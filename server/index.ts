@@ -1,4 +1,6 @@
 import { Hono } from 'hono';
+import { matterEvents } from './events';
+import { getMatterStore, type MatterStore } from './store';
 
 /** A module loaded from server/features/*.ts. Its default export should be a Hono app. */
 export type FeatureModule = { default?: unknown };
@@ -40,9 +42,35 @@ export function mountFeatures(app: Hono, modules: Record<string, FeatureModule>)
   return mounted;
 }
 
-export function createApp(modules: Record<string, FeatureModule> = featureFiles): Hono {
+export function createApp(modules: Record<string, FeatureModule> = featureFiles, store: MatterStore = getMatterStore()): Hono {
   const app = new Hono();
   app.get('/api/health', (c) => c.json({ ok: true }));
+  app.get('/api/events', (c) => matterEvents(store, c.req.raw.signal));
+  app.get('/api/matters', (c) => c.json(store.list()));
+  app.get('/api/matters/:id', (c) => {
+    const matter = store.get(c.req.param('id'));
+    return matter ? c.json(matter) : c.json({ error: 'not_found' }, 404);
+  });
+  const writeMatter = async (c: import('hono').Context) => {
+    try {
+      const value: unknown = await c.req.json();
+      const id = c.req.param('id');
+      if (id && (typeof value !== 'object' || value === null || !('id' in value) || value.id !== id)) {
+        return c.json({ error: 'invalid_matter', message: 'id: must match the URL' }, 400);
+      }
+      return c.json(store.upsert(value));
+    } catch (error) {
+      // The singleton's errors may come from a previous Vite module evaluation.
+      if (error instanceof Error && (error.name === 'StoreValidationError' || error instanceof SyntaxError)) {
+        return c.json({ error: 'invalid_matter', message: error.message }, 400);
+      }
+      throw error;
+    }
+  };
+  app.post('/api/matters', writeMatter);
+  app.put('/api/matters/:id', writeMatter);
+  app.delete('/api/matters/:id', (c) => store.remove(c.req.param('id'))
+    ? c.body(null, 204) : c.json({ error: 'not_found' }, 404));
   mountFeatures(app, modules);
   app.notFound((c) => c.json({ error: 'not_found', path: c.req.path }, 404));
   return app;
