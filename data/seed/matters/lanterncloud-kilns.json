@@ -1,36 +1,36 @@
 {
   "id": "matters-lanterncloud-kilns",
-  "title": "Lanterncloud Kilns: comments on the plume labels — SYNTHETIC",
+  "title": "Proposed rule on kiln emission labeling — comments",
   "practiceArea": "regulatory",
   "forum": "Federal environmental rulemaking; simulated notice-and-comment docket and related permit inquiry",
   "synthetic": true,
   "client": {
-    "name": "Lanterncloud Kiln Cooperative (fictional)",
-    "contact": "coordinator@lanterncloud-kilns.example.invalid"
+    "name": "Alderfen Kiln Cooperative",
+    "contact": "coordinator@alderfen-kilns.example.invalid"
   },
   "parties": [
     {
-      "name": "Lanterncloud Kiln Cooperative (fictional)",
+      "name": "Alderfen Kiln Cooperative",
       "role": "Client; prospective commenter"
     },
     {
-      "name": "Imaginary Clean-Sky Docket Office (fictional)",
+      "name": "Office of Kiln Emission Standards",
       "role": "Simulated federal rulemaking office"
     },
     {
-      "name": "Pebble Balloon Potters Guild (fictional)",
+      "name": "Rillhaven Potters Guild",
       "role": "Potential coalition commenter"
     }
   ],
   "timeline": [
     {
       "id": "event-1",
-      "event": "Simulated federal notice proposed new kiln-plume labels",
+      "event": "Simulated federal notice proposed new kiln emission labels",
       "date": "-32"
     },
     {
       "id": "event-2",
-      "event": "Cooperative measured label space on its tiny kiln cabinets",
+      "event": "Cooperative measured label space on its compact kiln cabinets",
       "date": "-18"
     },
     {
@@ -52,14 +52,14 @@
   "documents": [
     {
       "id": "doc-1",
-      "title": "Proposed plume-label notice excerpt (synthetic)",
+      "title": "Proposed kiln emission labeling notice excerpt",
       "kind": "notice",
       "body": "SYNTHETIC DEMO DOCUMENT. Entirely fictional notice and docket: comments close twenty-two calendar days after reset on the date expressly stated in the notice. Use that stated date; do not infer a universal APA comment period. The coalition wants a small-cabinet label option. No real agency proposal is represented.",
       "shared": true
     },
     {
       "id": "doc-2",
-      "title": "Permit timing and cost worksheet (synthetic)",
+      "title": "Permit timing and cost worksheet",
       "kind": "regulatory-note",
       "body": "SYNTHETIC DEMO DOCUMENT. The cooperative also asks about a separate permit-review clock under 42 U.S.C. § 7661b(c), an authority the demo deadline catalog does not implement. No start event, applicable period, or due date has been verified. Needs verification: independently identify the applicable authority and agency record before calendaring. Label measurements are fictional sample data only.",
       "shared": false

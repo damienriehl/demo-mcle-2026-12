@@ -1,27 +1,27 @@
 {
   "id": "canned-glimmer-pantry",
-  "title": "Glimmer Pantry: buying the cloud-jam cart — SYNTHETIC",
+  "title": "Asset purchase — Lindmere Preserves LLC",
   "practiceArea": "transactional",
   "forum": "Minnesota private asset purchase; no court proceeding",
   "synthetic": true,
   "client": {
-    "name": "Glimmer Pantry Collective (fictional)",
-    "contact": "coordinator@glimmer-pantry.example.invalid"
+    "name": "Alderfen Pantry Cooperative",
+    "contact": "coordinator@alderfen-pantry.example.invalid"
   },
   "parties": [
     {
-      "name": "Glimmer Pantry Collective (fictional)",
+      "name": "Alderfen Pantry Cooperative",
       "role": "Client; buyer"
     },
     {
-      "name": "Tiny Thunder Preserves (fictional)",
+      "name": "Lindmere Preserves LLC",
       "role": "Seller"
     }
   ],
   "timeline": [
     {
       "id": "event-1",
-      "event": "Buyer inspected the cloud-jam cart",
+      "event": "Buyer inspected the preserves cart",
       "date": "-24"
     },
     {
@@ -43,16 +43,16 @@
   "documents": [
     {
       "id": "doc-1",
-      "title": "Cart purchase agreement excerpt (synthetic)",
+      "title": "Cart purchase agreement excerpt",
       "kind": "agreement",
       "body": "SYNTHETIC DEMO DOCUMENT. Section 3.4 fixes the equipment objection date nine calendar days after reset. Section 6.1 fixes closing nineteen calendar days after reset. Both are express dates in the agreement with no automatic weekend extension.",
       "shared": true
     },
     {
       "id": "doc-2",
-      "title": "Equipment list (synthetic)",
+      "title": "Equipment list",
       "kind": "diligence",
-      "body": "SYNTHETIC DEMO DOCUMENT. The cart includes a copper kettle, a pretend cloud condenser, and six jam display trays. The condenser’s replacement filter is missing.",
+      "body": "SYNTHETIC DEMO DOCUMENT. The cart includes a copper kettle, a vapor condenser, and six jam display trays. The condenser’s replacement filter is missing.",
       "shared": false
     }
   ],
@@ -73,7 +73,7 @@
     },
     {
       "id": "closing",
-      "label": "Close cloud-jam cart purchase",
+      "label": "Close preserves cart purchase",
       "deadlineRuleId": "contract-deadline",
       "trigger": {
         "event": "Synthetic agreement signed",

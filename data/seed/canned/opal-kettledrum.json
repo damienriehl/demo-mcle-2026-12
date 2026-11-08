@@ -1,20 +1,20 @@
 {
   "id": "canned-opal-kettledrum",
-  "title": "Opal Kettledrum: the vanished training place — SYNTHETIC",
+  "title": "Kettlemere — EEOC and MDHR training-denial charges",
   "practiceArea": "employment",
   "forum": "EEOC Minneapolis Area Office and Minnesota Department of Human Rights; parallel charge preparation",
   "synthetic": true,
   "client": {
-    "name": "Opal Kettledrum (fictional)",
-    "contact": "coordinator@opal-kettledrum.example.invalid"
+    "name": "Maren Kettlemere",
+    "contact": "coordinator@maren-kettlemere.example.invalid"
   },
   "parties": [
     {
-      "name": "Opal Kettledrum (fictional)",
+      "name": "Maren Kettlemere",
       "role": "Client; prospective charging party"
     },
     {
-      "name": "Dancing Anvil Instruments (fictional)",
+      "name": "Alderwick Instrument Works LLC",
       "role": "Employer; prospective respondent"
     }
   ],
@@ -36,7 +36,7 @@
     },
     {
       "id": "event-4",
-      "event": "Synthetic client workplan signed; draft delivery agreed for ten days after reset",
+      "event": "Client workplan signed; draft delivery agreed for ten days after reset",
       "date": "-3"
     },
     {
@@ -48,21 +48,21 @@
   "documents": [
     {
       "id": "doc-1",
-      "title": "Training selection notice (synthetic)",
+      "title": "Training selection notice",
       "kind": "employment-record",
       "body": "SYNTHETIC DEMO DOCUMENT. The final training denial was communicated two hundred eighty days before reset and is the alleged discriminatory act. Sex-discrimination claim; federal scenario assumes qualifying state/local proceedings for the 300-day window. No earlier notice, special deadline, or tolling. No charge has been filed.",
       "shared": true
     },
     {
       "id": "doc-2",
-      "title": "Selection spreadsheet summary (synthetic)",
+      "title": "Selection spreadsheet summary",
       "kind": "evidence",
-      "body": "SYNTHETIC DEMO DOCUMENT. The imaginary spreadsheet gives Opal the highest practical score but labels the place unavailable. Another row appears to reserve it for a less experienced coworker; investigate before making factual assertions.",
+      "body": "SYNTHETIC DEMO DOCUMENT. The spreadsheet gives Maren the highest practical score but labels the training slot unavailable. Another row appears to reserve the slot for a less experienced coworker; investigate before making factual assertions.",
       "shared": false
     },
     {
       "id": "doc-3",
-      "title": "Agreed workplan (synthetic)",
+      "title": "Agreed workplan",
       "kind": "agreement",
       "body": "SYNTHETIC DEMO DOCUMENT. Workplan § 5: Counsel will deliver federal and Minnesota charge drafts. Delivery is due ten calendar days after the demo reset date. This is an agreed draft-delivery milestone, separate from any filing deadline.",
       "shared": true

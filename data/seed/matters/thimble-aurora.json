@@ -1,24 +1,24 @@
 {
   "id": "matters-thimble-aurora",
-  "title": "Thimble Aurora: the unpaid star ovens — SYNTHETIC",
+  "title": "In re Lakeshore Fen Bakery Co.",
   "practiceArea": "bankruptcy",
   "forum": "U.S. Bankruptcy Court, District of Minnesota; voluntary Chapter 7 asset case",
   "synthetic": true,
   "client": {
-    "name": "Thimble Aurora Ovenworks (fictional)",
-    "contact": "coordinator@thimble-aurora.example.invalid"
+    "name": "Rillbrook Oven Systems LLC",
+    "contact": "coordinator@rillbrook-ovens.example.invalid"
   },
   "parties": [
     {
-      "name": "Thimble Aurora Ovenworks (fictional)",
+      "name": "Rillbrook Oven Systems LLC",
       "role": "Client; ordinary unsecured trade creditor"
     },
     {
-      "name": "Drowsy Meteor Bakery (fictional)",
+      "name": "Lakeshore Fen Bakery Co.",
       "role": "Chapter 7 debtor"
     },
     {
-      "name": "Juniper Quillwidget (fictional)",
+      "name": "June Alderwick",
       "role": "Chapter 7 trustee"
     }
   ],
@@ -45,28 +45,28 @@
     },
     {
       "id": "event-5",
-      "event": "Synthetic client workplan signed; draft delivery agreed for ten days after reset",
+      "event": "Client workplan signed; draft delivery agreed for ten days after reset",
       "date": "-3"
     }
   ],
   "documents": [
     {
       "id": "doc-1",
-      "title": "Asset-case notice (synthetic)",
+      "title": "Asset-case notice",
       "kind": "notice",
       "body": "SYNTHETIC DEMO DOCUMENT. Voluntary Chapter 7 order for relief entered fifty-five days before reset. This is an asset case; ordinary unsecured trade claims are subject to the ordinary Rule 3002(c) period. No government claim, special exception, later asset-discovery notice, or different bar date applies.",
       "shared": true
     },
     {
       "id": "doc-2",
-      "title": "Oven invoice and payment ledger (synthetic)",
+      "title": "Oven invoice and payment ledger",
       "kind": "financial",
-      "body": "SYNTHETIC DEMO DOCUMENT. Invoice lists three star-shaped ovens for 18,600 synthetic dollars. A partial payment of 2,100 synthetic dollars appears on the ledger. Reconcile that payment before preparing the claim; no real account numbers are used.",
+      "body": "SYNTHETIC DEMO DOCUMENT. Invoice lists three star-shaped ovens for $18,600. A partial payment of $2,100 appears on the ledger. Reconcile that payment before preparing the claim.",
       "shared": false
     },
     {
       "id": "doc-3",
-      "title": "Agreed workplan (synthetic)",
+      "title": "Agreed workplan",
       "kind": "agreement",
       "body": "SYNTHETIC DEMO DOCUMENT. Workplan § 3: Counsel will deliver a reconciled proof-of-claim draft and attachment list. Delivery is due ten calendar days after the demo reset date. This is an agreed draft-delivery milestone, separate from any filing deadline.",
       "shared": true

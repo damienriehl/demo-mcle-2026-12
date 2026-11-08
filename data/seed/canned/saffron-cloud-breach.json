@@ -1,20 +1,20 @@
 {
   "id": "canned-saffron-cloud-breach",
-  "title": "Saffron Cloud: the leaking parade canopy — SYNTHETIC",
+  "title": "Merehaven Event Rentals LLC v. Sundmere Parade Services LLC",
   "practiceArea": "litigation",
   "forum": "Hennepin County District Court",
   "synthetic": true,
   "client": {
-    "name": "Saffron Cloud Paradeworks (fictional)",
-    "contact": "coordinator@saffron-cloud-breach.example.invalid"
+    "name": "Sundmere Parade Services LLC",
+    "contact": "coordinator@sundmere-parade.example.invalid"
   },
   "parties": [
     {
-      "name": "Saffron Cloud Paradeworks (fictional)",
+      "name": "Sundmere Parade Services LLC",
       "role": "Client; defendant"
     },
     {
-      "name": "Button Lantern Rentals (fictional)",
+      "name": "Merehaven Event Rentals LLC",
       "role": "Plaintiff"
     }
   ],
@@ -26,7 +26,7 @@
     },
     {
       "id": "event-2",
-      "event": "Canopy leaked during the pretend moon parade",
+      "event": "Canopy leaked during the parade",
       "date": "-23"
     },
     {
@@ -36,7 +36,7 @@
     },
     {
       "id": "event-4",
-      "event": "Synthetic client workplan signed; draft delivery agreed for ten days after reset",
+      "event": "Client workplan signed; draft delivery agreed for ten days after reset",
       "date": "-3"
     },
     {
@@ -48,21 +48,21 @@
   "documents": [
     {
       "id": "doc-1",
-      "title": "Summons and rental complaint (synthetic)",
+      "title": "Summons and rental complaint",
       "kind": "pleading",
-      "body": "SYNTHETIC DEMO DOCUMENT. Personal service occurred nine days before reset. Button Lantern demands rental fees; the client says the canopy leaked. Ordinary Minnesota answer period; no extension or prior motion.",
+      "body": "SYNTHETIC DEMO DOCUMENT. Personal service occurred nine days before reset. Merehaven Event Rentals demands rental fees; the client says the canopy leaked. Ordinary Minnesota answer period; no extension or prior motion.",
       "shared": true
     },
     {
       "id": "doc-2",
-      "title": "Seam photograph index (synthetic)",
+      "title": "Seam photograph index",
       "kind": "evidence",
-      "body": "SYNTHETIC DEMO DOCUMENT. Photo A shows a split seam above the brass drum stand. Photo B shows the patched corner. Both are synthetic descriptions, not uploaded real photographs.",
+      "body": "SYNTHETIC DEMO DOCUMENT. Photo A shows a split seam above the brass drum stand. Photo B shows the patched corner. This index describes the photographs; image files are not attached.",
       "shared": false
     },
     {
       "id": "doc-3",
-      "title": "Agreed workplan (synthetic)",
+      "title": "Agreed workplan",
       "kind": "agreement",
       "body": "SYNTHETIC DEMO DOCUMENT. Workplan § 2: Counsel will deliver a draft answer and exhibit index. Delivery is due ten calendar days after the demo reset date. This is an agreed draft-delivery milestone, separate from any filing deadline.",
       "shared": true

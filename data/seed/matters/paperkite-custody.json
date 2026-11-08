@@ -1,25 +1,25 @@
 {
   "id": "matters-paperkite-custody",
-  "title": "Paperkite: two homes and one telescope — SYNTHETIC",
+  "title": "In re the Marriage of Aster Lindmere and Rowan Fenwick",
   "practiceArea": "family",
   "forum": "Hennepin County District Court, Family Division; dissolution with custody",
   "synthetic": true,
   "client": {
-    "name": "Aster Paperkite (fictional)",
-    "contact": "coordinator@paperkite-custody.example.invalid"
+    "name": "Aster Lindmere",
+    "contact": "coordinator@aster-lindmere.example.invalid"
   },
   "parties": [
     {
-      "name": "Aster Paperkite (fictional)",
+      "name": "Aster Lindmere",
       "role": "Client; petitioner and moving parent"
     },
     {
-      "name": "Rowan Cloudthimble (fictional)",
+      "name": "Rowan Fenwick",
       "role": "Respondent; other parent"
     },
     {
-      "name": "Pip Paperkite-Cloudthimble (fictional)",
-      "role": "Fictional minor child; no personal identifiers"
+      "name": "Eli Lindmere-Fenwick",
+      "role": "Minor child"
     }
   ],
   "timeline": [
@@ -40,7 +40,7 @@
     },
     {
       "id": "event-4",
-      "event": "Synthetic client workplan signed; draft delivery agreed for ten days after reset",
+      "event": "Client workplan signed; draft delivery agreed for ten days after reset",
       "date": "-3"
     },
     {
@@ -52,21 +52,21 @@
   "documents": [
     {
       "id": "doc-1",
-      "title": "Temporary-custody hearing notice (synthetic)",
+      "title": "Temporary-custody hearing notice",
       "kind": "notice",
-      "body": "SYNTHETIC DEMO DOCUMENT. The simulated Hennepin County hearing is thirty-five days after reset. Aster seeks an ordinary temporary-custody schedule, not emergency or post-trial relief. No special scheduling order changes ordinary Rule 303 motion deadlines. Opposing submissions are tracked for planning as well as the client’s own motion.",
+      "body": "SYNTHETIC DEMO DOCUMENT. The Hennepin County hearing is thirty-five days after reset. Aster seeks an ordinary temporary-custody schedule, not emergency or post-trial relief. No special scheduling order changes ordinary Rule 303 motion deadlines. Opposing submissions are tracked for planning as well as the client’s own motion.",
       "shared": true
     },
     {
       "id": "doc-2",
-      "title": "Parenting schedule working note (synthetic)",
+      "title": "Parenting schedule working note",
       "kind": "family-plan",
-      "body": "SYNTHETIC DEMO DOCUMENT. Both parents want Pip to keep the same school-night routine. The portable telescope moves between homes on weekends. The draft proposes neutral exchanges and a shared equipment checklist; it records proposals, not an existing court order.",
+      "body": "SYNTHETIC DEMO DOCUMENT. Both parents want Eli to keep the same school-night routine. The portable telescope moves between homes on weekends. The draft proposes neutral exchanges and a shared equipment checklist; it records proposals, not an existing court order.",
       "shared": false
     },
     {
       "id": "doc-3",
-      "title": "Agreed workplan (synthetic)",
+      "title": "Agreed workplan",
       "kind": "agreement",
       "body": "SYNTHETIC DEMO DOCUMENT. Workplan § 6: Counsel will deliver a temporary-custody motion draft and proposed parenting schedule. Delivery is due ten calendar days after the demo reset date. This is an agreed draft-delivery milestone, separate from any filing deadline.",
       "shared": true

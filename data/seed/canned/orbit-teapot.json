@@ -1,20 +1,20 @@
 {
   "id": "canned-orbit-teapot",
-  "title": "Orbit Teapot: the copied constellation pattern — SYNTHETIC",
+  "title": "Tamarfen Ceramics LLC v. Rillstead Tableware LLC",
   "practiceArea": "litigation",
   "forum": "U.S. District Court, District of Minnesota",
   "synthetic": true,
   "client": {
-    "name": "Orbit Teapot Ceramics (fictional)",
-    "contact": "coordinator@orbit-teapot.example.invalid"
+    "name": "Tamarfen Ceramics LLC",
+    "contact": "coordinator@tamarfen-ceramics.example.invalid"
   },
   "parties": [
     {
-      "name": "Orbit Teapot Ceramics (fictional)",
+      "name": "Tamarfen Ceramics LLC",
       "role": "Client; plaintiff"
     },
     {
-      "name": "Woolen Rocket Tableware (fictional)",
+      "name": "Rillstead Tableware LLC",
       "role": "Defendant"
     }
   ],
@@ -41,28 +41,28 @@
     },
     {
       "id": "event-5",
-      "event": "Synthetic client workplan signed; draft delivery agreed for ten days after reset",
+      "event": "Client workplan signed; draft delivery agreed for ten days after reset",
       "date": "-3"
     }
   ],
   "documents": [
     {
       "id": "doc-1",
-      "title": "Interrogatories with mailing certificate (synthetic)",
+      "title": "Interrogatories with mailing certificate",
       "kind": "discovery",
       "body": "SYNTHETIC DEMO DOCUMENT. Rival mailed its first interrogatories seven days before reset. They ask for the constellation design history and sales channels. Ordinary federal response period; no extension or special scheduling order.",
       "shared": true
     },
     {
       "id": "doc-2",
-      "title": "Design chronology (synthetic)",
+      "title": "Design chronology",
       "kind": "evidence",
-      "body": "SYNTHETIC DEMO DOCUMENT. The fictional studio notebook records a crooked comet sketch followed by a five-star handle design. Preserve the source versions while preparing answers.",
+      "body": "SYNTHETIC DEMO DOCUMENT. The studio notebook records a crooked comet sketch followed by a five-star handle design. Preserve the source versions while preparing answers.",
       "shared": false
     },
     {
       "id": "doc-3",
-      "title": "Agreed workplan (synthetic)",
+      "title": "Agreed workplan",
       "kind": "agreement",
       "body": "SYNTHETIC DEMO DOCUMENT. Workplan § 2: Counsel will deliver draft interrogatory responses and a collection checklist. Delivery is due ten calendar days after the demo reset date. This is an agreed draft-delivery milestone, separate from any filing deadline.",
       "shared": true
@@ -99,7 +99,7 @@
   "clientFacing": {
     "status": "The other side has asked written questions about your design.",
     "nextSteps": [
-      "Collect the sketch versions and imaginary sales totals.",
+      "Collect the sketch versions and sales totals.",
       "Check the discovery response draft for accuracy."
     ]
   },

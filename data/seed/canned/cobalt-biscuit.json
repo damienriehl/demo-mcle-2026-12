@@ -1,20 +1,20 @@
 {
   "id": "canned-cobalt-biscuit",
-  "title": "Cobalt Biscuit: the unpaid balloon racks — SYNTHETIC",
+  "title": "In re Merehaven Party Supply LLC",
   "practiceArea": "bankruptcy",
   "forum": "U.S. Bankruptcy Court, District of Minnesota; voluntary Chapter 7 asset case",
   "synthetic": true,
   "client": {
-    "name": "Cobalt Biscuit Fixtures (fictional)",
-    "contact": "coordinator@cobalt-biscuit.example.invalid"
+    "name": "Fenridge Display Fixtures LLC",
+    "contact": "coordinator@fenridge-fixtures.example.invalid"
   },
   "parties": [
     {
-      "name": "Cobalt Biscuit Fixtures (fictional)",
+      "name": "Fenridge Display Fixtures LLC",
       "role": "Client; ordinary unsecured trade creditor"
     },
     {
-      "name": "Sleepy Zeppelin Gifts (fictional)",
+      "name": "Merehaven Party Supply LLC",
       "role": "Chapter 7 debtor"
     }
   ],
@@ -41,28 +41,28 @@
     },
     {
       "id": "event-5",
-      "event": "Synthetic client workplan signed; draft delivery agreed for ten days after reset",
+      "event": "Client workplan signed; draft delivery agreed for ten days after reset",
       "date": "-3"
     }
   ],
   "documents": [
     {
       "id": "doc-1",
-      "title": "Asset-case notice excerpt (synthetic)",
+      "title": "Asset-case notice excerpt",
       "kind": "notice",
       "body": "SYNTHETIC DEMO DOCUMENT. The voluntary Chapter 7 order for relief entered fifty-two days before reset. Ordinary trade claim; assets are expected. No government claim, Rule 3002(c) exception, later asset notice, or different bar date applies.",
       "shared": true
     },
     {
       "id": "doc-2",
-      "title": "Rack invoice packet (synthetic)",
+      "title": "Rack invoice packet",
       "kind": "financial",
-      "body": "SYNTHETIC DEMO DOCUMENT. Four spiral balloon racks remain unpaid, totaling 7,200 synthetic dollars. Delivery slips use fictional signatures and contain no bank details.",
+      "body": "SYNTHETIC DEMO DOCUMENT. Four spiral balloon racks remain unpaid, totaling $7,200. The packet includes signed delivery slips and omits bank details.",
       "shared": false
     },
     {
       "id": "doc-3",
-      "title": "Agreed workplan (synthetic)",
+      "title": "Agreed workplan",
       "kind": "agreement",
       "body": "SYNTHETIC DEMO DOCUMENT. Workplan § 3: Counsel will deliver the proof-of-claim draft and invoice attachment list. Delivery is due ten calendar days after the demo reset date. This is an agreed draft-delivery milestone, separate from any filing deadline.",
       "shared": true

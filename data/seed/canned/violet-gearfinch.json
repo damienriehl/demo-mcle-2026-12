@@ -1,20 +1,20 @@
 {
   "id": "canned-violet-gearfinch",
-  "title": "Violet Gearfinch: the workshop promotion list — SYNTHETIC",
+  "title": "Norvale — EEOC and MDHR promotion-denial charges",
   "practiceArea": "employment",
   "forum": "EEOC Minneapolis Area Office and Minnesota Department of Human Rights; parallel charge preparation",
   "synthetic": true,
   "client": {
-    "name": "Violet Gearfinch (fictional)",
-    "contact": "coordinator@violet-gearfinch.example.invalid"
+    "name": "Elise Norvale",
+    "contact": "coordinator@elise-norvale.example.invalid"
   },
   "parties": [
     {
-      "name": "Violet Gearfinch (fictional)",
+      "name": "Elise Norvale",
       "role": "Client; prospective charging party"
     },
     {
-      "name": "Velour Volcano Assemblies (fictional)",
+      "name": "Fenstead Assembly Systems LLC",
       "role": "Employer; prospective respondent"
     }
   ],
@@ -36,7 +36,7 @@
     },
     {
       "id": "event-4",
-      "event": "Synthetic client workplan signed; draft delivery agreed for ten days after reset",
+      "event": "Client workplan signed; draft delivery agreed for ten days after reset",
       "date": "-3"
     },
     {
@@ -48,21 +48,21 @@
   "documents": [
     {
       "id": "doc-1",
-      "title": "Promotion decision excerpt (synthetic)",
+      "title": "Promotion decision excerpt",
       "kind": "employment-record",
       "body": "SYNTHETIC DEMO DOCUMENT. Final denial communicated two hundred seventy-six days before reset; that notice is the alleged discriminatory act. Client alleges race discrimination. Federal 300-day scenario assumes qualifying state/local proceedings and no earlier notice or tolling. No Minnesota tolling or special deadline is assumed; neither charge is filed.",
       "shared": true
     },
     {
       "id": "doc-2",
-      "title": "Review and criteria comparison (synthetic)",
+      "title": "Review and criteria comparison",
       "kind": "evidence",
-      "body": "SYNTHETIC DEMO DOCUMENT. The fictional annual review praises assembly accuracy. The later selection memo adds an unexplained leadership threshold. The discrepancy needs investigation and is not a finding of discrimination.",
+      "body": "SYNTHETIC DEMO DOCUMENT. The annual review praises assembly accuracy. The later selection memo adds an unexplained leadership threshold. The discrepancy needs investigation and is not a finding of discrimination.",
       "shared": false
     },
     {
       "id": "doc-3",
-      "title": "Agreed workplan (synthetic)",
+      "title": "Agreed workplan",
       "kind": "agreement",
       "body": "SYNTHETIC DEMO DOCUMENT. Workplan § 5: Counsel will deliver federal and Minnesota promotion-denial charge drafts. Delivery is due ten calendar days after the demo reset date. This is an agreed draft-delivery milestone, separate from any filing deadline.",
       "shared": true
@@ -108,7 +108,7 @@
     "status": "We are checking how the promotion criteria changed before drafting charges.",
     "nextSteps": [
       "Review the comparison of the two documents.",
-      "Identify any fictional witness who heard the criteria discussion."
+      "Identify any witness who heard the criteria discussion."
     ]
   },
   "provenance": {

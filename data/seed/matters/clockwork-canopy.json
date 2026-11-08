@@ -1,24 +1,24 @@
 {
   "id": "matters-clockwork-canopy",
-  "title": "Clockwork Canopy: the upside-down exhibit — SYNTHETIC",
+  "title": "Fenridge Fabrication LLC v. Rillhaven Exhibit Studio LLC",
   "practiceArea": "litigation",
   "forum": "Hennepin County District Court (contract suit); U.S. District Court, District of Minnesota (related copyright suit)",
   "synthetic": true,
   "client": {
-    "name": "Clockwork Canopy Studio (fictional)",
-    "contact": "coordinator@clockwork-canopy.example.invalid"
+    "name": "Rillhaven Exhibit Studio LLC",
+    "contact": "coordinator@rillhaven-exhibit-studio.example.invalid"
   },
   "parties": [
     {
-      "name": "Clockwork Canopy Studio (fictional)",
+      "name": "Rillhaven Exhibit Studio LLC",
       "role": "Client; state defendant and federal plaintiff"
     },
     {
-      "name": "Velvet Rivet Fabricators (fictional)",
+      "name": "Fenridge Fabrication LLC",
       "role": "Plaintiff in state contract suit"
     },
     {
-      "name": "Paper Comet Exhibits (fictional)",
+      "name": "Tamarfen Exhibits LLC",
       "role": "Defendant in related federal copyright suit"
     }
   ],
@@ -50,28 +50,28 @@
     },
     {
       "id": "event-6",
-      "event": "Synthetic client workplan signed; draft delivery agreed for ten days after reset",
+      "event": "Client workplan signed; draft delivery agreed for ten days after reset",
       "date": "-3"
     }
   ],
   "documents": [
     {
       "id": "doc-1",
-      "title": "State summons and complaint (synthetic)",
+      "title": "State summons and complaint",
       "kind": "pleading",
-      "body": "SYNTHETIC DEMO DOCUMENT. Velvet Rivet seeks the unpaid balance for the upside-down forest display. Clockwork Canopy says the hanging platforms arrived warped. Summons personally served eight days before reset; ordinary Minnesota answer period, no extension or prior motion.",
+      "body": "SYNTHETIC DEMO DOCUMENT. Fenridge Fabrication seeks the unpaid balance for the upside-down forest display. Rillhaven Exhibit Studio says the hanging platforms arrived warped. Summons personally served eight days before reset; ordinary Minnesota answer period, no extension or prior motion.",
       "shared": true
     },
     {
       "id": "doc-2",
-      "title": "Federal interrogatories and mailing certificate (synthetic)",
+      "title": "Federal interrogatories and mailing certificate",
       "kind": "discovery",
-      "body": "SYNTHETIC DEMO DOCUMENT. Paper Comet asks who created each lantern-leaf drawing and who had access to the source files. Its certificate states service by U.S. mail five days before reset in the separate District of Minnesota copyright case; no stipulation changes the response period.",
+      "body": "SYNTHETIC DEMO DOCUMENT. Tamarfen Exhibits asks who created each lantern-leaf drawing and who had access to the source files. Its certificate states service by U.S. mail five days before reset in the separate District of Minnesota copyright case; no stipulation changes the response period.",
       "shared": false
     },
     {
       "id": "doc-3",
-      "title": "Agreed workplan (synthetic)",
+      "title": "Agreed workplan",
       "kind": "agreement",
       "body": "SYNTHETIC DEMO DOCUMENT. Workplan § 2: Counsel will deliver the state answer draft and a federal discovery response outline to the client. Delivery is due ten calendar days after the demo reset date. This is an agreed draft-delivery milestone, separate from any filing deadline.",
       "shared": true

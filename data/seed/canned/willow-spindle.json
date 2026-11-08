@@ -1,25 +1,25 @@
 {
   "id": "canned-willow-spindle",
-  "title": "Willow Spindle: the weekend puppet trunk — SYNTHETIC",
+  "title": "In re the Marriage of Willow Spindale and Cedar Rillmere",
   "practiceArea": "family",
   "forum": "Hennepin County District Court, Family Division; dissolution with custody",
   "synthetic": true,
   "client": {
-    "name": "Willow Spindle (fictional)",
-    "contact": "coordinator@willow-spindle.example.invalid"
+    "name": "Willow Spindale",
+    "contact": "coordinator@willow-spindale.example.invalid"
   },
   "parties": [
     {
-      "name": "Willow Spindle (fictional)",
+      "name": "Willow Spindale",
       "role": "Client; moving parent"
     },
     {
-      "name": "Cedar Moonbutton (fictional)",
+      "name": "Cedar Rillmere",
       "role": "Other parent"
     },
     {
-      "name": "Fenn Spindle-Moonbutton (fictional)",
-      "role": "Fictional minor child; no personal identifiers"
+      "name": "Finn Spindale-Rillmere",
+      "role": "Minor child"
     }
   ],
   "timeline": [
@@ -40,7 +40,7 @@
     },
     {
       "id": "event-4",
-      "event": "Synthetic client workplan signed; draft delivery agreed for ten days after reset",
+      "event": "Client workplan signed; draft delivery agreed for ten days after reset",
       "date": "-3"
     },
     {
@@ -52,21 +52,21 @@
   "documents": [
     {
       "id": "doc-1",
-      "title": "Family motion hearing notice (synthetic)",
+      "title": "Family motion hearing notice",
       "kind": "notice",
       "body": "SYNTHETIC DEMO DOCUMENT. Ordinary temporary-custody motion hearing thirty-four days after reset. No emergency, post-trial motion, or special scheduling order. Client is moving for a stable exchange schedule.",
       "shared": true
     },
     {
       "id": "doc-2",
-      "title": "Exchange schedule proposal (synthetic)",
+      "title": "Exchange schedule proposal",
       "kind": "family-plan",
-      "body": "SYNTHETIC DEMO DOCUMENT. The puppet trunk travels with Fenn for weekend performances. The proposed exchange includes a trunk checklist and one neutral pickup point; it is not an existing order.",
+      "body": "SYNTHETIC DEMO DOCUMENT. The puppet trunk travels with Finn for weekend performances. The proposed exchange includes a trunk checklist and one neutral pickup point; it is not an existing order.",
       "shared": false
     },
     {
       "id": "doc-3",
-      "title": "Agreed workplan (synthetic)",
+      "title": "Agreed workplan",
       "kind": "agreement",
       "body": "SYNTHETIC DEMO DOCUMENT. Workplan § 6: Counsel will deliver the motion draft and proposed exchange schedule. Delivery is due ten calendar days after the demo reset date. This is an agreed draft-delivery milestone, separate from any filing deadline.",
       "shared": true

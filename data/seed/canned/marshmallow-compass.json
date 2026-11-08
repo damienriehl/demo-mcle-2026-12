@@ -1,27 +1,27 @@
 {
   "id": "canned-marshmallow-compass",
-  "title": "Marshmallow Compass: the self-leveling tent peg — SYNTHETIC",
+  "title": "App. No. 18/517,204 — Self-leveling tent peg",
   "practiceArea": "patent",
   "forum": "U.S. Patent and Trademark Office; fictional utility application",
   "synthetic": true,
   "client": {
-    "name": "Marshmallow Compass Labs (fictional)",
-    "contact": "coordinator@marshmallow-compass.example.invalid"
+    "name": "Rillberg Outdoor Systems LLC",
+    "contact": "coordinator@rillberg-outdoor.example.invalid"
   },
   "parties": [
     {
-      "name": "Marshmallow Compass Labs (fictional)",
+      "name": "Rillberg Outdoor Systems LLC",
       "role": "Client; applicant"
     },
     {
-      "name": "Wren Boltpetal (fictional)",
+      "name": "Wren Alderwick",
       "role": "Inventor"
     }
   ],
   "timeline": [
     {
       "id": "event-1",
-      "event": "Tent-peg application filed in the simulation",
+      "event": "Tent-peg application filed",
       "date": "-180"
     },
     {
@@ -36,7 +36,7 @@
     },
     {
       "id": "event-4",
-      "event": "Synthetic client workplan signed; draft delivery agreed for ten days after reset",
+      "event": "Client workplan signed; draft delivery agreed for ten days after reset",
       "date": "-3"
     },
     {
@@ -48,21 +48,21 @@
   "documents": [
     {
       "id": "doc-1",
-      "title": "Non-final Office action excerpt (synthetic)",
+      "title": "Non-final Office action excerpt",
       "kind": "office-action",
-      "body": "SYNTHETIC DEMO DOCUMENT. Mailed seventy days before reset. The notice states a three-month shortened response period and six-month maximum. No extension is selected. The imaginary rejection concerns a self-leveling ring.",
+      "body": "SYNTHETIC DEMO DOCUMENT. Mailed seventy days before reset. The notice states a three-month shortened response period and six-month maximum. No extension is selected. The rejection concerns a self-leveling ring.",
       "shared": true
     },
     {
       "id": "doc-2",
-      "title": "Leveling-ring note (synthetic)",
+      "title": "Leveling-ring note",
       "kind": "technical",
-      "body": "SYNTHETIC DEMO DOCUMENT. The ring floats on three captive beads. Wren proposes explaining why the fictional cited peg lacks that arrangement; support in the original application must be checked.",
+      "body": "SYNTHETIC DEMO DOCUMENT. The ring floats on three captive beads. Wren proposes explaining why the cited peg lacks that arrangement; support in the original application must be checked.",
       "shared": false
     },
     {
       "id": "doc-3",
-      "title": "Agreed workplan (synthetic)",
+      "title": "Agreed workplan",
       "kind": "agreement",
       "body": "SYNTHETIC DEMO DOCUMENT. Workplan § 4: Counsel will deliver proposed amendments and an Office action response draft. Delivery is due ten calendar days after the demo reset date. This is an agreed draft-delivery milestone, separate from any filing deadline.",
       "shared": true

@@ -1,24 +1,24 @@
 {
   "id": "matters-mossbell-shift",
-  "title": "Mossbell: the missing night-shift promotion — SYNTHETIC",
+  "title": "Mossbell — EEOC and MDHR charges",
   "practiceArea": "employment",
   "forum": "EEOC Minneapolis Area Office and Minnesota Department of Human Rights; parallel charge preparation",
   "synthetic": true,
   "client": {
-    "name": "Nori Mossbell (fictional)",
-    "contact": "coordinator@mossbell-shift.example.invalid"
+    "name": "Nora Mossbell",
+    "contact": "coordinator@nora-mossbell.example.invalid"
   },
   "parties": [
     {
-      "name": "Nori Mossbell (fictional)",
+      "name": "Nora Mossbell",
       "role": "Client; prospective charging party"
     },
     {
-      "name": "Copper Teacup Robotics (fictional)",
+      "name": "Rillstead Robotics LLC",
       "role": "Employer; prospective respondent"
     },
     {
-      "name": "Tavi Paperfern (fictional)",
+      "name": "Tessa Alderwick",
       "role": "Shift supervisor and potential witness"
     }
   ],
@@ -45,28 +45,28 @@
     },
     {
       "id": "event-5",
-      "event": "Synthetic client workplan signed; draft delivery agreed for ten days after reset",
+      "event": "Client workplan signed; draft delivery agreed for ten days after reset",
       "date": "-3"
     }
   ],
   "documents": [
     {
       "id": "doc-1",
-      "title": "Promotion denial and scoring sheet (synthetic)",
+      "title": "Promotion denial and scoring sheet",
       "kind": "employment-record",
-      "body": "SYNTHETIC DEMO DOCUMENT. The final promotion denial was communicated two hundred eighty-two days before reset; this communication is the alleged discriminatory act and the limitations trigger. Nori alleges sex discrimination. The federal scenario assumes qualifying state/local proceedings for the 300-day window; no earlier notice, tolling, or special deadline applies. No administrative charge has yet been filed.",
+      "body": "SYNTHETIC DEMO DOCUMENT. The final promotion denial was communicated two hundred eighty-two days before reset; this communication is the alleged discriminatory act and the limitations trigger. Nora alleges sex discrimination. The federal scenario assumes qualifying state/local proceedings for the 300-day window; no earlier notice, tolling, or special deadline applies. No administrative charge has yet been filed.",
       "shared": true
     },
     {
       "id": "doc-2",
-      "title": "Witness interview summary (synthetic)",
+      "title": "Witness interview summary",
       "kind": "interview",
-      "body": "SYNTHETIC DEMO DOCUMENT. Tavi Paperfern recalls that the selection panel called the night shift a poor fit for Nori, despite the highest test score. This is a fictional allegation to investigate, not a finding. The Minnesota claim concerns the same denial; no tolling is assumed.",
+      "body": "SYNTHETIC DEMO DOCUMENT. Tessa Alderwick recalls that the selection panel called the night shift a poor fit for Nora, despite the highest test score. This allegation requires investigation and is not a finding. The Minnesota claim concerns the same denial; no tolling is assumed.",
       "shared": false
     },
     {
       "id": "doc-3",
-      "title": "Agreed workplan (synthetic)",
+      "title": "Agreed workplan",
       "kind": "agreement",
       "body": "SYNTHETIC DEMO DOCUMENT. Workplan § 5: Counsel will deliver the EEOC and Minnesota charge drafts to the client. Delivery is due ten calendar days after the demo reset date. This is an agreed draft-delivery milestone, separate from any filing deadline.",
       "shared": true

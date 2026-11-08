@@ -1,31 +1,31 @@
 {
   "id": "matters-pocket-aurora",
-  "title": "Pocket Aurora: the self-folding picnic sail — SYNTHETIC",
+  "title": "App. No. 18/402,117 — Self-folding shade canopy",
   "practiceArea": "patent",
   "forum": "U.S. Patent and Trademark Office; fictional utility application",
   "synthetic": true,
   "client": {
-    "name": "Pocket Aurora Inventions (fictional)",
-    "contact": "coordinator@pocket-aurora.example.invalid"
+    "name": "Sundmere Canopy Systems LLC",
+    "contact": "coordinator@sundmere-canopy.example.invalid"
   },
   "parties": [
     {
-      "name": "Pocket Aurora Inventions (fictional)",
+      "name": "Sundmere Canopy Systems LLC",
       "role": "Client; applicant"
     },
     {
-      "name": "Mira Gearwhistle (fictional)",
+      "name": "Mira Sundmere",
       "role": "Inventor"
     },
     {
-      "name": "Examiner Cobalt Paperkite (fictional)",
+      "name": "Examiner Evan Rillberg",
       "role": "Simulated examiner"
     }
   ],
   "timeline": [
     {
       "id": "event-1",
-      "event": "Utility application for a folding picnic sail filed in the simulation",
+      "event": "Utility application for a self-folding shade canopy filed",
       "date": "-160"
     },
     {
@@ -35,7 +35,7 @@
     },
     {
       "id": "event-3",
-      "event": "Inventor supplied a hinge sketch distinguishing the cited sail",
+      "event": "Inventor supplied a hinge sketch distinguishing the cited canopy",
       "date": "-20"
     },
     {
@@ -45,28 +45,28 @@
     },
     {
       "id": "event-5",
-      "event": "Synthetic client workplan signed; draft delivery agreed for ten days after reset",
+      "event": "Client workplan signed; draft delivery agreed for ten days after reset",
       "date": "-3"
     }
   ],
   "documents": [
     {
       "id": "doc-1",
-      "title": "Non-final Office action (synthetic)",
+      "title": "Non-final Office action",
       "kind": "office-action",
-      "body": "SYNTHETIC DEMO DOCUMENT. The fictional action was mailed seventy-two days before reset. It expressly notifies a three-calendar-month shortened response period and maximum six-calendar-month period. Claims are rejected over imaginary folding-sail references. No extension has been selected; any available extension would require the applicable petition and fee.",
+      "body": "SYNTHETIC DEMO DOCUMENT. The Office action was mailed seventy-two days before reset. It expressly notifies a three-calendar-month shortened response period and maximum six-calendar-month period. Claims are rejected over cited folding-canopy references. No extension has been selected; any available extension would require the applicable petition and fee.",
       "shared": true
     },
     {
       "id": "doc-2",
-      "title": "Inventor hinge sketch note (synthetic)",
+      "title": "Inventor hinge sketch note",
       "kind": "technical",
-      "body": "SYNTHETIC DEMO DOCUMENT. Mira Gearwhistle describes a spiral hinge that locks the picnic sail without a separate pin. The note supports a proposed amendment but does not concede that the cited imaginary references disclose the hinge.",
+      "body": "SYNTHETIC DEMO DOCUMENT. Mira Sundmere describes a spiral hinge that locks the shade canopy without a separate pin. The note supports a proposed amendment but does not concede that the cited references disclose the hinge.",
       "shared": false
     },
     {
       "id": "doc-3",
-      "title": "Agreed workplan (synthetic)",
+      "title": "Agreed workplan",
       "kind": "agreement",
       "body": "SYNTHETIC DEMO DOCUMENT. Workplan § 4: Counsel will deliver proposed claim amendments and a response explanation. Delivery is due ten calendar days after the demo reset date. This is an agreed draft-delivery milestone, separate from any filing deadline.",
       "shared": true

@@ -1,20 +1,20 @@
 {
   "id": "canned-snowglobe-signal",
-  "title": "Snowglobe Signal: the tiny beacon comments — SYNTHETIC",
+  "title": "Proposed rule on beacon markings — comments",
   "practiceArea": "regulatory",
   "forum": "Federal notice-and-comment rulemaking; simulated docket",
   "synthetic": true,
   "client": {
-    "name": "Snowglobe Signal Cooperative (fictional)",
-    "contact": "coordinator@snowglobe-signal.example.invalid"
+    "name": "Norvale Signal Cooperative",
+    "contact": "coordinator@norvale-signal.example.invalid"
   },
   "parties": [
     {
-      "name": "Snowglobe Signal Cooperative (fictional)",
+      "name": "Norvale Signal Cooperative",
       "role": "Client; prospective commenter"
     },
     {
-      "name": "Imaginary Beacon Docket Office (fictional)",
+      "name": "Office of Beacon Marking Standards",
       "role": "Simulated federal rulemaking office"
     }
   ],
@@ -43,16 +43,16 @@
   "documents": [
     {
       "id": "doc-1",
-      "title": "Beacon proposal notice excerpt (synthetic)",
+      "title": "Beacon proposal notice excerpt",
       "kind": "notice",
       "body": "SYNTHETIC DEMO DOCUMENT. This is a fictional proposal in a simulated federal docket. The notice expressly closes comments seventeen calendar days after reset, with no inferred universal period or court-calendar adjustment.",
       "shared": true
     },
     {
       "id": "doc-2",
-      "title": "Sample marking test note (synthetic)",
+      "title": "Sample marking test note",
       "kind": "technical",
-      "body": "SYNTHETIC DEMO DOCUMENT. The proposed large marking obscures the pretend snow-level window. Members suggest a narrow stripe and include fictional visibility measurements for the comment.",
+      "body": "SYNTHETIC DEMO DOCUMENT. The proposed large marking obscures the snow-level window. Members suggest a narrow stripe and include sample visibility measurements for the comment.",
       "shared": false
     }
   ],

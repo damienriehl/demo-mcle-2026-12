@@ -47,7 +47,7 @@ describe('synthetic matter collections', () => {
     const catalog = new Set([...deadlineCatalog().map(rule => rule.id), 'none']);
     for (const matter of authored) {
       expect(matter.synthetic).toBe(true);
-      expect(matter.title).toMatch(/synthetic/i);
+      expect(matter.title).not.toMatch(/synthetic/i);
       expect(matter.client.contact).toMatch(/@[^\s]+\.example\.invalid$/);
       expect(matter.timeline.length).toBeGreaterThanOrEqual(4);
       expect(matter.timeline.length).toBeLessThanOrEqual(7);

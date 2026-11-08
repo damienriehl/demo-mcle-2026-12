@@ -1,20 +1,20 @@
 {
   "id": "canned-brass-petal",
-  "title": "Brass Petal: the greenhouse asset sale — SYNTHETIC",
+  "title": "Asset sale — Alderwick Greenhouses LLC",
   "practiceArea": "transactional",
   "forum": "Minnesota private asset purchase; no court proceeding",
   "synthetic": true,
   "client": {
-    "name": "Brass Petal Greenhouses (fictional)",
-    "contact": "coordinator@brass-petal.example.invalid"
+    "name": "Alderwick Greenhouses LLC",
+    "contact": "coordinator@alderwick-greenhouses.example.invalid"
   },
   "parties": [
     {
-      "name": "Brass Petal Greenhouses (fictional)",
+      "name": "Alderwick Greenhouses LLC",
       "role": "Client; seller"
     },
     {
-      "name": "Pebble Sun Seedlings (fictional)",
+      "name": "Fenbrook Seedlings LLC",
       "role": "Buyer"
     }
   ],
@@ -43,16 +43,16 @@
   "documents": [
     {
       "id": "doc-1",
-      "title": "Greenhouse asset agreement excerpt (synthetic)",
+      "title": "Greenhouse asset agreement excerpt",
       "kind": "agreement",
       "body": "SYNTHETIC DEMO DOCUMENT. Section 5.3 requires seller’s bench inventory fourteen calendar days after reset. Section 8.1 sets closing twenty-seven calendar days after reset. No court counting rules or weekend adjustment apply.",
       "shared": true
     },
     {
       "id": "doc-2",
-      "title": "Bench inventory draft (synthetic)",
+      "title": "Bench inventory draft",
       "kind": "diligence",
-      "body": "SYNTHETIC DEMO DOCUMENT. Inventory includes twelve rolling benches and the imaginary sunbeam shade screen. Two benches need caster replacement; the draft lists them separately.",
+      "body": "SYNTHETIC DEMO DOCUMENT. Inventory includes twelve rolling benches and the solar shade screen. Two benches need caster replacement; the draft lists them separately.",
       "shared": false
     }
   ],
