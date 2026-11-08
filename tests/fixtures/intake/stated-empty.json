@@ -1,0 +1,23 @@
+{
+  "output": {
+    "fields": [
+      {
+        "path": "parties.0.name",
+        "value": "Additional Example",
+        "source": "invented"
+      },
+      {
+        "path": "parties.0.role",
+        "value": "witness",
+        "source": "invented"
+      }
+    ],
+    "followups": []
+  },
+  "events": [
+    {"type":"content_block_start","index":0,"content_block":{"type":"tool_use","id":"tool-fictional-intake","name":"structure_matter","input":{}}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"{\"fields\":[{\"path\":\"parties.0.name\",\"value\":\"Additional Example\",\"source\":\"invented\"},{\"path\":\"parties.0.role\",\"value\":\"witness\",\"source\":\"invented\"}],\"followups\":[]}"}},
+    {"type":"content_block_stop","index":0},
+    {"type":"message_stop"}
+  ]
+}

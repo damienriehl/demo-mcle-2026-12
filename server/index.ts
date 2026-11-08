@@ -1,6 +1,7 @@
 import { Hono } from 'hono';
 import { matterEvents } from './events';
 import { getMatterStore, type MatterStore } from './store';
+import { createIntakeRoutes } from './intake/routes';
 
 /** A module loaded from server/features/*.ts. Its default export should be a Hono app. */
 export type FeatureModule = { default?: unknown };
@@ -71,6 +72,7 @@ export function createApp(modules: Record<string, FeatureModule> = featureFiles,
   app.put('/api/matters/:id', writeMatter);
   app.delete('/api/matters/:id', (c) => store.remove(c.req.param('id'))
     ? c.body(null, 204) : c.json({ error: 'not_found' }, 404));
+  app.route('/api/intake', createIntakeRoutes({ store }));
   mountFeatures(app, modules);
   app.notFound((c) => c.json({ error: 'not_found', path: c.req.path }, 404));
   return app;

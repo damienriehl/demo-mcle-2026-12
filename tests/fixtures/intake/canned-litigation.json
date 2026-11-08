@@ -1,0 +1,146 @@
+{
+  "id": "fictional-litigation",
+  "title": "Synthetic civil claim",
+  "practiceArea": "litigation",
+  "forum": "EEOC \u2014 Minnesota",
+  "synthetic": true,
+  "client": {
+    "name": "Mira Example",
+    "contact": "mira@example.invalid"
+  },
+  "parties": [
+    {
+      "name": "Mira Example",
+      "role": "employee"
+    },
+    {
+      "name": "Juniper Example Works",
+      "role": "employer"
+    }
+  ],
+  "timeline": [
+    {
+      "id": "termination",
+      "event": "Termination after reporting discrimination",
+      "date": "2026-01-05"
+    }
+  ],
+  "documents": [
+    {
+      "id": "intake-note",
+      "title": "Synthetic intake note",
+      "kind": "note",
+      "body": "Fictional employee reported discrimination and was terminated. No real person or employer is depicted.",
+      "shared": true
+    }
+  ],
+  "deadlines": [
+    {
+      "id": "charge",
+      "label": "EEOC charge",
+      "deadlineRuleId": "eeoc-charge",
+      "trigger": {
+        "event": "discriminatory act \u2014 termination",
+        "date": "2026-01-05"
+      },
+      "assumptions": {}
+    }
+  ],
+  "clientFacing": {
+    "status": "Reviewing your fictional workplace concern.",
+    "nextSteps": [
+      "Confirm the termination date.",
+      "Collect the synthetic termination notice."
+    ]
+  },
+  "reasoning": "The fictional termination suggests an EEOC charge. State proceedings qualify for the catalog\u2019s 300-day window; no tolling or earlier termination notice is assumed. The engine computes the filing date.",
+  "provenance": {
+    "id": {
+      "source": "invented"
+    },
+    "title": {
+      "source": "invented"
+    },
+    "practiceArea": {
+      "source": "invented"
+    },
+    "forum": {
+      "source": "invented"
+    },
+    "synthetic": {
+      "source": "invented"
+    },
+    "client.name": {
+      "source": "invented"
+    },
+    "client.contact": {
+      "source": "invented"
+    },
+    "parties.0.name": {
+      "source": "invented"
+    },
+    "parties.0.role": {
+      "source": "invented"
+    },
+    "parties.1.name": {
+      "source": "invented"
+    },
+    "parties.1.role": {
+      "source": "invented"
+    },
+    "timeline.0.id": {
+      "source": "invented"
+    },
+    "timeline.0.event": {
+      "source": "invented"
+    },
+    "timeline.0.date": {
+      "source": "invented"
+    },
+    "documents.0.id": {
+      "source": "invented"
+    },
+    "documents.0.title": {
+      "source": "invented"
+    },
+    "documents.0.kind": {
+      "source": "invented"
+    },
+    "documents.0.body": {
+      "source": "invented"
+    },
+    "documents.0.shared": {
+      "source": "invented"
+    },
+    "deadlines.0.id": {
+      "source": "invented"
+    },
+    "deadlines.0.label": {
+      "source": "invented"
+    },
+    "deadlines.0.deadlineRuleId": {
+      "source": "invented"
+    },
+    "deadlines.0.trigger.event": {
+      "source": "invented"
+    },
+    "deadlines.0.trigger.date": {
+      "source": "invented"
+    },
+    "deadlines.0.assumptions": {
+      "source": "invented"
+    },
+    "clientFacing.status": {
+      "source": "invented"
+    },
+    "clientFacing.nextSteps.0": {
+      "source": "invented"
+    },
+    "clientFacing.nextSteps.1": {
+      "source": "invented"
+    },
+    "reasoning": {
+      "source": "invented"
+    }
+  }
+}

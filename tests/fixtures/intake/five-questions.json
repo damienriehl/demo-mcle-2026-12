@@ -1,0 +1,76 @@
+{
+  "output": {
+    "fields": [
+      {
+        "path": "client.name",
+        "value": "Mira Example",
+        "source": "stated",
+        "evidence": "My fictional client Mira Example"
+      }
+    ],
+    "followups": [
+      {
+        "id": "deadlines.0.trigger.date",
+        "question": "When was the termination?",
+        "field": "deadlines.0.trigger.date"
+      },
+      {
+        "id": "extra-0",
+        "question": "Fictional question 0?",
+        "field": "clientFacing.nextSteps.0"
+      },
+      {
+        "id": "extra-1",
+        "question": "Fictional question 1?",
+        "field": "clientFacing.nextSteps.1"
+      },
+      {
+        "id": "extra-2",
+        "question": "Fictional question 2?",
+        "field": "clientFacing.nextSteps.2"
+      },
+      {
+        "id": "extra-3",
+        "question": "Fictional question 3?",
+        "field": "clientFacing.nextSteps.3"
+      }
+    ]
+  },
+  "events": [
+    {"type":"content_block_start","index":0,"content_block":{"type":"tool_use","id":"tool-fictional-intake","name":"structure_matter","input":{}}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"{\"fields\":[{\"path\":"}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"\"client.name\",\"valu"}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"e\":\"Mira Example\",\""}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"source\":\"stated\",\"e"}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"vidence\":\"My fictio"}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"nal client Mira Exa"}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"mple\"}],\"followups\""}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":":[{\"id\":\"deadlines."}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"0.trigger.date\",\"qu"}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"estion\":\"When was t"}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"he termination?\",\"f"}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"ield\":\"deadlines.0."}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"trigger.date\"},{\"id"}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"\":\"extra-0\",\"questi"}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"on\":\"Fictional ques"}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"tion 0?\",\"field\":\"c"}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"lientFacing.nextSte"}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"ps.0\"},{\"id\":\"extra"}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"-1\",\"question\":\"Fic"}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"tional question 1?\""}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":",\"field\":\"clientFac"}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"ing.nextSteps.1\"},{"}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"\"id\":\"extra-2\",\"que"}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"stion\":\"Fictional q"}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"uestion 2?\",\"field\""}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":":\"clientFacing.next"}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"Steps.2\"},{\"id\":\"ex"}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"tra-3\",\"question\":\""}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"Fictional question "}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"3?\",\"field\":\"client"}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"Facing.nextSteps.3\""}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"}]}"}},
+    {"type":"content_block_stop","index":0},
+    {"type":"message_stop"}
+  ]
+}
