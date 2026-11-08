@@ -1,22 +1,5 @@
-// Temporary shared contract. Integration replaces this import with src/engine/types.ts.
-export type DeadlineInput = {
-  deadlineRuleId: string;
-  trigger: { event: string; date: string };
-  assumptions: Record<string, string | number | boolean>;
-  inputs?: Record<string, string | number>;
-};
-
-export type Step = { label: string; date?: string; citation: { ruleId: string; subdivision?: string } };
-export type DeadlineResult =
-  | { status: 'computed'; dueDate: string; steps: Step[] }
-  | { status: 'uncomputable'; reason: string; steps: Step[] };
-
-export type DeadlineRuleSummary = {
-  id: string;
-  label: string;
-  description: string;
-  assumptions: { key: string; label: string; options: (string | boolean)[]; default: string | boolean }[];
-};
+export type { DeadlineInput, Step, DeadlineResult, DeadlineRuleSummary } from '../engine/types';
+import type { DeadlineInput, DeadlineResult, DeadlineRuleSummary } from '../engine/types';
 
 export type DeadlineEngine = {
   computeDeadline: (input: DeadlineInput) => DeadlineResult;

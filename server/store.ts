@@ -3,6 +3,7 @@ import { dirname, resolve } from 'node:path';
 import { z } from 'zod';
 import { mattersSchema, matterSchema, type Matter, type MatterWithDeadlines } from '../src/data/schema';
 import type { DeadlineEngine } from '../src/data/engine-types';
+import { computeDeadline, deadlineCatalog } from '../src/engine/index';
 
 export class StoreValidationError extends Error {
   readonly name = 'StoreValidationError';
@@ -125,5 +126,5 @@ const STORE_KEY = Symbol.for('matter-cockpit.matter-store');
 const globals = globalThis as typeof globalThis & { [STORE_KEY]?: MatterStore };
 
 export function getMatterStore(): MatterStore {
-  return globals[STORE_KEY] ??= createMatterStore({ filePath: resolve('data/matters.json') });
+  return globals[STORE_KEY] ??= createMatterStore({ filePath: resolve('data/matters.json'), engine: { computeDeadline, deadlineCatalog } });
 }
