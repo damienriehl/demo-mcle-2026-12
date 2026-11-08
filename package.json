@@ -1,0 +1,41 @@
+{
+  "name": "matter-cockpit",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "license": "MIT",
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "scripts": {
+    "dev": "vite",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "e2e": "playwright test",
+    "smoke:ai": "tsx scripts/smoke-ai.ts",
+    "ingest:rules": "tsx scripts/ingest-rules/index.ts",
+    "reset": "tsx scripts/reset-demo.ts"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "1.6.0",
+    "@hono/node-server": "2.1.6",
+    "cheerio": "1.2.0",
+    "hono": "4.13.17",
+    "react": "19.3.1",
+    "react-dom": "19.3.1",
+    "zod": "4.6.7"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.65.0",
+    "@tailwindcss/vite": "4.3.5",
+    "@types/node": "26.6.6",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
+    "@vitejs/plugin-react": "6.2.1",
+    "tailwindcss": "4.3.5",
+    "tsx": "4.23.15",
+    "typescript": "7.0.2",
+    "vite": "8.3.6",
+    "vitest": "5.1.0"
+  }
+}

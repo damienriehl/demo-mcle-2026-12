@@ -1,0 +1,35 @@
+@import 'tailwindcss';
+@import './theme/tokens.css';
+
+/* Expose the tokens as Tailwind utilities (bg-bg, text-ink, font-display, ...). */
+@theme inline {
+  --color-bg: var(--mc-bg);
+  --color-surface: var(--mc-surface);
+  --color-border: var(--mc-border);
+  --color-ink: var(--mc-ink);
+  --color-ink-muted: var(--mc-ink-muted);
+  --color-accent: var(--mc-accent);
+  --color-accent-ink: var(--mc-accent-ink);
+
+  --font-body: var(--mc-font-body);
+  --font-display: var(--mc-font-display);
+  --font-mono: var(--mc-font-mono);
+
+  /* The smallest Tailwind sizes clamp to the 18px projector floor. */
+  --text-xs: var(--mc-text-min);
+  --text-sm: var(--mc-text-min);
+  --text-base: var(--mc-text-body);
+  --text-lg: var(--mc-text-lg);
+  --text-xl: var(--mc-text-xl);
+
+  --radius-md: var(--mc-radius);
+}
+
+html,
+body {
+  background: var(--mc-bg);
+  color: var(--mc-ink);
+  font-family: var(--mc-font-body);
+  font-size: var(--mc-text-body);
+  line-height: 1.5;
+}

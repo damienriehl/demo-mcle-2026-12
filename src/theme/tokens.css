@@ -1,0 +1,31 @@
+/*
+ * Design tokens. Every color, font, and size the app uses comes from here,
+ * so a theme change or a live tweak is a token edit.
+ *
+ * Neutral placeholder values. Projector rules every theme must keep:
+ *   - body text contrast at least 7:1 against its background
+ *   - nothing smaller than 18px at 1920x1080
+ *   - never carry meaning by color alone; pair color with text or an icon
+ */
+:root {
+  --mc-bg: #f7f7f5;
+  --mc-surface: #ffffff;
+  --mc-border: #5c5c58;
+  --mc-ink: #141414;          /* ~17:1 on --mc-bg */
+  --mc-ink-muted: #3b3b38;    /* ~10:1 on --mc-bg */
+  --mc-accent: #1d4ed8;       /* ~6.6:1 on --mc-bg; use for large text and marks */
+  --mc-accent-ink: #ffffff;
+
+  --mc-font-body: 'Charter', 'Iowan Old Style', 'Palatino Linotype', Georgia, serif;
+  --mc-font-display: 'Charter', 'Iowan Old Style', 'Palatino Linotype', Georgia, serif;
+  --mc-font-mono: ui-monospace, 'SF Mono', 'Cascadia Mono', monospace;
+
+  --mc-text-min: 1.125rem;    /* 18px floor */
+  --mc-text-body: 1.25rem;    /* 20px */
+  --mc-text-lg: 1.5rem;
+  --mc-text-xl: 2rem;
+  --mc-text-display: 3rem;
+
+  --mc-radius: 0.5rem;
+  --mc-space: 1rem;
+}
