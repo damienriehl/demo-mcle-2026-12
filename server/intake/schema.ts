@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import type { Tool } from '@anthropic-ai/sdk/resources/messages';
+import type { BetaTool } from '@anthropic-ai/sdk/resources/beta/messages';
 import { matterSchema, provenanceSchema, type Matter } from '../../src/data/schema';
 import { deadlineCatalog } from '../../src/engine';
 
@@ -12,7 +12,7 @@ export type Field = z.infer<typeof fieldSchema>;
 export const questionSchema = z.strictObject({ id: z.string().min(1), question: z.string().min(1), field: z.string().min(1) });
 export const outputSchema = z.strictObject({ fields: z.array(fieldSchema), followups: z.array(questionSchema) });
 
-export const intakeTool: Tool = {
+export const intakeTool: BetaTool = {
   name: 'structure_matter',
   description: 'Extract or complete a fictional matter. Write fields first, then followups. Each field is a matter dot path, JSON value, source label, and optional evidence quote. Use leaf paths including array indices. Use empty arrays/objects for empty collections. Never emit provenance as a field; source and evidence become the provenance map.',
   eager_input_streaming: true,

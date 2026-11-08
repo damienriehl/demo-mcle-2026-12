@@ -1,14 +1,17 @@
-import type { MessageCreateParamsNonStreaming, MessageStreamEvent } from '@anthropic-ai/sdk/resources/messages';
+import type { BetaMessageStreamParams, BetaRawMessageStreamEvent } from '@anthropic-ai/sdk/resources/beta/messages';
 import { createClient } from '../ai';
 import { intakeTool } from './schema';
 
-export type ModelStream = (request: MessageCreateParamsNonStreaming, signal: AbortSignal) => AsyncIterable<MessageStreamEvent>;
+export type ModelStream = (request: BetaMessageStreamParams, signal: AbortSignal) => AsyncIterable<BetaRawMessageStreamEvent>;
+
+/** The model ended its turn without one complete tool call; the route retries once. */
+export class IncompleteToolError extends Error {}
 
 export function modelStream(): ModelStream | null {
   const client = createClient();
   if (!client) return null;
   return async function* (request, signal) {
-    const stream = client.messages.stream(request, { signal, maxRetries: 0 });
+    const stream = client.beta.messages.stream(request, { signal, maxRetries: 0 });
     try { for await (const event of stream) yield event; }
     finally { stream.abort(); }
   };
@@ -54,11 +57,12 @@ class FieldScanner {
   }
 }
 
-export async function consumeTool(stream: AsyncIterable<MessageStreamEvent>, onField: (field: unknown) => Promise<void>): Promise<unknown> {
+export async function consumeTool(stream: AsyncIterable<BetaRawMessageStreamEvent>, onField: (field: unknown) => Promise<void>): Promise<unknown> {
   let activeIndex: number | undefined;
   let input = '';
   let stopped = false;
   let fieldsRead = 0;
+  let stopReason: string | null = null;
   const scanner = new FieldScanner();
   for await (const event of stream) {
     if (event.type === 'content_block_start' && event.content_block.type === 'tool_use') {
@@ -68,8 +72,10 @@ export async function consumeTool(stream: AsyncIterable<MessageStreamEvent>, onF
       input += event.delta.partial_json;
       for (const field of scanner.append(event.delta.partial_json)) { await onField(field); fieldsRead++; }
     } else if (event.type === 'content_block_stop' && event.index === activeIndex) stopped = true;
+    else if (event.type === 'message_delta') stopReason = event.delta.stop_reason;
   }
-  if (!stopped) throw new Error('Incomplete intake tool response');
+  if (stopReason === 'max_tokens' || stopReason === 'refusal') throw new IncompleteToolError(`Model stopped with ${stopReason} before a complete tool call.`);
+  if (!stopped) throw new IncompleteToolError('Model ended without calling structure_matter.');
   const output: unknown = JSON.parse(input);
   // JSON property order is not semantically significant. A reordered tool still validates.
   if (output && typeof output === 'object' && 'fields' in output && Array.isArray(output.fields)) {

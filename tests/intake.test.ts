@@ -1,7 +1,7 @@
 import { mkdtempSync, readFileSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
-import type { MessageStreamEvent } from '@anthropic-ai/sdk/resources/messages';
+import type { BetaRawMessageStreamEvent as MessageStreamEvent } from '@anthropic-ai/sdk/resources/beta/messages';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { matterSchema, type Matter } from '../src/data/schema';
 import { computeDeadline, deadlineCatalog } from '../src/engine';
