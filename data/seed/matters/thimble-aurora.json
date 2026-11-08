@@ -1,0 +1,342 @@
+{
+  "id": "matters-thimble-aurora",
+  "title": "Thimble Aurora: the unpaid star ovens — SYNTHETIC",
+  "practiceArea": "bankruptcy",
+  "forum": "U.S. Bankruptcy Court, District of Minnesota; voluntary Chapter 7 asset case",
+  "synthetic": true,
+  "client": {
+    "name": "Thimble Aurora Ovenworks (fictional)",
+    "contact": "coordinator@thimble-aurora.example.invalid"
+  },
+  "parties": [
+    {
+      "name": "Thimble Aurora Ovenworks (fictional)",
+      "role": "Client; ordinary unsecured trade creditor"
+    },
+    {
+      "name": "Drowsy Meteor Bakery (fictional)",
+      "role": "Chapter 7 debtor"
+    },
+    {
+      "name": "Juniper Quillwidget (fictional)",
+      "role": "Chapter 7 trustee"
+    }
+  ],
+  "timeline": [
+    {
+      "id": "event-1",
+      "event": "Three star-shaped ovens delivered with signed receiving slips",
+      "date": "-90"
+    },
+    {
+      "id": "event-2",
+      "event": "Voluntary Chapter 7 petition filed; order for relief entered",
+      "date": "-55"
+    },
+    {
+      "id": "event-3",
+      "event": "Court notice identified an asset case and ordinary proof-of-claim deadline",
+      "date": "-48"
+    },
+    {
+      "id": "event-4",
+      "event": "Client found an uncredited partial payment in its ledger",
+      "date": "-12"
+    },
+    {
+      "id": "event-5",
+      "event": "Synthetic client workplan signed; draft delivery agreed for ten days after reset",
+      "date": "-3"
+    }
+  ],
+  "documents": [
+    {
+      "id": "doc-1",
+      "title": "Asset-case notice (synthetic)",
+      "kind": "notice",
+      "body": "SYNTHETIC DEMO DOCUMENT. Voluntary Chapter 7 order for relief entered fifty-five days before reset. This is an asset case; ordinary unsecured trade claims are subject to the ordinary Rule 3002(c) period. No government claim, special exception, later asset-discovery notice, or different bar date applies.",
+      "shared": true
+    },
+    {
+      "id": "doc-2",
+      "title": "Oven invoice and payment ledger (synthetic)",
+      "kind": "financial",
+      "body": "SYNTHETIC DEMO DOCUMENT. Invoice lists three star-shaped ovens for 18,600 synthetic dollars. A partial payment of 2,100 synthetic dollars appears on the ledger. Reconcile that payment before preparing the claim; no real account numbers are used.",
+      "shared": false
+    },
+    {
+      "id": "doc-3",
+      "title": "Agreed workplan (synthetic)",
+      "kind": "agreement",
+      "body": "SYNTHETIC DEMO DOCUMENT. Workplan § 3: Counsel will deliver a reconciled proof-of-claim draft and attachment list. Delivery is due ten calendar days after the demo reset date. This is an agreed draft-delivery milestone, separate from any filing deadline.",
+      "shared": true
+    }
+  ],
+  "deadlines": [
+    {
+      "id": "proof-of-claim",
+      "label": "File ordinary trade-creditor proof of claim",
+      "deadlineRuleId": "frbp-3002-proof-of-claim",
+      "trigger": {
+        "event": "Voluntary Chapter 7 order for relief",
+        "date": "-55"
+      },
+      "assumptions": {}
+    },
+    {
+      "id": "agreed-draft",
+      "label": "Agreed delivery of reconciled claim draft",
+      "deadlineRuleId": "contract-deadline",
+      "trigger": {
+        "event": "Synthetic agreement signed",
+        "date": "-3"
+      },
+      "assumptions": {},
+      "inputs": {
+        "dueDate": "+10",
+        "section": "Workplan § 3"
+      }
+    }
+  ],
+  "clientFacing": {
+    "status": "The bakery entered Chapter 7. We are checking the unpaid balance before submitting your claim.",
+    "nextSteps": [
+      "Confirm whether the partial payment covered these ovens.",
+      "Send the signed delivery slips so we can attach support to the claim."
+    ]
+  },
+  "provenance": {
+    "id": {
+      "source": "stated",
+      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+    },
+    "title": {
+      "source": "stated",
+      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+    },
+    "practiceArea": {
+      "source": "stated",
+      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+    },
+    "forum": {
+      "source": "stated",
+      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+    },
+    "synthetic": {
+      "source": "stated",
+      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+    },
+    "client.name": {
+      "source": "stated",
+      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+    },
+    "client.contact": {
+      "source": "stated",
+      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+    },
+    "parties.0.name": {
+      "source": "stated",
+      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+    },
+    "parties.0.role": {
+      "source": "stated",
+      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+    },
+    "parties.1.name": {
+      "source": "stated",
+      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+    },
+    "parties.1.role": {
+      "source": "stated",
+      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+    },
+    "parties.2.name": {
+      "source": "stated",
+      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+    },
+    "parties.2.role": {
+      "source": "stated",
+      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+    },
+    "timeline.0.id": {
+      "source": "stated",
+      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+    },
+    "timeline.0.event": {
+      "source": "stated",
+      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+    },
+    "timeline.0.date": {
+      "source": "stated",
+      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+    },
+    "timeline.1.id": {
+      "source": "stated",
+      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+    },
+    "timeline.1.event": {
+      "source": "stated",
+      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+    },
+    "timeline.1.date": {
+      "source": "stated",
+      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+    },
+    "timeline.2.id": {
+      "source": "stated",
+      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+    },
+    "timeline.2.event": {
+      "source": "stated",
+      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+    },
+    "timeline.2.date": {
+      "source": "stated",
+      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+    },
+    "timeline.3.id": {
+      "source": "stated",
+      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+    },
+    "timeline.3.event": {
+      "source": "stated",
+      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+    },
+    "timeline.3.date": {
+      "source": "stated",
+      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+    },
+    "timeline.4.id": {
+      "source": "stated",
+      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+    },
+    "timeline.4.event": {
+      "source": "stated",
+      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+    },
+    "timeline.4.date": {
+      "source": "stated",
+      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+    },
+    "documents.0.id": {
+      "source": "stated",
+      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+    },
+    "documents.0.title": {
+      "source": "stated",
+      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+    },
+    "documents.0.kind": {
+      "source": "stated",
+      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+    },
+    "documents.0.body": {
+      "source": "stated",
+      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+    },
+    "documents.0.shared": {
+      "source": "stated",
+      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+    },
+    "documents.1.id": {
+      "source": "stated",
+      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+    },
+    "documents.1.title": {
+      "source": "stated",
+      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+    },
+    "documents.1.kind": {
+      "source": "stated",
+      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+    },
+    "documents.1.body": {
+      "source": "stated",
+      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+    },
+    "documents.1.shared": {
+      "source": "stated",
+      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+    },
+    "documents.2.id": {
+      "source": "stated",
+      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+    },
+    "documents.2.title": {
+      "source": "stated",
+      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+    },
+    "documents.2.kind": {
+      "source": "stated",
+      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+    },
+    "documents.2.body": {
+      "source": "stated",
+      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+    },
+    "documents.2.shared": {
+      "source": "stated",
+      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+    },
+    "deadlines.0.id": {
+      "source": "stated",
+      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+    },
+    "deadlines.0.label": {
+      "source": "stated",
+      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+    },
+    "deadlines.0.deadlineRuleId": {
+      "source": "stated",
+      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+    },
+    "deadlines.0.trigger.event": {
+      "source": "stated",
+      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+    },
+    "deadlines.0.trigger.date": {
+      "source": "stated",
+      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+    },
+    "deadlines.1.id": {
+      "source": "stated",
+      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+    },
+    "deadlines.1.label": {
+      "source": "stated",
+      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+    },
+    "deadlines.1.deadlineRuleId": {
+      "source": "stated",
+      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+    },
+    "deadlines.1.trigger.event": {
+      "source": "stated",
+      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+    },
+    "deadlines.1.trigger.date": {
+      "source": "stated",
+      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+    },
+    "deadlines.1.inputs.dueDate": {
+      "source": "stated",
+      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+    },
+    "deadlines.1.inputs.section": {
+      "source": "stated",
+      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+    },
+    "clientFacing.status": {
+      "source": "stated",
+      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+    },
+    "clientFacing.nextSteps.0": {
+      "source": "stated",
+      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+    },
+    "clientFacing.nextSteps.1": {
+      "source": "stated",
+      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+    }
+  }
+}

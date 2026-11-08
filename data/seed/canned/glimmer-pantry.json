@@ -1,0 +1,298 @@
+{
+  "id": "canned-glimmer-pantry",
+  "title": "Glimmer Pantry: buying the cloud-jam cart — SYNTHETIC",
+  "practiceArea": "transactional",
+  "forum": "Minnesota private asset purchase; no court proceeding",
+  "synthetic": true,
+  "client": {
+    "name": "Glimmer Pantry Collective (fictional)",
+    "contact": "coordinator@glimmer-pantry.example.invalid"
+  },
+  "parties": [
+    {
+      "name": "Glimmer Pantry Collective (fictional)",
+      "role": "Client; buyer"
+    },
+    {
+      "name": "Tiny Thunder Preserves (fictional)",
+      "role": "Seller"
+    }
+  ],
+  "timeline": [
+    {
+      "id": "event-1",
+      "event": "Buyer inspected the cloud-jam cart",
+      "date": "-24"
+    },
+    {
+      "id": "event-2",
+      "event": "Asset purchase agreement signed",
+      "date": "-8"
+    },
+    {
+      "id": "event-3",
+      "event": "Seller supplied equipment list",
+      "date": "-3"
+    },
+    {
+      "id": "event-4",
+      "event": "Closing scheduled under the agreement",
+      "date": "+19"
+    }
+  ],
+  "documents": [
+    {
+      "id": "doc-1",
+      "title": "Cart purchase agreement excerpt (synthetic)",
+      "kind": "agreement",
+      "body": "SYNTHETIC DEMO DOCUMENT. Section 3.4 fixes the equipment objection date nine calendar days after reset. Section 6.1 fixes closing nineteen calendar days after reset. Both are express dates in the agreement with no automatic weekend extension.",
+      "shared": true
+    },
+    {
+      "id": "doc-2",
+      "title": "Equipment list (synthetic)",
+      "kind": "diligence",
+      "body": "SYNTHETIC DEMO DOCUMENT. The cart includes a copper kettle, a pretend cloud condenser, and six jam display trays. The condenser’s replacement filter is missing.",
+      "shared": false
+    }
+  ],
+  "deadlines": [
+    {
+      "id": "equipment-objection",
+      "label": "Deliver equipment objection under Agreement § 3.4",
+      "deadlineRuleId": "contract-deadline",
+      "trigger": {
+        "event": "Synthetic agreement signed",
+        "date": "-8"
+      },
+      "assumptions": {},
+      "inputs": {
+        "dueDate": "+9",
+        "section": "Cart Purchase Agreement § 3.4"
+      }
+    },
+    {
+      "id": "closing",
+      "label": "Close cloud-jam cart purchase",
+      "deadlineRuleId": "contract-deadline",
+      "trigger": {
+        "event": "Synthetic agreement signed",
+        "date": "-8"
+      },
+      "assumptions": {},
+      "inputs": {
+        "dueDate": "+19",
+        "section": "Cart Purchase Agreement § 6.1"
+      }
+    }
+  ],
+  "clientFacing": {
+    "status": "We are checking the cart equipment before closing.",
+    "nextSteps": [
+      "Confirm whether the missing filter needs a seller credit.",
+      "Review the equipment objection notice."
+    ]
+  },
+  "provenance": {
+    "id": {
+      "source": "stated",
+      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+    },
+    "title": {
+      "source": "stated",
+      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+    },
+    "practiceArea": {
+      "source": "stated",
+      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+    },
+    "forum": {
+      "source": "stated",
+      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+    },
+    "synthetic": {
+      "source": "stated",
+      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+    },
+    "client.name": {
+      "source": "stated",
+      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+    },
+    "client.contact": {
+      "source": "stated",
+      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+    },
+    "parties.0.name": {
+      "source": "stated",
+      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+    },
+    "parties.0.role": {
+      "source": "stated",
+      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+    },
+    "parties.1.name": {
+      "source": "stated",
+      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+    },
+    "parties.1.role": {
+      "source": "stated",
+      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+    },
+    "timeline.0.id": {
+      "source": "stated",
+      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+    },
+    "timeline.0.event": {
+      "source": "stated",
+      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+    },
+    "timeline.0.date": {
+      "source": "stated",
+      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+    },
+    "timeline.1.id": {
+      "source": "stated",
+      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+    },
+    "timeline.1.event": {
+      "source": "stated",
+      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+    },
+    "timeline.1.date": {
+      "source": "stated",
+      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+    },
+    "timeline.2.id": {
+      "source": "stated",
+      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+    },
+    "timeline.2.event": {
+      "source": "stated",
+      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+    },
+    "timeline.2.date": {
+      "source": "stated",
+      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+    },
+    "timeline.3.id": {
+      "source": "stated",
+      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+    },
+    "timeline.3.event": {
+      "source": "stated",
+      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+    },
+    "timeline.3.date": {
+      "source": "stated",
+      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+    },
+    "documents.0.id": {
+      "source": "stated",
+      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+    },
+    "documents.0.title": {
+      "source": "stated",
+      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+    },
+    "documents.0.kind": {
+      "source": "stated",
+      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+    },
+    "documents.0.body": {
+      "source": "stated",
+      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+    },
+    "documents.0.shared": {
+      "source": "stated",
+      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+    },
+    "documents.1.id": {
+      "source": "stated",
+      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+    },
+    "documents.1.title": {
+      "source": "stated",
+      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+    },
+    "documents.1.kind": {
+      "source": "stated",
+      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+    },
+    "documents.1.body": {
+      "source": "stated",
+      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+    },
+    "documents.1.shared": {
+      "source": "stated",
+      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+    },
+    "deadlines.0.id": {
+      "source": "stated",
+      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+    },
+    "deadlines.0.label": {
+      "source": "stated",
+      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+    },
+    "deadlines.0.deadlineRuleId": {
+      "source": "stated",
+      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+    },
+    "deadlines.0.trigger.event": {
+      "source": "stated",
+      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+    },
+    "deadlines.0.trigger.date": {
+      "source": "stated",
+      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+    },
+    "deadlines.0.inputs.dueDate": {
+      "source": "stated",
+      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+    },
+    "deadlines.0.inputs.section": {
+      "source": "stated",
+      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+    },
+    "deadlines.1.id": {
+      "source": "stated",
+      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+    },
+    "deadlines.1.label": {
+      "source": "stated",
+      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+    },
+    "deadlines.1.deadlineRuleId": {
+      "source": "stated",
+      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+    },
+    "deadlines.1.trigger.event": {
+      "source": "stated",
+      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+    },
+    "deadlines.1.trigger.date": {
+      "source": "stated",
+      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+    },
+    "deadlines.1.inputs.dueDate": {
+      "source": "stated",
+      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+    },
+    "deadlines.1.inputs.section": {
+      "source": "stated",
+      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+    },
+    "clientFacing.status": {
+      "source": "stated",
+      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+    },
+    "clientFacing.nextSteps.0": {
+      "source": "stated",
+      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+    },
+    "clientFacing.nextSteps.1": {
+      "source": "stated",
+      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+    }
+  }
+}

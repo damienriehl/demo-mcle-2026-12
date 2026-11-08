@@ -1,0 +1,402 @@
+{
+  "id": "matters-paperkite-custody",
+  "title": "Paperkite: two homes and one telescope — SYNTHETIC",
+  "practiceArea": "family",
+  "forum": "Hennepin County District Court, Family Division; dissolution with custody",
+  "synthetic": true,
+  "client": {
+    "name": "Aster Paperkite (fictional)",
+    "contact": "coordinator@paperkite-custody.example.invalid"
+  },
+  "parties": [
+    {
+      "name": "Aster Paperkite (fictional)",
+      "role": "Client; petitioner and moving parent"
+    },
+    {
+      "name": "Rowan Cloudthimble (fictional)",
+      "role": "Respondent; other parent"
+    },
+    {
+      "name": "Pip Paperkite-Cloudthimble (fictional)",
+      "role": "Fictional minor child; no personal identifiers"
+    }
+  ],
+  "timeline": [
+    {
+      "id": "event-1",
+      "event": "Dissolution petition filed with custody requested",
+      "date": "-62"
+    },
+    {
+      "id": "event-2",
+      "event": "Parents tried a two-week school-night schedule",
+      "date": "-24"
+    },
+    {
+      "id": "event-3",
+      "event": "Court set an ordinary temporary-custody motion hearing",
+      "date": "-7"
+    },
+    {
+      "id": "event-4",
+      "event": "Synthetic client workplan signed; draft delivery agreed for ten days after reset",
+      "date": "-3"
+    },
+    {
+      "id": "event-5",
+      "event": "Scheduled temporary-custody motion hearing",
+      "date": "+35"
+    }
+  ],
+  "documents": [
+    {
+      "id": "doc-1",
+      "title": "Temporary-custody hearing notice (synthetic)",
+      "kind": "notice",
+      "body": "SYNTHETIC DEMO DOCUMENT. The simulated Hennepin County hearing is thirty-five days after reset. Aster seeks an ordinary temporary-custody schedule, not emergency or post-trial relief. No special scheduling order changes ordinary Rule 303 motion deadlines. Opposing submissions are tracked for planning as well as the client’s own motion.",
+      "shared": true
+    },
+    {
+      "id": "doc-2",
+      "title": "Parenting schedule working note (synthetic)",
+      "kind": "family-plan",
+      "body": "SYNTHETIC DEMO DOCUMENT. Both parents want Pip to keep the same school-night routine. The portable telescope moves between homes on weekends. The draft proposes neutral exchanges and a shared equipment checklist; it records proposals, not an existing court order.",
+      "shared": false
+    },
+    {
+      "id": "doc-3",
+      "title": "Agreed workplan (synthetic)",
+      "kind": "agreement",
+      "body": "SYNTHETIC DEMO DOCUMENT. Workplan § 6: Counsel will deliver a temporary-custody motion draft and proposed parenting schedule. Delivery is due ten calendar days after the demo reset date. This is an agreed draft-delivery milestone, separate from any filing deadline.",
+      "shared": true
+    }
+  ],
+  "deadlines": [
+    {
+      "id": "motion-papers",
+      "label": "Serve and file temporary-custody motion papers",
+      "deadlineRuleId": "mn-gp-303-family-motion",
+      "trigger": {
+        "event": "Scheduled ordinary family motion hearing",
+        "date": "+35"
+      },
+      "assumptions": {}
+    },
+    {
+      "id": "new-issues",
+      "label": "Track response deadline for new issues",
+      "deadlineRuleId": "mn-gp-303-family-new-issues",
+      "trigger": {
+        "event": "Scheduled ordinary family motion hearing",
+        "date": "+35"
+      },
+      "assumptions": {}
+    },
+    {
+      "id": "response",
+      "label": "Track ordinary responsive papers deadline",
+      "deadlineRuleId": "mn-gp-303-family-response",
+      "trigger": {
+        "event": "Scheduled ordinary family motion hearing",
+        "date": "+35"
+      },
+      "assumptions": {}
+    },
+    {
+      "id": "agreed-draft",
+      "label": "Agreed delivery of temporary-custody motion draft",
+      "deadlineRuleId": "contract-deadline",
+      "trigger": {
+        "event": "Synthetic agreement signed",
+        "date": "-3"
+      },
+      "assumptions": {},
+      "inputs": {
+        "dueDate": "+10",
+        "section": "Workplan § 6"
+      }
+    }
+  ],
+  "clientFacing": {
+    "status": "The court has set a hearing about the temporary parenting schedule. We are preparing your proposal and supporting statement.",
+    "nextSteps": [
+      "Review the school-night schedule and telescope exchange plan.",
+      "Send corrections to your supporting statement before the motion papers are due."
+    ]
+  },
+  "provenance": {
+    "id": {
+      "source": "stated",
+      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+    },
+    "title": {
+      "source": "stated",
+      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+    },
+    "practiceArea": {
+      "source": "stated",
+      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+    },
+    "forum": {
+      "source": "stated",
+      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+    },
+    "synthetic": {
+      "source": "stated",
+      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+    },
+    "client.name": {
+      "source": "stated",
+      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+    },
+    "client.contact": {
+      "source": "stated",
+      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+    },
+    "parties.0.name": {
+      "source": "stated",
+      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+    },
+    "parties.0.role": {
+      "source": "stated",
+      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+    },
+    "parties.1.name": {
+      "source": "stated",
+      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+    },
+    "parties.1.role": {
+      "source": "stated",
+      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+    },
+    "parties.2.name": {
+      "source": "stated",
+      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+    },
+    "parties.2.role": {
+      "source": "stated",
+      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+    },
+    "timeline.0.id": {
+      "source": "stated",
+      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+    },
+    "timeline.0.event": {
+      "source": "stated",
+      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+    },
+    "timeline.0.date": {
+      "source": "stated",
+      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+    },
+    "timeline.1.id": {
+      "source": "stated",
+      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+    },
+    "timeline.1.event": {
+      "source": "stated",
+      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+    },
+    "timeline.1.date": {
+      "source": "stated",
+      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+    },
+    "timeline.2.id": {
+      "source": "stated",
+      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+    },
+    "timeline.2.event": {
+      "source": "stated",
+      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+    },
+    "timeline.2.date": {
+      "source": "stated",
+      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+    },
+    "timeline.3.id": {
+      "source": "stated",
+      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+    },
+    "timeline.3.event": {
+      "source": "stated",
+      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+    },
+    "timeline.3.date": {
+      "source": "stated",
+      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+    },
+    "timeline.4.id": {
+      "source": "stated",
+      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+    },
+    "timeline.4.event": {
+      "source": "stated",
+      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+    },
+    "timeline.4.date": {
+      "source": "stated",
+      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+    },
+    "documents.0.id": {
+      "source": "stated",
+      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+    },
+    "documents.0.title": {
+      "source": "stated",
+      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+    },
+    "documents.0.kind": {
+      "source": "stated",
+      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+    },
+    "documents.0.body": {
+      "source": "stated",
+      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+    },
+    "documents.0.shared": {
+      "source": "stated",
+      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+    },
+    "documents.1.id": {
+      "source": "stated",
+      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+    },
+    "documents.1.title": {
+      "source": "stated",
+      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+    },
+    "documents.1.kind": {
+      "source": "stated",
+      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+    },
+    "documents.1.body": {
+      "source": "stated",
+      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+    },
+    "documents.1.shared": {
+      "source": "stated",
+      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+    },
+    "documents.2.id": {
+      "source": "stated",
+      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+    },
+    "documents.2.title": {
+      "source": "stated",
+      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+    },
+    "documents.2.kind": {
+      "source": "stated",
+      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+    },
+    "documents.2.body": {
+      "source": "stated",
+      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+    },
+    "documents.2.shared": {
+      "source": "stated",
+      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+    },
+    "deadlines.0.id": {
+      "source": "stated",
+      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+    },
+    "deadlines.0.label": {
+      "source": "stated",
+      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+    },
+    "deadlines.0.deadlineRuleId": {
+      "source": "stated",
+      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+    },
+    "deadlines.0.trigger.event": {
+      "source": "stated",
+      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+    },
+    "deadlines.0.trigger.date": {
+      "source": "stated",
+      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+    },
+    "deadlines.1.id": {
+      "source": "stated",
+      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+    },
+    "deadlines.1.label": {
+      "source": "stated",
+      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+    },
+    "deadlines.1.deadlineRuleId": {
+      "source": "stated",
+      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+    },
+    "deadlines.1.trigger.event": {
+      "source": "stated",
+      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+    },
+    "deadlines.1.trigger.date": {
+      "source": "stated",
+      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+    },
+    "deadlines.2.id": {
+      "source": "stated",
+      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+    },
+    "deadlines.2.label": {
+      "source": "stated",
+      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+    },
+    "deadlines.2.deadlineRuleId": {
+      "source": "stated",
+      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+    },
+    "deadlines.2.trigger.event": {
+      "source": "stated",
+      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+    },
+    "deadlines.2.trigger.date": {
+      "source": "stated",
+      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+    },
+    "deadlines.3.id": {
+      "source": "stated",
+      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+    },
+    "deadlines.3.label": {
+      "source": "stated",
+      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+    },
+    "deadlines.3.deadlineRuleId": {
+      "source": "stated",
+      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+    },
+    "deadlines.3.trigger.event": {
+      "source": "stated",
+      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+    },
+    "deadlines.3.trigger.date": {
+      "source": "stated",
+      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+    },
+    "deadlines.3.inputs.dueDate": {
+      "source": "stated",
+      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+    },
+    "deadlines.3.inputs.section": {
+      "source": "stated",
+      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+    },
+    "clientFacing.status": {
+      "source": "stated",
+      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+    },
+    "clientFacing.nextSteps.0": {
+      "source": "stated",
+      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+    },
+    "clientFacing.nextSteps.1": {
+      "source": "stated",
+      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+    }
+  }
+}
