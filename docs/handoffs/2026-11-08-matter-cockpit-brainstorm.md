@@ -1,22 +1,19 @@
 ---
-topic: matter-cockpit-brainstorm
+topic: matter-cockpit-build
 ---
 
-# Handoff: Matter Cockpit CLE demo, brainstorm done, planning next
+# Handoff: Matter Cockpit CLE demo, build in progress
 
 ## State
-- Requirements-only plan written and pushed: `docs/plans/2026-11-08-1555-feat-matter-cockpit-cle-demo-plan.md` (R1-R38, F1-F4, AE1-AE5).
-- Decisions recorded via cockpit-decide/cockpit-answer under stems `demo-mcle-2026-12-2026-11-08-*` (base-repo, subject, crowd-intake, ramble-parser, crowd-steering, intake-followups, intake-flow, verify-panel, visual-direction).
-- No code exists yet; repo holds only LICENSE, README stub, and the plan.
+- Plan (implementation-ready, reviewed): `docs/plans/2026-11-08-1555-feat-matter-cockpit-cle-demo-plan.md`.
+- Build branch: `feat/matter-cockpit` (pushed). Integrated so far: scaffold, rules library (408 verbatim records), deadline engine (25 rules), matter store with engine wiring. 81 tests pass.
+- In flight as Codex workers on `worker/*` branches: seed matters, intake AI service, three views plus slot registry, `/cook` stage skill.
+- Remaining after those: Trust but Verify panel, final themes, six fallback branches with timed `/cook` dry runs, runbook, slides, README polish, PR and merge.
 
-## Next
-1. Run `ce-plan` on the plan file to enrich it in place with the Planning Contract and Implementation Units.
-2. First build unit after planning: the prep sketch session for three visual directions (R31), published as an Artifact for Damien to pick.
-3. Then `ce-work`: app, rules library ingestion, seed matters, stage command, six fallback branches.
+## Open items for Damien
+- Default theme pick (filed; provisional default is Law Review).
+- Which Claude API key the app should use for live intake (none provisioned for this project yet).
+- One full rehearsal screen recording.
 
-## Damien's tweaks given at confirmation
-- Stage brainstorm: answer what time allows, ripcord phrase "answer everything else yourself", plus a built-in time budget.
-- Design and theme tweaks close the show, never open it.
-- He drives via Remote Control in Chrome with a Chrome dictation app; venue internet is good.
-- Attendees have Claude Code and an API key; the app still works without a key.
-- Minnesota rules are public domain.
+## Conventions
+- Workers get shared contracts for rule IDs, the engine interface, the intake API, and the slot registry; the orchestrator integrates by cherry-pick, verifies, and commits.
