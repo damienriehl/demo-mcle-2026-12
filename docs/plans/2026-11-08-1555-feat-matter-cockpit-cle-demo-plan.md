@@ -17,7 +17,7 @@ execution: code
 - **Product authority:** Damien decides product direction, visual taste, and run of show; technical choices follow engineering best practice.
 - **Open blockers:** None for building. Damien's theme pick (U9) and his one screen recording (U12) gate only those steps; see Open Questions.
 - **Execution profile:** One PR from a feature branch built in a worktree under `~/worktrees/`, merged to `main`. The six fallback branches (U11) branch from that merged `main` and are never merged. Per Damien's worker policy, the orchestrating session decomposes units to workers and verifies their artifacts itself.
-- **Stop conditions:** Stop and ask only for taste calls (theme pick) or a credential with no prior authorization; everything else follows the Decision Bar.
+- **Stop conditions:** Stop and ask only for a credential with no prior authorization; the theme pick proceeds provisionally under U9, and everything else follows the Decision Bar.
 - **Finisher:** The implementing session ships the PR, builds the fallback branches, and runs the rehearsal evidence; Damien records the one screen capture and presents.
 
 ---
@@ -82,7 +82,7 @@ The existing open-source legal AI platforms (Mike, BigLaw, LQ.AI) are large, mul
 - R16. The panel shows the governing rule's verbatim text from the bundled library, with a link to its official source.
 - R17. The panel shows the date math as ordered steps: trigger date, period added, landing day, any weekend or holiday roll-forward with its rule, and the final due date.
 - R18. The AI chooses the governing rule and trigger, and deterministic code computes every date.
-- R19. The panel lists each assumption behind a deadline as a toggle, and flipping one recomputes the deadline and redraws the math live; for example, switching personal service to mail service adds three days under Fed. R. Civ. P. 6(d).
+- R19. The panel lists each assumption behind a deadline as a toggle, and flipping one recomputes the deadline and redraws the math live; for example, switching a federal complaint from personal service to a Rule 4(d) waiver moves the answer deadline from 21 days after service to 60 days after the waiver request was sent under Fed. R. Civ. P. 12(a)(1)(A)(ii).
 - R20. The panel shows a plain-English reasoning chain for why the rule applies, with the same stated-versus-inferred labels as R12.
 - R21. When no bundled rule matches, or the rule has no computed-deadline logic, the panel shows the reasoning and an amber "No source on file. Verify independently." warning instead of a date.
 
@@ -152,7 +152,7 @@ flowchart TB
 ### Acceptance Examples
 
 - AE1. **Covers R8, R9.** **Given** Damien rambles about a fired employee but never says when, **when** the app asks "When was the termination?" and Damien presses Embellish, **then** the app fills a plausible termination date labeled invented and computes the EEOC charge deadline from it.
-- AE2. **Covers R18, R19.** **Given** a federal complaint served personally with an answer due on a weekday, **when** Damien flips the service assumption to mail, **then** the due date moves three days later, rolling to the next business day if needed, and the math steps show Rule 6(d) and any Rule 6(a)(1)(C) roll-forward.
+- AE2. **Covers R18, R19.** **Given** a federal complaint served personally with an answer due 21 days later, **when** Damien flips the service assumption to a Rule 4(d) waiver, **then** the due date moves to 60 days after the waiver request was sent, rolling to the next business day if needed, and the math steps show Rule 12(a)(1)(A)(ii) and any Rule 6(a)(1)(C) roll-forward.
 - AE3. **Covers R21.** **Given** a regulatory matter whose AI-chosen authority has no computed-deadline logic, **when** Damien opens its deadline, **then** the panel shows the reasoning and the amber no-source warning instead of a date.
 - AE4. **Covers R24, R25.** **Given** the stage brainstorm has asked two of five questions, **when** Damien says "answer everything else yourself," **then** Claude Code states its remaining choices in one short list and begins building without another question.
 - AE5. **Covers R37.** **Given** an attendee clones the repo with no API key, **when** they press Surprise Me, **then** a complete canned matter appears, and the Ramble box explains that it needs a key.
@@ -200,7 +200,7 @@ All questions the brainstorm deferred to planning are resolved in the Planning C
 - Minnesota Rules of Civil Procedure: https://www.revisor.mn.gov/court_rules/rule/cp-toh/
 - Lesson from the alea-intake rehearsal on 2026-11-08: example stories with fixed dates showed most deadlines as lapsed, which R6 prevents.
 
-**Product Contract preservation:** restructured, no scope change: the five "Deferred to Planning" questions were resolved in place by KTD8–KTD10, KTD12, and KTD13; Goal Capsule gained execution profile, stop conditions, and finisher lines.
+**Product Contract preservation:** changed: R19's example and AE2 — the original example added Rule 6(d) mail days to a complaint answer, but a complaint is served under Rule 4 and Rule 6(d) reaches only Rule 5(b)(2)(C), (D), or (F) service, so the toggle now flips personal service to a Rule 4(d) waiver; the requirement's intent (flip an assumption, watch the date and math redraw) is unchanged. Restructured, no scope change: the five "Deferred to Planning" questions were resolved in place by KTD8–KTD10, KTD12, and KTD13.
 
 ---
 
@@ -210,15 +210,15 @@ All questions the brainstorm deferred to planning are resolved in the Planning C
 
 - KTD1. **Vite, React, and TypeScript, styled with Tailwind on CSS-variable design tokens.** Claude Code writes this stack fastest and most reliably, which is what a ten-minute live build needs; tokens as CSS variables make every theme and live tweak a token edit (R30–R33).
 - KTD2. **One small Node server in the same repo, started with the client by a single `npm run dev`.** It holds the matter store, the intake AI calls, and the API key, so the key never reaches the browser. Hono keeps it to a few files.
-- KTD3. **Matters live in one plain JSON file that the server watches and pushes to every view over server-sent events.** Claude Code adds a matter by writing that file (R14), new crowd features read the same data with no wiring, and every open tab updates within a second (R1). Seeds live in committed files; the runtime file is gitignored and rebuilt by a reset script, so rehearsals start clean.
+- KTD3. **Matters live in one plain JSON file that the server watches and pushes to every view over server-sent events.** Claude Code adds a matter by writing that file (R14), new crowd features read the same data with no wiring, and every open tab updates within a second (R1). The file stores each deadline's rule ID, trigger date, and assumptions only, never a computed date; the shared engine computes dates and steps on read, so a matter written by Claude Code gets the same code-computed dates as a Ramble matter. Every file-watch change is validated against the schema, including KTD7's rule-ID catalog, and a stored due date is rejected. Seeds live in committed files; the runtime file is gitignored and rebuilt by a reset script, so rehearsals start clean.
 - KTD4. **Seed dates are stored as day offsets from "today" and materialized at reset.** Covers R6; the alea-intake rehearsal on 2026-11-08 showed fixed dates turning every deadline red.
 - KTD5. **The app reads its Claude key from `MATTER_COCKPIT_API_KEY` (or a key file path), never `ANTHROPIC_API_KEY`.** Setting `ANTHROPIC_API_KEY` in a shell that runs Claude Code breaks Remote Control on Damien's box; a distinct name keeps the app key out of Claude Code's environment. Default model is the current Sonnet (`claude-sonnet-5-5`), overridable by env, chosen for intake speed under a one-minute budget (Success Criteria).
 - KTD6. **Intake uses Claude tool use with streamed tool input, and every field carries provenance.** Each field is `{value, source: stated | inferred | invented, evidence}`; streaming lets the card build progressively (R11) and provenance drives the labels (R12, R20). The same schema serves Ramble, Embellish, and Surprise Me (R7–R10).
 - KTD7. **The model may only choose a deadline rule by ID from the bundled catalog, or "none".** The server rejects any other value; "none" or an uncomputable rule routes to the amber warning (R21). Rule text and dates never come from the model (Key Decision governing R16–R21, R38).
 - KTD8. **The deadline engine is pure, dependency-free TypeScript with hand-encoded holiday calendars.** Federal legal holidays follow 5 U.S.C. § 6103 and Fed. R. Civ. P. 6(a)(6); Minnesota holidays follow Minn. Stat. § 645.44 subd. 5, where a Saturday holiday moves to the preceding Friday. Each computation returns ordered steps that the panel renders verbatim (R17). A small encoded calendar is easier to verify and cite than a general holiday library.
-- KTD9. **Rule text is ingested once by an offline script and committed as JSON with source URL, retrieval date, and version.** FRCP text comes from the uscourts.gov December 1, 2025 pamphlet PDF; Minn. R. Civ. P. and Minn. Gen. R. Prac. from revisor.mn.gov per-rule pages (`/court_rules/cp/id/<n>/`, `/court_rules/gp/id/<n>/`); 37 C.F.R. from the eCFR versioner API; U.S. Code sections from govinfo `link/uscode`; Fed. R. Bankr. P. 3002 from the uscourts.gov FRBP pamphlet; Minn. Stat. §§ 363A.28 subd. 3 and 645.44 subd. 5 from revisor.mn.gov as short excerpts. Cornell LII pages serve as navigation links only, because LII claims copyright in its compilation. Nothing fetches rules at stage time.
-- KTD10. **The dev server binds to localhost plus the home box's tailnet address on port 8982, and Damien's presentation Chrome opens it by MagicDNS name.** Hot module reload makes each Claude Code change appear without a restart (R34). Port 8982 comes from the deterministic port hash and was free on 2026-11-08; attendees get localhost only by default.
-- KTD11. **New features plug into a slot registry.** Views expose named slots (Cockpit tabs, Cockpit sidebar, Radar overlay, Portal sections, global toolbar), and each feature is one self-contained folder registered in one file. The repo's `CLAUDE.md` teaches this, so a live build touches few files and every fallback branch stays a small diff.
+- KTD9. **Rule text is ingested once by an offline script and committed as JSON with source URL, retrieval date, and version.** FRCP text comes from the uscourts.gov December 1, 2025 pamphlet PDF; Minn. R. Civ. P. and Minn. Gen. R. Prac. from revisor.mn.gov per-rule pages (`/court_rules/cp/id/<n>/`, `/court_rules/gp/id/<n>/`); 37 C.F.R. from the eCFR versioner API; U.S. Code sections from govinfo `link/uscode`; Fed. R. Bankr. P. 3002 from the uscourts.gov FRBP pamphlet; Minn. Stat. §§ 363A.28 subd. 3, 645.15, and 645.44 subd. 5 from revisor.mn.gov as short excerpts. The counting authorities the non-civil deadlines follow join the targeted sections: Fed. R. Bankr. P. 9006(a), 35 U.S.C. § 21(b), and 37 C.F.R. § 1.7. Cornell LII pages serve as navigation links only, because LII claims copyright in its compilation. Nothing fetches rules at stage time.
+- KTD10. **The app serves client and API on one port bound to 127.0.0.1:8982, and the home box publishes it to the tailnet with `tailscale serve`, which Damien's presentation Chrome opens by MagicDNS name.** Nothing binds 0.0.0.0, so the unauthenticated API that spends the key never reaches the home LAN or an attendee's café Wi-Fi. Vite's allowed hosts come from an env var holding the MagicDNS name, empty by default; `allowedHosts: true` is never committed. Hot module reload makes each Claude Code change appear without a restart (R34). Port 8982 comes from the deterministic port hash and was free on 2026-11-08.
+- KTD11. **New features plug into a slot registry.** Views expose named slots (Cockpit tabs, Cockpit sidebar, Radar overlay, Portal sections, global toolbar), and each feature is one self-contained folder registered in one file. A feature that needs the model adds a `server/features/<slug>.ts` route that loads automatically and calls a shared AI helper, which applies the KTD5 key, the model choice, and the standard needs-a-key response (R37). The server runs under a watch-reloader and SSE clients reconnect on their own, so a live build never needs a manual restart (R34). The repo's `CLAUDE.md` teaches this, so a live build touches few files and every fallback branch stays a small diff.
 - KTD12. **The stage brainstorm ships as a self-contained project skill invoked as `/cook`.** It needs no Compound Engineering plugin, so attendees can use it as-is. It stamps a start time, asks one question at a time with a recommendation, honors the ripcord phrase, ripcords itself at the budget (four minutes by default), shrinks oversized ideas aloud, then builds straight into a slot and runs typecheck and tests before announcing (R23–R26). (session-settled: user-directed — Damien proposed answering as time allows with an "answer everything else yourself" ripcord, over the full brainstorm-plan-build cycle.)
 - KTD13. **The six primer ideas are a client-update email drafter, a conflict check across matters, a risk heat map, a budget burn-down, a "what happens next" client explainer, and Ask the Rules.** Each spans a different view or slot, and each touches every practice area's matters.
 - KTD14. **Fallback branches are built by running `/cook` itself during rehearsal, timed, on `fallback/<slug>` branches cut from the merged `main`.** Each build is both the fallback and the proof of the ten-minute budget (R28, Success Criteria).
@@ -264,7 +264,7 @@ sequenceDiagram
   AI-->>SV: remaining fields marked invented
   SV->>EN: rule ID + trigger + assumptions
   EN-->>SV: due date + ordered steps, or uncomputable
-  SV->>SV: write matter to store
+  SV->>SV: write matter to store (triggers only; dates recomputed on read)
 ```
 
 Deadline computation, which also drives the assumption toggles:
@@ -273,12 +273,17 @@ Deadline computation, which also drives the assumption toggles:
 flowchart TB
   A[Rule ID + trigger date + assumptions] --> B{Rule has deadline logic?}
   B -->|no| W[Amber: no source on file]
-  B -->|yes| C[Add period per rule]
-  C --> D[Apply service adjustment, e.g. 6 d mail +3]
-  D --> E{Lands on weekend or holiday?}
-  E -->|yes| F[Roll forward per the forum's calendar]
-  E -->|no| G[Due date]
-  F --> G
+  B -->|yes| M{Minnesota 6.05 mail service?}
+  M -->|yes| N[Extend the period by 3 days before counting]
+  M -->|no| C[Count the period per the rule's counting authority]
+  N --> C
+  C --> E{Lands on weekend or holiday?}
+  E -->|yes| F[Roll to the next court day, or the previous one for backward-counted periods]
+  E -->|no| X{Federal 6 d service adjustment?}
+  F --> X
+  X -->|yes| Y[Add 3 days, then roll again]
+  X -->|no| G[Due date]
+  Y --> G
   G --> H[Ordered steps with rule citations]
 ```
 
@@ -338,8 +343,8 @@ docs/rehearsal/       runbook and timing evidence
 | U2 | Matter store and live sync | `server/store.ts`, `src/data/useMatters.ts` | U1 |
 | U3 | Rules library ingestion | `scripts/ingest-rules/`, `data/rules/` | U1 |
 | U4 | Deadline engine | `src/engine/` | U3 |
-| U5 | Intake AI service | `server/intake/` | U2, U4 |
-| U6 | Three views and slot registry | `src/views/`, `src/features/registry.ts` | U2 |
+| U5 | Intake AI service | `server/intake/` | U2, U4, U8 |
+| U6 | Three views and slot registry | `src/views/`, `src/features/registry.ts` | U2, U4, U8 |
 | U7 | Trust but Verify panel | `src/verify/` | U4, U6 |
 | U8 | Seed matters and canned pool | `data/seed/` | U2, U4 |
 | U9 | Visual directions and themes | `src/theme/` | U6 |
@@ -352,32 +357,36 @@ docs/rehearsal/       runbook and timing evidence
 - **Goal:** A cold clone runs the client and server with one command, reachable on the tailnet with hot reload.
 - **Requirements:** R34, R36; KTD1, KTD2, KTD10.
 - **Dependencies:** none.
-- **Files:** `package.json`, `vite.config.ts`, `tsconfig.json`, `server/index.ts`, `index.html`, `src/main.tsx`, `.gitignore`, `.env.example`, `CLAUDE.md`, `README.md`, `THIRD-PARTY.md`, `tests/smoke.spec.ts`.
+- **Files:** `package.json`, `vite.config.ts`, `tsconfig.json`, `server/index.ts`, `server/ai.ts`, `server/features/README.md`, `index.html`, `src/main.tsx`, `.gitignore`, `.env.example`, `CLAUDE.md`, `README.md`, `THIRD-PARTY.md`, `tests/smoke.spec.ts`.
 - **Approach:**
   1. Scaffold the client and server with pinned versions and log each dependency's license in `THIRD-PARTY.md`.
-  2. Read `HOST` and `PORT` (default localhost:8982) so the home box binds its tailnet address too.
+  2. Serve the Hono API inside the Vite dev server on one port; read `HOST` (default 127.0.0.1), `PORT` (default 8982), and the allowed-hosts env var (KTD10); run server code under a watch-reloader (KTD11).
   3. Write `CLAUDE.md` for future Claude Code sessions: the stack, the slot pattern (filled in by U6), the store schema (by U2), and the rule that features go in `src/features/`.
   4. Gitignore `.env*` except `.env.example`, `data/matters.json`, and test output.
 - **Test scenarios:**
   - Starting dev serves the client page and a server health endpoint on the configured port.
   - An edit to a client file appears in an open browser without a reload.
-- **Verification:** A Playwright smoke test loads the page over the tailnet hostname on the home box.
+  - An edit to a server route takes effect without a manual restart, and SSE clients reconnect.
+  - With `HOST` unset, the API refuses connections on a non-loopback interface.
+- **Verification:** A Playwright smoke test loads the page through the `tailscale serve` MagicDNS URL on the home box.
 
 ### U2. Matter store and live sync
 
 - **Goal:** One file-backed store that every view, the intake server, and Claude Code share, with sub-second push updates.
 - **Requirements:** R1, R6, R13, R14; KTD3, KTD4.
-- **Dependencies:** U1.
+- **Dependencies:** U1; the engine module from U4 plugs in for recompute-on-read.
 - **Files:** `server/store.ts`, `server/events.ts`, `src/data/schema.ts`, `src/data/useMatters.ts`, `scripts/reset-demo.ts`, `tests/store.test.ts`.
 - **Approach:**
-  1. Define the matter schema once (validated at the server boundary): parties, practice area, forum, timeline events, documents, deadlines with rule ID, trigger, and assumptions, and per-field provenance (KTD6).
-  2. Watch the runtime file; on a valid change, broadcast; on an invalid write (for example a malformed hand edit), keep the last good state and log a readable error that names the field.
+  1. Define the matter schema once (validated at the server boundary): parties, practice area, forum, timeline events, documents, deadlines with rule ID, trigger, and assumptions (never computed dates, per KTD3), client-facing status and next steps in plain language, an internal-only flag on fields the Portal must hide, and per-field provenance (KTD6).
+  2. Watch the runtime file; on a valid change, recompute deadlines with the shared engine and broadcast; on an invalid write (for example a malformed hand edit, a rule ID outside the catalog, or a stored due date), keep the last good state and log a readable error that names the field.
   3. `reset-demo` materializes seed day offsets against today and writes the runtime file.
   4. Document the schema and "add a matter by editing `data/matters.json`" in `CLAUDE.md`.
 - **Test scenarios:**
   - Adding a matter through the API broadcasts it to two connected clients.
   - An external write to the file (simulating Claude Code) reaches connected clients within one second.
   - A malformed external write leaves clients on the last good state and logs which field failed.
+  - An external write with a rule ID outside the catalog, or with a hand-written due date, is rejected the same way.
+  - A matter written to the file with only a trigger date reaches clients with the engine-computed due date.
   - Reset with a seed offset of +12 days produces a date 12 days after the reset date.
 - **Verification:** Store tests pass, and two browser tabs show a hand-added matter without reloading.
 
@@ -409,13 +418,17 @@ docs/rehearsal/       runbook and timing evidence
 - **Dependencies:** U3 (rule IDs).
 - **Files:** `src/engine/rules.ts`, `src/engine/compute.ts`, `src/engine/calendars/federal.ts`, `src/engine/calendars/minnesota.ts`, `tests/engine.test.ts`.
 - **Approach:**
-  1. Each deadline rule declares its rule ID, trigger event, period and unit, counting method, service adjustments, forum calendar, and the assumptions it exposes as toggles.
-  2. The set covers every seed matter's deadlines at minimum: federal and Minnesota answer deadlines (Fed. R. Civ. P. 12(a), Minn. R. Civ. P. 12.01), mail-service additions (Fed. R. Civ. P. 6(d), Minn. R. Civ. P. 6.05), the Fed. R. Bankr. P. 3002(c) proof-of-claim period, 37 C.F.R. 1.134 response periods with 1.136(a) extensions, the EEOC 300-day and Minnesota Human Rights Act one-year charge windows, and contract-derived deadlines whose source is the matter's own agreement.
+  1. Each deadline rule declares its rule ID, trigger event, period and unit, its counting authority (rule ID plus calendar), service adjustments with their position in the computation (KTD8 and the computation diagram), forum calendar, and the assumptions it exposes as toggles.
+  2. The set covers every seed matter's deadlines at minimum: federal and Minnesota answer deadlines (Fed. R. Civ. P. 12(a), Minn. R. Civ. P. 12.01), mail-service additions (Fed. R. Civ. P. 6(d), Minn. R. Civ. P. 6.05), the Fed. R. Bankr. P. 3002(c) proof-of-claim period, 37 C.F.R. 1.134 response periods with 1.136(a) extensions, the EEOC 300-day and Minnesota Human Rights Act one-year charge windows, the rulemaking comment period keyed to the notice's stated close date under the bundled APA provision, Fed. R. Civ. P. 33 interrogatory responses (the Rule 6(d) mail toggle's home, since Rule 6(d) reaches only Rule 5 service), and contract-derived deadlines whose source is the matter's own agreement.
   3. Output is either a due date with ordered steps, each citing its rule ID, or an uncomputable result carrying the reason (R21).
   4. Calendars encode observed dates per KTD8, covering 2026 through 2028.
 - **Execution note:** Implement test-first; each rule's tests come from the rule text, not from the implementation.
 - **Test scenarios:**
-  - Covers AE2. An FRCP 12(a) answer for a complaint served personally on a Tuesday lands 21 days later; switching to mail service adds three days under Rule 6(d), and a Saturday landing rolls to Monday with a Rule 6(a)(1)(C) step.
+  - Covers AE2. An FRCP 12(a) answer for a complaint served personally on a Tuesday lands 21 days later; switching to a Rule 4(d) waiver moves it to 60 days after the request was sent under Rule 12(a)(1)(A)(ii), and a Saturday landing rolls to Monday with a Rule 6(a)(1)(C) step.
+  - Rule 33 interrogatories served by mail under Rule 5(b)(2)(C): a 30-day period ending on a Saturday rolls to Monday, then Rule 6(d) adds three days, giving Thursday.
+  - A Minnesota Rule 6.05 mail-service adjustment extends the period before counting under Rule 6.01.
+  - The proof-of-claim steps cite Fed. R. Bankr. P. 9006(a) and the patent response steps cite 35 U.S.C. § 21(b) and 37 C.F.R. § 1.7, not Fed. R. Civ. P. 6(a).
+  - A rulemaking comment deadline equals the notice's stated close date.
   - A federal period ending on Thanksgiving rolls to the Friday after; the Minnesota treatment of that Friday follows the reading verified against Minn. Stat. § 645.44 subd. 5 and Minn. R. Civ. P. 6.01, recorded with its citation in the calendar file.
   - A Minnesota holiday falling on a Saturday is observed the preceding Friday.
   - Juneteenth 2027 counts as a legal holiday in both calendars.
@@ -430,20 +443,21 @@ docs/rehearsal/       runbook and timing evidence
 
 - **Goal:** Ramble, follow-ups, Embellish, and Surprise Me produce schema-valid matters with provenance, streamed, with a no-key fallback.
 - **Requirements:** R7, R8, R9, R10, R11, R13, R18, R20, R37; KTD5, KTD6, KTD7; AE1, AE5.
-- **Dependencies:** U2, U4.
-- **Files:** `server/intake/client.ts`, `server/intake/prompts.ts`, `server/intake/routes.ts`, `server/intake/canned.ts`, `tests/intake.test.ts`, `tests/fixtures/intake/*.json`.
+- **Dependencies:** U2, U4, U8 (canned pool).
+- **Files:** `server/intake/client.ts`, `server/intake/prompts.ts`, `server/intake/routes.ts`, `server/intake/canned.ts`, `tests/intake.test.ts`, `tests/no-secrets.test.ts`, `tests/fixtures/intake/*.json`.
 - **Approach:**
   1. Load the `claude-api` skill before writing this unit, and use the current SDK and model guidance.
   2. One tool schema serves all three modes; the prompt gives the deadline-rule catalog (IDs and one-line descriptions), requires every field's source label, caps follow-ups at three, and forbids real-person data.
   3. Validate tool output against the matter schema and the rule-ID enum; on a validation failure, retry once, then keep the valid fields and mark the rest for Embellish.
   4. Without a key, Ramble and Embellish return a clear "needs a key" state, and Surprise Me draws from the canned pool (U8).
-  5. Record fixtures from real calls once a key exists; tests replay them.
+  5. Record fixtures from real calls once a key exists, storing only the streamed response events and tool output, never request headers or the raw HTTP exchange; tests replay them.
 - **Test scenarios:**
   - Covers AE1. A replayed ramble about a fired employee with no date yields a termination-date follow-up; Embellish fills the date labeled invented, and the engine returns the EEOC deadline.
   - A ramble that states the client's name labels that field stated, with an evidence quote.
   - A model response naming a rule ID outside the catalog is rejected, and the deadline becomes uncomputable.
   - A response with five follow-up questions is cut to three.
   - Covers AE5. With no key, Surprise Me returns a complete canned matter, and Ramble returns the needs-a-key state.
+  - A repository scan fails if any file under `tests/fixtures/` or `data/` contains an Anthropic key pattern or an `x-api-key` header.
   - Live smoke, key present only: a short real ramble returns a schema-valid matter in under 60 seconds.
 - **Verification:** Intake tests pass on replayed fixtures; the live smoke result and its timing land in the PR description.
 
@@ -451,19 +465,25 @@ docs/rehearsal/       runbook and timing evidence
 
 - **Goal:** Cockpit, Deadline Radar, Client Portal, and the Ramble UI on shared data, with named slots for new features.
 - **Requirements:** R2, R3, R4, R11, R12, R30; KTD1, KTD11, KTD15; F1.
-- **Dependencies:** U2.
+- **Dependencies:** U2, U4, U8 (seed matters and computed deadlines).
 - **Files:** `src/views/Cockpit.tsx`, `src/views/Radar.tsx`, `src/views/Portal.tsx`, `src/intake/Ramble.tsx`, `src/intake/SourceLabel.tsx`, `src/features/registry.ts`, `src/features/README.md`, `tests/views.spec.ts`.
 - **Approach:**
   1. Apply the `frontend-design` skill; build on neutral tokens that U9 replaces.
-  2. Ramble shows the card filling field by field, then animates the matter onto the Radar.
-  3. Source labels follow R12, with a toggle that highlights stated facts only.
-  4. The registry exposes the slots KTD11 names, each with one example registration; document it in `src/features/README.md` and `CLAUDE.md`.
-  5. Selecting a deadline anywhere opens the U7 panel.
+  2. A persistent top bar holds the three view tabs, the Ramble entry point, and the theme switcher; a matter list selects the active matter for Cockpit and Portal, and a newly arrived matter is highlighted in the list without changing the active selection.
+  3. Ramble moves through named states, each with its own on-screen content and a persistent Embellish control: idle, streaming (the card fills field by field), awaiting follow-up (one question at a time with a Skip action), embellishing, partial failure (unfilled fields flagged for Embellish), needs a key, and done (the matter animates onto the Radar).
+  4. The Radar groups deadlines into named urgency bands (overdue, this week, this month, later) with countdown text, puts uncomputable deadlines in a "Needs verification" band with the amber marker in place of a countdown, and pairs every practice-area color with a text or icon label (KTD15).
+  5. The Portal renders only the client-facing fields from the schema (U2) and never internal-only fields.
+  6. Source labels follow R12, with a toggle that highlights stated facts only.
+  7. The registry exposes the slots KTD11 names, each with one example registration; document it in `src/features/README.md` and `CLAUDE.md`.
+  8. Selecting a deadline or an AI-derived fact anywhere opens the U7 panel over the current view.
 - **Test scenarios:**
   - The Radar lists deadlines from all seven seed matters in urgency order with countdowns.
-  - Selecting a Radar deadline opens that matter's Cockpit with the deadline focused.
+  - Selecting a Radar deadline opens the Trust but Verify panel over the Radar; the panel's Open matter action switches to that matter's Cockpit with the deadline focused.
+  - An uncomputable deadline appears in the Needs verification band with the amber marker, never a blank or invalid countdown.
+  - A matter arriving from Ramble or the file highlights in the matter list without changing the active matter.
+  - Each Ramble state shows its defined content, and Embellish stays available in every state except done.
   - The Portal shows plain-language next steps and hides internal-only fields such as reasoning chains.
-  - Toggling "show what I said" dims every invented and inferred field.
+  - Toggling "show what I said" emphasizes stated fields with heavier weight and an accent marker and de-emphasizes the rest by weight and marker only, with every field's text still meeting the KTD15 contrast floor.
   - A feature registered in the Cockpit tab slot appears as a tab without other file changes.
 - **Verification:** Playwright suite passes; screenshots of each view at 1920×1080 are inspected.
 
@@ -474,12 +494,16 @@ docs/rehearsal/       runbook and timing evidence
 - **Dependencies:** U4, U6.
 - **Files:** `src/verify/VerifyPanel.tsx`, `src/verify/MathSteps.tsx`, `src/verify/AssumptionToggles.tsx`, `tests/verify.spec.ts`.
 - **Approach:**
-  1. Rule text renders verbatim from the library record with its official and navigation links.
-  2. Math steps render the engine's ordered steps, each linked to its rule excerpt.
-  3. Toggles re-run the engine client-side and animate changed steps.
-  4. The reasoning chain carries the same source labels as U6.
+  1. The panel is a side drawer over the current view with Escape and a visible close control, ordered top to bottom: due date, assumption toggles, math steps, reasoning chain, then the verbatim rule text in its own scrollable region (the cited subdivision expanded, the full rule on demand), so the flip-and-watch moment never needs scrolling at 1920×1080.
+  2. Rule text renders verbatim from the library record with its official and navigation links.
+  3. Math steps render the engine's ordered steps, each linked to its rule excerpt.
+  4. Toggles re-run the engine client-side and animate changed steps.
+  5. The reasoning chain carries the same source labels as U6.
+  6. A non-deadline AI-derived fact opens the same drawer with its source label, its evidence quote or a statement that none exists, and the reasoning chain, omitting the rule, math, and toggle sections.
 - **Test scenarios:**
-  - Covers AE2. Flipping service from personal to mail moves the due date three days and adds a Rule 6(d) step on screen.
+  - Covers AE2. Flipping service from personal to a Rule 4(d) waiver moves the due date to 60 days after the request was sent and shows a Rule 12(a)(1)(A)(ii) step on screen.
+  - At 1920×1080 the due date and toggles are visible without scrolling, even for a long rule.
+  - Selecting an invented party name shows its source label and reasoning with no rule or math sections.
   - Covers AE3. A deadline with an uncomputable result shows the amber "No source on file. Verify independently." message and no date.
   - Rule text in the panel matches the committed library record byte for byte.
 - **Verification:** Playwright suite passes with screenshots of a computed and an uncomputable deadline.
@@ -554,7 +578,7 @@ docs/rehearsal/       runbook and timing evidence
 - **Dependencies:** U11.
 - **Files:** `docs/rehearsal/runbook.md`, `README.md`, `tests/rehearsal-video.spec.ts`; slides as a published Artifact.
 - **Approach:**
-  1. The runbook follows F4 minute by minute, with sample rambles for each practice area, the exact fallback-switch steps, the reset step, and the pre-talk checklist (tailnet up, key present, reset run, `main` clean).
+  1. The runbook follows F4 minute by minute, with sample rambles for each practice area, the exact fallback-switch steps, the reset step, and the pre-talk checklist (tailnet up, key present, reset run, `main` clean, and every `fallback/*` branch rebased onto final `main`, retested, and its new tip SHA recorded in `docs/rehearsal/fallback-timings.md`).
   2. The slides Artifact holds the primer slide (six ideas), the ecosystem slide (Mike, BigLaw, LQ.AI with links), and a QR code to the repo.
   3. The README gives attendees prerequisites (Claude Code and a key), run steps, and "point Claude Code here and try `/cook`."
   4. A Playwright run records the app side of a full rehearsal as video; Damien records one full screen capture (Open Questions).
@@ -570,7 +594,7 @@ docs/rehearsal/       runbook and timing evidence
 |---|---|---|---|
 | Types | `npm run typecheck` | all units | zero errors |
 | Unit tests | `npm test` | U2–U5, U8, U9 | all pass |
-| Browser tests | `npm run e2e -- --trace off` | U1, U6, U7 | all pass, screenshots inspected |
+| Browser tests | `npm run e2e -- --trace off` | U1, U6, U7, U9 | all pass, screenshots inspected |
 | Rules integrity | `npm test -- rules-library` | U3 | counts and spot checks pass |
 | Live AI smoke | `npm run smoke:ai` | U5 | schema-valid matter in under 60 s; runs only with a key |
 | Fallback timings | `docs/rehearsal/fallback-timings.md` | U11 | six builds at or under ten minutes |
@@ -580,10 +604,33 @@ docs/rehearsal/       runbook and timing evidence
 
 ## Definition of Done
 
-- Every unit's verification holds, and the PR merges to `main` with gates green.
+- Every unit's verification holds, and the PR merges to `main` with gates green; the live AI smoke gates merge only when a key is present, and otherwise the PR description states that it did not run.
 - `main` carries none of the six primer features; six `fallback/*` branches exist and pass tests.
 - `THIRD-PARTY.md` lists every added dependency with license and version.
 - No credential appears in the repo, history, or any doc.
 - Abandoned-attempt code and scratch files are removed from the diff.
 - The runbook, slides Artifact, and README exist, and a full rehearsal fits the run of show.
 - Dev servers and browsers started for verification are stopped.
+
+---
+
+## Deferred / Open Questions
+
+These entries are review items left for the author; they do not block implementation.
+
+### From 2026-11-08 review
+
+- **Patent response period is fixed by rule instead of read from the Office action** — Deadline engine unit (P2, security-lens and whole-document cross-model reviewers, confidence 75)
+
+  The engine would show a three-month response period for every Office action, but the Office action itself sets the shortened statutory period, so a matter with a different notified period would project a wrong date.
+  Change: Make the notified response period and its maximum period inputs on the patent deadline, give the seed Office action an explicit three-month period, compute 1.136(a) extensions against the maximum, and return uncomputable when the period is missing.
+
+- **The `/cook` time budget cannot fire while Claude Code waits for an answer** — Stage-skill decision and unit (P2, whole-document cross-model reviewer, confidence 75)
+
+  Claude Code acts only when it receives a message, so a four-minute budget checked "each turn" cannot ripcord while a question sits unanswered; the build would start only when Damien next speaks.
+  Change: State that the budget is checked on every incoming message and that the first message after the budget elapses triggers the ripcord whatever it says, and add a dry run where Damien answers late and the build starts on that message.
+
+- **Nothing reminds attendees that intake text goes to an AI provider** — Intake service and Ramble UI (P2, security-lens cross-model reviewer, confidence 75)
+
+  After the talk, lawyers using their own copy could paste real client facts into the Ramble box, which sends them to the model provider; for this audience that raises a confidentiality question the app never mentions.
+  Change: Show a persistent, non-blocking notice in the Ramble box that the demo is for synthetic matters only and that text is sent to the model provider, and repeat it in the README; do not add a confirmation step that would slow the stage flow.
