@@ -29,3 +29,21 @@
   --mc-radius: 0.5rem;
   --mc-space: 1rem;
 }
+
+/* Workspace typography and layout; neutral values for the theme pass. */
+:root {
+  --mc-font-ui: 'IBM Plex Sans', Arial, sans-serif;
+  --mc-font-heading: 'Newsreader', Georgia, serif;
+  --mc-text-hero: 2.6rem;
+  --mc-text-section: 1.6rem;
+  --mc-rail-width: 17rem;
+  --mc-drawer-width: 35rem;
+  --mc-warning: #704b00;
+  --mc-area-litigation: #262626;
+  --mc-area-transactional: #484848;
+  --mc-area-patent: #626262;
+  --mc-area-bankruptcy: #353535;
+  --mc-area-family: #555555;
+  --mc-area-employment: #707070;
+  --mc-area-regulatory: #424242;
+}
