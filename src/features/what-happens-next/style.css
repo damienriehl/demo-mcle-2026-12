@@ -1,0 +1,4 @@
+.what-happens-next dl { margin: 0 0 1rem; display: grid; gap: .4rem; }
+.what-happens-next dt { font-weight: var(--mc-weight-label); text-transform: var(--mc-label-case); letter-spacing: var(--mc-label-tracking); font-size: var(--mc-text-min); color: var(--mc-ink-muted); margin-top: .6rem; }
+.what-happens-next dd { margin: 0; font-size: var(--mc-text-body); color: var(--mc-ink); }
+.what-happens-next p { font-size: var(--mc-text-body); }
