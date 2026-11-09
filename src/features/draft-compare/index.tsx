@@ -43,7 +43,7 @@ function CompareDrafts({ matter }: { matter: MatterWithDeadlines }) {
       </div>
       {!state.redline.changes.length && <p>No differences found.</p>}
       <RedlineReview redline={state.redline} tags={state.tags?.tags ?? []} assessments={state.assessments} applied={state.applied} selected={selected} selectedTag={selectedTag} onSelect={selectChange} onToggle={id => toggleApplied(matter.id, id)} onTag={setSelectedTag} />
-      {state.tags && <TagPanel event={state.tags} onSelect={setSelectedTag} />}
+      {state.tags && <TagPanel event={state.tags} selectedTag={selectedTag} onSelect={setSelectedTag} />}
     </>}
   </div>;
 }

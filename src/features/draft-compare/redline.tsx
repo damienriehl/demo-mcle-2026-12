@@ -28,8 +28,8 @@ function sourceNodes(root: HTMLElement, draft: FolioTag['draft']) {
   }
   return nodes;
 }
-function nodesForTag(root: HTMLElement, tag: FolioTag) {
-  return sourceNodes(root, tag.draft).filter(item => item.start < tag.end && item.end > tag.start);
+function nodesForTag(nodes: SourceNode[], tag: FolioTag) {
+  return nodes.filter(item => item.start < tag.end && item.end > tag.start);
 }
 function addLabel(element: Element, text: string, className: string) {
   const label = document.createElement('span');
@@ -64,7 +64,7 @@ export function RedlineReview({ redline, tags, assessments, applied, selected, s
         }
       });
     }
-    setTagChanges(new Map(tags.map(tag => [tag, [...new Set(nodesForTag(root, tag).map(item => item.node.parentElement?.closest<HTMLElement>('[data-change-id]')?.dataset.changeId).filter((id): id is string => !!id))]])));
+    setTagChanges(new Map(tags.map(tag => [tag, [...new Set(nodesForTag(sourceNodes(root, tag.draft), tag).map(item => item.node.parentElement?.closest<HTMLElement>('[data-change-id]')?.dataset.changeId).filter((id): id is string => !!id))]])));
   }, [redline, tags]);
 
   useLayoutEffect(() => {
@@ -73,44 +73,66 @@ export function RedlineReview({ redline, tags, assessments, applied, selected, s
     root.querySelectorAll('.dc-tag-span').forEach(span => span.replaceWith(...span.childNodes));
     root.normalize();
     if (!selectedTag) return;
-    const nodes = nodesForTag(root, selectedTag);
-    // Wrap each part separately so a source span can cross revision elements.
-    for (const item of [...nodes].reverse()) {
-      const range = document.createRange();
-      range.setStart(item.node, Math.max(0, selectedTag.start - item.start));
-      range.setEnd(item.node, Math.min(item.node.length, selectedTag.end - item.start));
-      const span = document.createElement('span');
-      span.className = 'dc-tag-span';
-      range.surroundContents(span);
+    const ranges = new Map<Text, { start: number; end: number; current: boolean }[]>();
+    const sourceByDraft: Partial<Record<FolioTag['draft'], SourceNode[]>> = {};
+    for (const tag of tags.filter(tag => tag.iri === selectedTag.iri)) {
+      const nodes = sourceByDraft[tag.draft] ??= sourceNodes(root, tag.draft);
+      for (const item of nodesForTag(nodes, tag)) {
+        const parts = ranges.get(item.node) ?? [];
+        parts.push({ start: Math.max(0, tag.start - item.start), end: Math.min(item.node.length, tag.end - item.start), current: tag === selectedTag });
+        ranges.set(item.node, parts);
+      }
     }
-    const first = root.querySelector<HTMLElement>('.dc-tag-span');
+    for (const [node, parts] of ranges) {
+      const merged: typeof parts = [];
+      for (const part of parts.sort((a, b) => a.start - b.start)) {
+        const last = merged.at(-1);
+        if (last && part.start <= last.end) {
+          last.end = Math.max(last.end, part.end);
+          last.current ||= part.current;
+        } else merged.push({ ...part });
+      }
+      for (const part of merged.reverse()) {
+        const range = document.createRange();
+        range.setStart(node, part.start);
+        range.setEnd(node, part.end);
+        const span = document.createElement('span');
+        span.className = `dc-tag-span${part.current ? ' dc-tag-current' : ''}`;
+        span.tabIndex = -1;
+        range.surroundContents(span);
+      }
+    }
+    const first = root.querySelector<HTMLElement>('.dc-tag-current');
     if (first) {
       const label = document.createElement('span');
       label.className = 'dc-tag-label';
       label.textContent = `FOLIO: ${selectedTag.label} · ${selectedTag.branch} · ${selectedTag.draft}`;
       first.closest('[data-change-id],p,li,td')?.append(label);
+      first.focus({ preventScroll: true });
       first.scrollIntoView({ block: 'nearest' });
     }
-  }, [redline, selectedTag]);
+  }, [redline, tags, selectedTag]);
 
   useLayoutEffect(() => {
     const root = documentRef.current!;
     const cards = cardsRef.current!;
     const align = () => {
       const wide = getComputedStyle(reviewRef.current!).getPropertyValue('grid-template-columns').trim().split(' ').length > 1;
-      root.querySelectorAll<HTMLElement>('[data-change-id]').forEach(anchor => { anchor.style.minHeight = ''; });
       cards.querySelectorAll<HTMLElement>('[data-assessment]').forEach(card => { card.style.position = ''; card.style.top = ''; });
       cards.style.minHeight = '';
       if (!wide) return;
+      let nextTop = 0;
+      const gap = parseFloat(getComputedStyle(cards).rowGap);
       for (const change of redline.changes) {
         const anchor = changeElement(root, change.changeId, change.anchorId);
         const card = [...cards.querySelectorAll<HTMLElement>('[data-assessment]')].find(element => element.dataset.assessment === change.changeId);
         if (!anchor || !card) continue;
-        anchor.style.minHeight = `${Math.max(anchor.getBoundingClientRect().height, card.getBoundingClientRect().height)}px`;
+        const top = Math.max(anchor.getBoundingClientRect().top - cards.getBoundingClientRect().top, nextTop);
         card.style.position = 'absolute';
-        card.style.top = `${anchor.getBoundingClientRect().top - cards.getBoundingClientRect().top}px`;
+        card.style.top = `${top}px`;
+        nextTop = top + card.getBoundingClientRect().height + gap;
       }
-      cards.style.minHeight = `${root.getBoundingClientRect().height}px`;
+      cards.style.minHeight = `${Math.max(root.getBoundingClientRect().height, nextTop - gap)}px`;
     };
     align();
     let width = reviewRef.current!.getBoundingClientRect().width;

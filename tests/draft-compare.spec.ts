@@ -1,6 +1,7 @@
 import { expect, test, type Page } from '@playwright/test';
 import initial from './fixtures/views/scheduling-order-empty.json' with { type: 'json' };
 import fixture from './fixtures/drafts/ui/comparison.json' with { type: 'json' };
+import denseFixture from './fixtures/drafts/ui/dense-comparison.json' with { type: 'json' };
 
 const api = '**/api/features/draft-compare';
 const sse = (events: unknown[]) => events.map(event => `data: ${JSON.stringify(event)}\n\n`).join('');
@@ -123,6 +124,10 @@ test('assessments stream, memo orders harms first, links focus pairs, and tab sw
   await expect(page.locator('[data-assessment="c2"]')).toContainText('Helps ▲');
   await expect(page.locator('[data-assessment="c1"]')).toContainText('Pending assessment');
   for (let i = 1; i < fixture.advice.length; i++) await next(page);
+  const summary = page.getByRole('region', { name: 'Advice memo' }).locator('summary');
+  await expect(summary).toHaveText('Harms ▼: 1 · Neutral ●: 2 · Helps ▲: 1 · Advice memo');
+  await expect(summary.locator('strong')).toHaveText('Harms ▼: 1');
+  await expect(page.getByRole('region', { name: 'Advice memo' }).locator('details')).not.toHaveAttribute('open');
   await page.getByText('Advice memo', { exact: false }).click();
   const memo = page.getByRole('region', { name: 'Advice memo' });
   await expect(memo.getByRole('link').first()).toContainText('Five days');
@@ -178,11 +183,15 @@ test('FOLIO filter hides other branches and selecting a tag outlines the precise
   const span = page.locator('.dc-tag-span');
   await expect(span).toHaveText('Notice');
   await expect(span).toHaveCSS('outline-style', 'solid');
-  await expect(page.getByRole('region', { name: 'Redline document' })).toContainText('FOLIO: Notice · Clauses · later');
+  await expect(page.getByRole('region', { name: 'Redline document' })).toContainText('FOLIO: Notice · Clauses · earlier');
   await panel.getByRole('button', { name: /Response period.*earlier/ }).click();
-  await expect(span).toHaveText('30');
-  await panel.getByRole('button', { name: /Response period.*later/ }).click();
-  await expect(span).toHaveText('5');
+  await expect(span).toHaveText(['30', '5']);
+  await expect(page.locator('.dc-tag-current')).toHaveText('30');
+  await panel.getByRole('button', { name: 'Next', exact: true }).click();
+  await expect(page.locator('.dc-tag-current')).toHaveText('5');
+  await expect(page.locator('.dc-tag-current')).toBeFocused();
+  await panel.getByRole('button', { name: 'Previous', exact: true }).click();
+  await expect(page.locator('.dc-tag-current')).toHaveText('30');
 });
 
 test('changing party clears cards, memo and applied suggestions and allows fresh advice', async ({ page }) => {
@@ -242,15 +251,53 @@ test('identical drafts and refusal messages are readable on screen', async ({ pa
 });
 
 test('projector layout aligns cards with changes and captures advice at 1920 by 1080', async ({ page }) => {
-  await open(page);
+  await open(page, denseFixture.compare, denseFixture.advice);
+  await page.getByRole('combobox', { name: 'Theme', exact: true }).selectOption('law-review');
   await advise(page);
+  const panel = page.getByRole('region', { name: 'FOLIO tags' });
+  await expect(panel.getByRole('button')).toHaveCount(10);
+  await expect(panel.getByRole('button')).toHaveText([
+    'Buyer · Actor / Player · earlier 2 · later 2', 'Seller · Actor / Player · earlier 2 · later 2',
+    ...['Assignment', 'Indemnification', 'Notice', 'Payment', 'Termination'].map(label => `${label} · Clauses · earlier 2 · later 2`),
+    'Asset purchase agreement · Document types · earlier 2 · later 2',
+    'Assets · Objectives · earlier 2 · later 2', 'Fees · Objectives · earlier 2 · later 2',
+  ]);
+  await panel.getByRole('button', { name: /^Seller/ }).click();
+  await expect(page.locator('.dc-tag-span')).toHaveText(['Seller', 'Seller']);
+  await expect(panel.getByRole('status')).toHaveText('Seller · earlier · occurrence 1 of 4');
+  await panel.getByRole('button', { name: 'Next', exact: true }).click();
+  await expect(panel.getByRole('status')).toHaveText('Seller · earlier · occurrence 2 of 4');
+  await expect(page.locator('.dc-tag-current')).toBeFocused();
+  await panel.getByRole('button', { name: 'Next', exact: true }).click();
+  await expect(panel.getByRole('status')).toHaveText('Seller · later · occurrence 3 of 4');
+  await panel.getByLabel('Branch').selectOption('Clauses');
+  await expect(panel.locator('.dc-chip')).toHaveCount(5);
+  await panel.getByLabel('Branch').selectOption('');
   await page.locator('[data-assessment="c1"]').getByRole('button', { name: /Harms/ }).click();
   const change = page.locator('[data-change-id="c1"]').first();
   const card = page.locator('[data-assessment="c1"]');
+  await expect(card.locator('.dc-chip')).toHaveCount(6);
+  await expect(card).toContainText('+4 more');
+  await expect(card.locator('.dc-chip')).toHaveText([
+    'Buyer · Actor / Player', 'Seller · Actor / Player', 'Assignment · Clauses',
+    'Indemnification · Clauses', 'Notice · Clauses', 'Payment · Clauses',
+  ]);
   await expect.poll(async () => Math.abs((await change.boundingBox())!.y - (await card.boundingBox())!.y)).toBeLessThan(5);
+  expect((await card.boundingBox())!.height).toBeGreaterThan((await change.boundingBox())!.height + 200);
+  await expect(change).toBeFocused();
+  const cards = await page.locator('[data-assessment]').all();
+  for (let i = 1; i < cards.length; i++) {
+    const previous = (await cards[i - 1].boundingBox())!;
+    expect((await cards[i].boundingBox())!.y).toBeGreaterThanOrEqual(previous.y + previous.height);
+  }
+  const heading = page.locator('.dc-redline .docx-Heading1');
+  await expect(heading).toHaveCSS('font-family', /Newsreader/);
+  await expect(heading.locator('span')).toHaveCSS('font-family', /Newsreader/);
+  await expect(heading).toHaveCSS('font-weight', '500');
+  await expect(page.locator('.dc-redline h2')).toHaveCSS('font-family', /Newsreader/);
   await page.getByRole('region', { name: 'Advice memo' }).evaluate(element => element.scrollIntoView({ block: 'start' }));
   await page.evaluate(() => window.scrollBy(0, -document.querySelector('header')!.getBoundingClientRect().height));
-  await page.screenshot({ path: '.cache/dc-u6.png' });
+  await page.screenshot({ path: '.cache/dc-u6b.png' });
   await page.setViewportSize({ width: 390, height: 844 });
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
 });
