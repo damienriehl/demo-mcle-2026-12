@@ -14,7 +14,7 @@ export type DeadlineRule = DeadlineRuleSummary & {
   serviceAdjustments: ServiceAdjustment[];
 } & (
   | { kind: 'federal-answer'; waiver: { period: number; citation: Citation; triggerEvent: string } }
-  | { kind: 'period' | 'patent' | 'notice' | 'contract' }
+  | { kind: 'period' | 'patent' | 'notice' | 'contract' | 'court-order' }
 );
 
 const cite = (ruleId: string, subdivision?: string): Citation => ({ ruleId, ...(subdivision ? { subdivision } : {}) });
@@ -134,6 +134,50 @@ export const rules: DeadlineRule[] = [
     period: { amount: 'dueDate', unit: 'date' }, direction: 'forward', calendar: 'none', kind: 'contract',
     counting: { count: cite('contract'), roll: cite('contract'), direction: cite('contract'), holidays: cite('contract') },
     serviceAdjustments: [], assumptions: [],
+  },
+  {
+    id: 'court-order-date', label: 'Court-ordered date',
+    description: 'Use only for a date the court’s order states. Inputs: date (YYYY-MM-DD), page (whole number, at least 1), and quote (the exact quote from that page). No calendar roll applies.',
+    triggerEvent: 'date stated in the court’s order', citation: cite('order'),
+    period: { amount: 'date', unit: 'date' }, direction: 'forward', calendar: 'none', kind: 'court-order',
+    counting: { count: cite('order'), roll: cite('order'), direction: cite('order'), holidays: cite('order') },
+    serviceAdjustments: [], assumptions: [],
+  },
+  {
+    ...civil('frcp-26a2d-expert-disclosure', 'Federal expert disclosures', 'frcp:26', '(a)(2)(D)(i)', 90, 'the date set for trial or for the case to be ready for trial', 'federal', 'backward'),
+    description: 'At least 90 days before the date set for trial or for the case to be ready for trial, unless the court orders otherwise or the parties stipulate otherwise.',
+  },
+  {
+    ...civil('frcp-26a3-pretrial-disclosure', 'Federal pretrial disclosures', 'frcp:26', '(a)(3)(B)', 30, 'the date set for trial', 'federal', 'backward'),
+    description: 'At least 30 days before trial, unless the court orders otherwise.',
+  },
+  {
+    ...civil('frcp-26a3-objections', 'Federal objections to pretrial disclosures', 'frcp:26', '(a)(3)(B)', 14, 'the pretrial disclosures are made', 'federal'),
+    description: 'Within 14 days after the pretrial disclosures are made, unless the court orders otherwise; serve and promptly file objections.',
+  },
+  {
+    ...civil('mn-civ-26-expert-disclosure', 'Minnesota expert disclosures', 'mn-civ:26', '26.01(b)(4)(A)', 90, 'the date set for trial or for the case to be ready for trial', 'minnesota', 'backward'),
+    description: 'At least 90 days before the date set for trial or for the case to be ready for trial, unless the court orders otherwise or the parties stipulate otherwise.',
+  },
+  {
+    ...civil('mn-civ-26-pretrial-disclosure', 'Minnesota pretrial disclosures', 'mn-civ:26', '26.01(c)(2)', 30, 'the date set for trial', 'minnesota', 'backward'),
+    description: 'At least 30 days before trial, unless the court orders otherwise.',
+  },
+  {
+    ...civil('mn-civ-26-objections', 'Minnesota objections to pretrial disclosures', 'mn-civ:26', '26.01(c)(2)', 14, 'the pretrial disclosures are made', 'minnesota'),
+    description: 'Within 14 days after the pretrial disclosures are made, unless the court orders otherwise; serve and promptly file objections.',
+  },
+  {
+    ...civil('mn-gp-115-nondispositive-motion', 'Minnesota nondispositive motion service and filing', 'mn-gp:115', '115.04(a)', 21, 'the hearing', 'minnesota', 'backward'),
+    description: 'Serve and file at least 21 days before the hearing, unless the court orders otherwise under Rule 115.01(b). Excludes post-trial motions.',
+  },
+  {
+    ...civil('mn-gp-115-nondispositive-response', 'Minnesota nondispositive motion response', 'mn-gp:115', '115.04(b)', 14, 'the hearing', 'minnesota', 'backward'),
+    description: 'Serve and file at least 14 days before the hearing, unless the court orders otherwise under Rule 115.01(b). Excludes post-trial motions.',
+  },
+  {
+    ...civil('mn-gp-115-nondispositive-reply', 'Minnesota nondispositive motion reply', 'mn-gp:115', '115.04(c)', 7, 'the hearing', 'minnesota', 'backward'),
+    description: 'Serve and file a reply limited to new legal or factual matters raised by the response at least 7 days before the hearing, unless the court orders otherwise under Rule 115.01(b). Excludes post-trial motions.',
   },
   civil('mn-gp-115-dispositive-motion', 'Minnesota dispositive motion service and filing', 'mn-gp:115', '115.03(a)', 28, 'the hearing', 'minnesota', 'backward'),
   civil('frcp-12a-counterclaim-answer', 'Federal answer to counterclaim', 'frcp:12', '(a)(1)(B)', 21, 'service of the counterclaim', 'federal', 'forward', true),
