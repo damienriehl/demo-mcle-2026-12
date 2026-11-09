@@ -3,7 +3,7 @@ import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 import { afterAll, describe, expect, it } from 'vitest';
 import { resetDemo } from '../scripts/reset-demo';
-import { mattersSchema } from '../src/data/schema';
+import { mattersSchema, type Matter } from '../src/data/schema';
 import { computeDeadline, deadlineCatalog } from '../src/engine/index';
 
 const areas = ['bankruptcy', 'employment', 'family', 'litigation', 'patent', 'regulatory', 'transactional'];
@@ -23,6 +23,11 @@ function files(pool: 'matters' | 'canned') {
 
 function reset(pool: 'matters' | 'canned', today: string) {
   return resetDemo({ seedDirectory: resolve('data/seed', pool), filePath: join(scratch, `${pool}.json`), today });
+}
+
+function computeSeedDeadline(deadline: Matter['deadlines'][number]) {
+  if (!('date' in deadline.trigger)) throw new Error('Seed deadlines must have stated triggers');
+  return computeDeadline({ ...deadline, trigger: deadline.trigger });
 }
 
 function leaves(value: unknown, path = ''): [string, unknown][] {
@@ -70,7 +75,7 @@ describe('synthetic matter collections', () => {
     }
     for (const matter of materialized) {
       for (const deadline of matter.deadlines) {
-        expect(computeDeadline(deadline).status, `${matter.id}: ${deadline.label}`)
+        expect(computeSeedDeadline(deadline).status, `${matter.id}: ${deadline.label}`)
           .toBe(deadline.deadlineRuleId === 'none' ? 'uncomputable' : 'computed');
       }
     }
@@ -105,7 +110,7 @@ describe('synthetic matter collections', () => {
     expect(regulatory.deadlines.find(deadline => deadline.deadlineRuleId === 'none')?.label).toMatch(/verification/i);
     const transaction = matters.find(matter => matter.practiceArea === 'transactional')!;
     const closing = transaction.deadlines[0];
-    expect(computeDeadline(closing).steps.some(step => step.citation.ruleId === 'contract'
+    expect(computeSeedDeadline(closing).steps.some(step => step.citation.ruleId === 'contract'
       && step.citation.subdivision === closing.inputs?.section)).toBe(true);
   });
 
@@ -115,7 +120,7 @@ describe('synthetic matter collections', () => {
       const matters = reset('matters', today);
       expect(matters).toHaveLength(7);
       for (const matter of matters) {
-        const upcoming = matter.deadlines.map(computeDeadline).some(result => {
+        const upcoming = matter.deadlines.map(computeSeedDeadline).some(result => {
           if (result.status !== 'computed') return false;
           const distance = (Date.parse(`${result.dueDate}T00:00:00Z`) - day) / 86_400_000;
           return distance >= 3 && distance <= 40;
@@ -130,7 +135,7 @@ describe('synthetic matter collections', () => {
     // becomes uncomputable; stop a few days short of that edge.
     for (let day = Date.UTC(2026, 0, 1); day <= Date.UTC(2028, 11, 26); day += 86_400_000) {
       const today = new Date(day).toISOString().slice(0, 10);
-      const thisWeek = reset('matters', today).filter(matter => matter.deadlines.map(computeDeadline).some(result => {
+      const thisWeek = reset('matters', today).filter(matter => matter.deadlines.map(computeSeedDeadline).some(result => {
         if (result.status !== 'computed') return false;
         const distance = (Date.parse(`${result.dueDate}T00:00:00Z`) - day) / 86_400_000;
         return distance >= 2 && distance <= 7;

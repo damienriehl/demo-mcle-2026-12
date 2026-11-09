@@ -57,7 +57,9 @@ atomically. Claude Code can also write a temporary file and rename it over the r
 | `parties` | Array of `{ name, role }`. |
 | `timeline` | Array of `{ id, event, date }`, with ISO `YYYY-MM-DD` dates. |
 | `documents` | Array of `{ id, title, kind, body, shared? }`. Bodies are short synthetic text; `shared` defaults to `false`. The Portal shows only shared documents. |
-| `deadlines` | Array of `{ id, label, deadlineRuleId, trigger: { event, date }, assumptions, inputs? }`. Dates are ISO dates; assumptions map names to strings, numbers, or booleans, and inputs map names to strings or numbers. |
+| `deadlines` | Array of `{ id, label, deadlineRuleId, trigger, assumptions, inputs?, supersededBy? }`. Dates are ISO dates; assumptions map names to strings, numbers, or booleans, and inputs map names to strings or numbers. |
+| `deadlines[].trigger` | Either `{ event, date }` or `{ event, fromDeadline }`, where `fromDeadline` names another deadline in the same matter whose computed due date becomes the trigger date. |
+| `deadlines[].supersededBy` | Optional ID of another deadline in the same matter that supersedes this deadline, without changing this deadline's computation. |
 | `clientFacing` | `{ status: string, nextSteps: string[] }` in plain language. |
 | `provenance` | Map from dot field paths, including array indices (e.g. `client.name`, `timeline.0.date`), to `{ source: "stated" \| "inferred" \| "invented", evidence?: string }`. Supply provenance for each authored field. |
 | `reasoning` | Optional internal assessment string. |

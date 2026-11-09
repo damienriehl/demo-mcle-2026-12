@@ -21,7 +21,10 @@ function DeadlineVerification({ selection, matter }: { selection: VerifySelectio
   const [assumptions, setAssumptions] = useState<DeadlineInput['assumptions']>(deadline?.assumptions ?? {});
   const [previousSteps, setPreviousSteps] = useState<Step[]>();
   const [chosenCitation, setChosenCitation] = useState<Step['citation']>();
-  const result = deadline ? computeDeadline({ ...deadline, assumptions }) : selection.result;
+  const storedResult = deadline ? matter?.computedDeadlines[deadline.id] : selection.result;
+  const triggerDate = deadline && ('date' in deadline.trigger ? deadline.trigger.date : storedResult?.steps[0]?.date);
+  const result = deadline && triggerDate
+    ? computeDeadline({ ...deadline, trigger: { event: deadline.trigger.event, date: triggerDate }, assumptions }) : storedResult;
   const citation = chosenCitation ?? result?.steps?.[0]?.citation;
   function changeAssumption(key: string, value: string | boolean) {
     setPreviousSteps(result?.steps);
@@ -48,7 +51,7 @@ function DeadlineVerification({ selection, matter }: { selection: VerifySelectio
     }} />
     <section data-verify-section="reasoning" className="verify-reasoning"><h3>Reasoning chain</h3><ol>
       {catalog && <li><span>{catalog.description}</span><SourceLabel source={ruleContext?.provenance?.source} /></li>}
-      {deadline && <li><span>Trigger: {deadline.trigger.event} · {dateLabel(deadline.trigger.date)}.</span><SourceLabel source={triggerContext?.provenance?.source} /></li>}
+      {deadline && <li><span>Trigger: {deadline.trigger.event} · {triggerDate ? dateLabel(triggerDate) : 'No computed date'}.</span><SourceLabel source={triggerContext?.provenance?.source} /></li>}
       {catalog?.assumptions.map(control => <li key={control.key}><span>{control.label}: {assumptionLabel(assumptions[control.key] ?? control.default)}.</span><span className="source-label">Local preview</span></li>)}
       <li><span>{matter?.reasoning || NO_REASONING}</span><SourceLabel source={matter ? factContext(matter, 'reasoning').provenance?.source : undefined} /></li>
     </ol></section>

@@ -9,7 +9,7 @@ import { computeDeadline, deadlineCatalog } from '../src/engine';
 import { createMatterStore, type MatterStore } from '../server/store';
 import { createIntakeRoutes, type ModelStream } from '../server/intake/routes';
 import { createApp } from '../server/index';
-import { readDraft, validateMatter } from '../server/intake/schema';
+import { leaves, readDraft, validateMatter } from '../server/intake/schema';
 
 const fixtureDirectory = resolve('tests/fixtures/intake');
 const fixture = (name: string) => JSON.parse(readFileSync(join(fixtureDirectory, `${name}.json`), 'utf8'));
@@ -60,6 +60,23 @@ function draftFrom(events: ReturnType<typeof fixture>[]) {
 }
 
 describe('streamed intake routes', () => {
+  it('round-trips chained trigger and supersession leaves in an intake draft', () => {
+    const input = fixture('canned-employment');
+    input.deadlines.push({ ...input.deadlines[0], id: 'dependent', label: 'Dependent deadline',
+      trigger: { event: 'Upstream deadline due', fromDeadline: input.deadlines[0].id },
+      supersededBy: input.deadlines[0].id,
+    });
+    for (const leaf of leaves(input.deadlines[1], 'deadlines.1')) {
+      input.provenance[leaf.path] = { source: 'inferred' };
+    }
+    const roundTrip = readDraft(input);
+    expect(roundTrip.errors).toEqual([]);
+    expect(validateMatter(roundTrip.draft).deadlines[1]).toMatchObject({
+      trigger: { event: 'Upstream deadline due', fromDeadline: input.deadlines[0].id },
+      supersededBy: input.deadlines[0].id,
+    });
+  });
+
   it('round-trips an empty internalOnly field before applying schema defaults', async () => {
     const stream: ModelStream = async function* () {
       yield { type: 'content_block_start', index: 0, content_block: { type: 'tool_use', id: 'empty-internal', name: 'structure_matter', input: {} } } as MessageStreamEvent;
@@ -108,6 +125,8 @@ describe('streamed intake routes', () => {
     }] });
     expect(saved.list()).toEqual([]);
     expect(fake.requests[0].system).toContain('eeoc-charge');
+    expect(fake.requests[0].system).toContain('"fromDeadline"');
+    expect(fake.requests[0].system).toContain('"supersededBy"');
     expect(fake.requests[0].system).toContain(deadlineCatalog().find((r) => r.id === 'eeoc-charge')!.description);
   });
 
