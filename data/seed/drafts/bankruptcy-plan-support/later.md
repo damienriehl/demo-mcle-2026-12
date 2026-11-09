@@ -40,6 +40,6 @@ Debtor's obligations requiring tribunal approval are expressly conditioned on th
 
 ## Section 10. Notices and Execution
 
-Notices shall be sent to restructuring@sablequoin.example.invalid and support@nimbrelith.example.invalid with confirmation of receipt. Amendments require a signed writing by both parties. This agreement may be signed in electronic counterparts, which together form one agreement. It becomes effective upon delivery of both signatures and remains subject to any required approval. The signed claim schedule is incorporated solely to identify the claim covered by the support commitment.
-
 Each party shall keep restructuring forecasts and negotiation communications confidential and disclose them only to advisers bound by equivalent duties or as legally required. A party receiving a compulsory demand shall give prompt notice where lawful and reasonably cooperate in seeking protection for sensitive business information.
+
+Notices shall be sent to restructuring@sablequoin.example.invalid and support@nimbrelith.example.invalid with confirmation of receipt. Amendments require a signed writing by both parties. This agreement may be signed in electronic counterparts, which together form one agreement. It becomes effective upon delivery of both signatures and remains subject to any required approval. The signed claim schedule is incorporated solely to identify the claim covered by the support commitment.

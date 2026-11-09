@@ -30,9 +30,10 @@ export async function loadCanned(directory = 'data/seed/drafts'): Promise<void> 
   const entries = await readdir(directory, { withFileTypes: true });
   for (const entry of entries.filter(entry => entry.isDirectory()).sort((a, b) => a.name.localeCompare(b.name))) {
     const folder = resolve(directory, entry.name);
+    const files = await readdir(folder);
+    if (!files.includes('meta.json')) continue;
     const meta: CannedMeta = JSON.parse(await readFile(resolve(folder, 'meta.json'), 'utf8'));
     nextMetadata.set(meta.key, meta);
-    const files = await readdir(folder);
     for (const file of files.filter(file => /^analysis\..+\.json$/.test(file)).sort()) {
       const analysis: CannedAnalysis = JSON.parse(await readFile(resolve(folder, file), 'utf8'));
       nextAnalyses.set(cannedPartyKey(meta.key, analysis.party), analysis.assessments);

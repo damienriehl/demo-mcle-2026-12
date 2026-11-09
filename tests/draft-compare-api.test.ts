@@ -108,7 +108,7 @@ describe('draft compare HTTP flow', () => {
     const { samples } = await (await app.request(`/samples?matterId=${c.matterId}`)).json();
     expect(samples).toHaveLength(6);
     expect(new Set(samples.map((s: { family: string }) => s.family)).size).toBe(6);
-    for (const s of samples) expect(s).toMatchObject({ id: expect.any(String), title: expect.any(String), earlierName: 'earlier.md', laterName: 'later.md' });
+    for (const s of samples) expect(s).toMatchObject({ id: expect.any(String), title: expect.any(String), earlierName: 'earlier.docx', laterName: s.id === 'litigation-settlement' ? 'later.pdf' : 'later.docx' });
   });
 
   it('resets comparisons under a temporary data directory and leaves seeds intact', () => {

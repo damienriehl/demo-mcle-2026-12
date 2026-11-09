@@ -10,4 +10,21 @@ The metadata records the pair's title, broad document family, named parties and 
 
 Each later draft includes substantive edits affecting both sides, one verbatim clause move of at least twenty-five words, counter-edit opportunities, and two neutral wording clean-ups. The asset-purchase revision includes the seller's indemnity cap at 10% of the Purchase Price and moves confidentiality from Section 7 to Section 3.
 
-A build script turns these Markdown sources into `.docx` files and supplies canned analyses for the demo. That script, the generated Word and PDF artifacts, and the verified canned results belong to the separate build task; this content set supplies only Markdown drafts and authoring metadata. The builder should preserve the section-heading syntax and use the change lists to check that comparison and analysis retain the intended examples.
+Rebuild the committed Word files and the litigation later PDF from the Markdown, then generate verified canned analyses with the app's configured Claude key:
+
+```sh
+npx tsx scripts/build-drafts.ts
+npx tsx scripts/generate-canned.ts
+```
+
+Both commands use the already installed dependencies; no package-script changes or downloads are needed. The builder uses `normalizeDraft` for Word and local Playwright Chromium for the litigation PDF. Rebuilding unchanged Markdown produces identical bytes, including canonical Word relationship IDs and fixed PDF clock metadata. The bankruptcy confidentiality clause sits before the notices paragraph in Section 10 because the engine treats a move to the final paragraph as a deletion and insertion.
+
+The generator calls `createClient` through `server/ai.ts`, using the app's configured key without displaying it. With no configured key it prints the standard needs-key message and exits. To regenerate just one pair:
+
+```sh
+npx tsx scripts/generate-canned.ts transactional-asset-purchase
+```
+
+Generation uses the same source selection as `GET /samples`: earlier Word if present, otherwise Markdown; later PDF first, then Word, then Markdown. It normalizes those actual files before hashing their text and comparing, so the litigation replay key and change IDs match the Word-versus-PDF route. Rebuild before generating canned results whenever a Markdown source changes.
+
+The generator runs one model fact pass, then advice for every party named in `pair.json`, through the route's verification code. It writes `meta.json` (content key, detected parties, document type, and verified model tags) and `analysis.<party-slug>.json` (party and verified assessments). Counter-language is retained only when its span verifies; replay verifies that span again. Each pair's summary reports changes, verified and unverified assessments, and counters kept. Unverified assessments are counted but never saved. Inspect generated advice for the intended effects in `pair.json`, run the sample tests, and commit the results. Samples without canned files still compare; canned assertions skip until those files are generated.

@@ -49,7 +49,7 @@
       "counterOpportunity": true
     },
     {
-      "summary": "Move the unchanged confidentiality clause from Section 5 to Section 10.",
+      "summary": "Move the unchanged confidentiality clause from Section 5 to Section 10, before the notices paragraph. Keeping a following paragraph lets the comparison engine pair the clause as one move.",
       "section": "Section 5 \u2192 Section 10",
       "harms": "none",
       "helps": "none",
