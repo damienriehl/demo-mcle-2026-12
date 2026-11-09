@@ -1,0 +1,46 @@
+{
+  "key": "1e72488ab19c9446c63912349decd756783672e5516fc9da320b47d486d92c9a",
+  "parties": [
+    {
+      "name": "Zelmivale Studios LLC",
+      "role": "Claimant",
+      "isMatterClient": false,
+      "actorIri": "https://folio.openlegalstandard.org/R9UnetFhUZWHNEZJYjGQuXN",
+      "actorLabel": "Claimant"
+    },
+    {
+      "name": "Brindlequartz Freight LLC",
+      "role": "Respondent",
+      "isMatterClient": false,
+      "actorIri": "https://folio.openlegalstandard.org/RDsxHT4FlaoALPmeZmTt8td",
+      "actorLabel": "Respondent"
+    }
+  ],
+  "documentType": {
+    "iri": "https://folio.openlegalstandard.org/RBVGGEdVgHfVPEPq5dLPjrS",
+    "label": "Settlement Agreement",
+    "family": "transactional"
+  },
+  "modelTags": [
+    {
+      "iri": "https://folio.openlegalstandard.org/RGby6vUcfplpGBjYXaIo8i",
+      "label": "Release",
+      "branch": "Document / Artifact",
+      "draft": "later",
+      "start": 1029,
+      "end": 1139,
+      "text": "Claimant releases Respondent from all claims arising from any shipment handled by Respondent before execution.",
+      "source": "model"
+    },
+    {
+      "iri": "https://folio.openlegalstandard.org/RGby6vUcfplpGBjYXaIo8i",
+      "label": "Release",
+      "branch": "Document / Artifact",
+      "draft": "earlier",
+      "start": 1026,
+      "end": 1136,
+      "text": "Claimant releases Respondent from claims arising from the disputed shipment and its handling before execution.",
+      "source": "model"
+    }
+  ]
+}

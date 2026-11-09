@@ -1,0 +1,64 @@
+{
+  "party": "Zelmivale Studios LLC",
+  "assessments": [
+    {
+      "changeId": "c1",
+      "verdict": "harms",
+      "reason": "Zelmivale is Claimant and receives payment; extending the deadline from fifteen to \"forty-five calendar days after execution\" delays receipt of $180,000 and prolongs credit risk.",
+      "quote": "within forty-five calendar days after execution",
+      "confidence": "high",
+      "counter": {
+        "find": "within forty-five calendar days after execution",
+        "replace": "within fifteen calendar days after execution",
+        "effect": "Restores prompt payment."
+      }
+    },
+    {
+      "changeId": "c2",
+      "verdict": "harms",
+      "reason": "The release broadens from the disputed shipment to \"all claims arising from any shipment handled by Respondent before execution\", and drops the carve-out for unrelated shipments, so Zelmivale would give up unrelated claims for the same $180,000. The freight-charge release by Respondent remains tied to the same shipment.",
+      "quote": "all claims arising from any shipment handled by Respondent before execution",
+      "confidence": "high",
+      "counter": {
+        "find": "all claims arising from any shipment handled by Respondent before execution. The release does not extend to obligations created by this agreement.",
+        "replace": "claims arising from the disputed shipment and its handling before execution. The release does not extend to obligations created by this agreement or shipments unrelated to the display units.",
+        "effect": "Restores narrow release."
+      }
+    },
+    {
+      "changeId": "c3",
+      "verdict": "neutral",
+      "reason": "The preservation paragraph is only moved to Section 8, with identical text: \"The parties shall preserve the delivery photographs, tracking records, and joint inspection notes for two years after execution.\"",
+      "quote": "The parties shall preserve the delivery photographs, tracking records, and joint inspection notes for two years after execution.",
+      "confidence": "high"
+    },
+    {
+      "changeId": "c4",
+      "verdict": "neutral",
+      "reason": "Respondent's packaging account is due sooner, \"within ten days after execution\", which slightly benefits Zelmivale as the recipient, though it is minor and the day count is unspecified.",
+      "quote": "within ten days after execution",
+      "confidence": "medium"
+    },
+    {
+      "changeId": "c5",
+      "verdict": "helps",
+      "reason": "Shortening the cure period to \"three calendar days\" lets Zelmivale bring an enforcement claim sooner after a payment default.",
+      "quote": "allow three calendar days to cure",
+      "confidence": "high"
+    },
+    {
+      "changeId": "c6",
+      "verdict": "neutral",
+      "reason": "\"contains\" to \"states\" the entire settlement is a stylistic change with no substantive effect.",
+      "quote": "This agreement states the entire settlement",
+      "confidence": "high"
+    },
+    {
+      "changeId": "c7",
+      "verdict": "neutral",
+      "reason": "\"constitute\" to \"form\" one instrument is stylistic only.",
+      "quote": "which together form one instrument",
+      "confidence": "high"
+    }
+  ]
+}

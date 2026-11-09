@@ -1,0 +1,25 @@
+{
+  "key": "3d5c7c561dc02eaeeadb38c2d8d6a195a448d24e72c804b91e7e19d3d1751c6f",
+  "parties": [
+    {
+      "name": "Vellunspur Fabrication LLC",
+      "role": "Seller",
+      "isMatterClient": false,
+      "actorIri": "https://folio.openlegalstandard.org/R7kkf8NvitG8hubZUnTwevG",
+      "actorLabel": "Seller"
+    },
+    {
+      "name": "Quorrelith Components LLC",
+      "role": "Buyer",
+      "isMatterClient": false,
+      "actorIri": "https://folio.openlegalstandard.org/RjM80CC0FA0G2sKxmlbaJF",
+      "actorLabel": "Buyer"
+    }
+  ],
+  "documentType": {
+    "iri": "https://folio.openlegalstandard.org/RmCQVvWRqLFZ5V65G0txFq",
+    "label": "Asset Purchase Agreement",
+    "family": "transactional"
+  },
+  "modelTags": []
+}

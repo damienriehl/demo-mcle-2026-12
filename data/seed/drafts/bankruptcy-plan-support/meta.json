@@ -1,0 +1,126 @@
+{
+  "key": "fa40ccdfdd20063f2f4667b7c4c3e506f17250f2ae9c231ec02a4c19bffd5d09",
+  "parties": [
+    {
+      "name": "Sablequoin Alloyworks LLC",
+      "role": "Debtor",
+      "isMatterClient": false,
+      "actorIri": "https://folio.openlegalstandard.org/R77pHybcEdlO9OmqSuiyWi1",
+      "actorLabel": "Debtor"
+    },
+    {
+      "name": "Nimbrelith Claims Consortium",
+      "role": "Supporting Creditor",
+      "isMatterClient": false,
+      "actorIri": "https://folio.openlegalstandard.org/RrYc14SDMHyXfplFhiI2Ok",
+      "actorLabel": "Unsecured Creditor"
+    }
+  ],
+  "documentType": {
+    "iri": "https://folio.openlegalstandard.org/RGwW3AjJQKusxWkOrvIYDT",
+    "label": "Restructuring Support Agreement",
+    "family": "bankruptcy"
+  },
+  "modelTags": [
+    {
+      "iri": "https://folio.openlegalstandard.org/R9hTXkmBgyClbJrFIevSdTJ",
+      "label": "Milestone Objectives",
+      "branch": "Objectives",
+      "draft": "earlier",
+      "start": 1697,
+      "end": 1780,
+      "text": "shall obtain a confirmation order within one hundred twenty days after commencement",
+      "source": "model"
+    },
+    {
+      "iri": "https://folio.openlegalstandard.org/R9hTXkmBgyClbJrFIevSdTJ",
+      "label": "Milestone Objectives",
+      "branch": "Objectives",
+      "draft": "later",
+      "start": 1692,
+      "end": 1769,
+      "text": "shall obtain a confirmation order within seventy-five days after commencement",
+      "source": "model"
+    },
+    {
+      "iri": "https://folio.openlegalstandard.org/RbhwFzygnSyMKmSVGPH2DO",
+      "label": "Debtor in Possession Financing Motion",
+      "branch": "Document / Artifact",
+      "draft": "earlier",
+      "start": 2121,
+      "end": 2208,
+      "text": "Debtor may seek approval for interim financing with principal not exceeding $1,500,000.",
+      "source": "model"
+    },
+    {
+      "iri": "https://folio.openlegalstandard.org/RbhwFzygnSyMKmSVGPH2DO",
+      "label": "Debtor in Possession Financing Motion",
+      "branch": "Document / Artifact",
+      "draft": "later",
+      "start": 2110,
+      "end": 2197,
+      "text": "Debtor may seek approval for interim financing with principal not exceeding $2,500,000.",
+      "source": "model"
+    },
+    {
+      "iri": "https://folio.openlegalstandard.org/RBrQ5TxsIktzAkyFafeC1NS",
+      "label": "Reimbursement of Expenses Clause",
+      "branch": "Objectives",
+      "draft": "earlier",
+      "start": 4122,
+      "end": 4232,
+      "text": "Debtor shall reimburse Supporting Creditor's documented restructuring-adviser expenses up to $50,000 in total.",
+      "source": "model"
+    },
+    {
+      "iri": "https://folio.openlegalstandard.org/RBrQ5TxsIktzAkyFafeC1NS",
+      "label": "Reimbursement of Expenses Clause",
+      "branch": "Objectives",
+      "draft": "later",
+      "start": 3776,
+      "end": 3886,
+      "text": "Debtor shall reimburse Supporting Creditor's documented restructuring-adviser expenses up to $20,000 in total.",
+      "source": "model"
+    },
+    {
+      "iri": "https://folio.openlegalstandard.org/RCLGQsilSLhiEYMG8njnuvc",
+      "label": "Fiduciary Termination Right",
+      "branch": "Objectives",
+      "draft": "earlier",
+      "start": 4623,
+      "end": 4734,
+      "text": "Either party may terminate for the other's material breach after written notice and five business days to cure.",
+      "source": "model"
+    },
+    {
+      "iri": "https://folio.openlegalstandard.org/RCLGQsilSLhiEYMG8njnuvc",
+      "label": "Fiduciary Termination Right",
+      "branch": "Objectives",
+      "draft": "later",
+      "start": 4279,
+      "end": 4393,
+      "text": "Either party may terminate for the other's material breach after written notice and fifteen business days to cure.",
+      "source": "model"
+    },
+    {
+      "iri": "https://folio.openlegalstandard.org/RDOq8HJJl8YdcwBdCZmjlOW",
+      "label": "Confidentiality Clause",
+      "branch": "Objectives",
+      "draft": "later",
+      "start": 5366,
+      "end": 5455,
+      "text": "Each party shall keep restructuring forecasts and negotiation communications confidential",
+      "source": "model"
+    },
+    {
+      "iri": "https://folio.openlegalstandard.org/RBCaxiBwyfzT4iSxezQE1Fb",
+      "label": "Assignment of Claims Clause",
+      "branch": "Objectives",
+      "draft": "later",
+      "start": 3230,
+      "end": 3386,
+      "text": "Supporting Creditor may transfer its scheduled claim only if the transferee signs a joinder accepting the remaining support and confidentiality obligations.",
+      "source": "model"
+    }
+  ]
+}

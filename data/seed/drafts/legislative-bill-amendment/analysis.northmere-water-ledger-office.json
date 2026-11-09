@@ -1,0 +1,54 @@
+{
+  "party": "Northmere Water Ledger Office",
+  "assessments": [
+    {
+      "changeId": "c1",
+      "verdict": "harms",
+      "reason": "Moving from \"every calendar quarter\" to \"every calendar month\" triples the number of ledgers the Office must handle, including forms and clerical corrections. It also matches the definition of ledger as \"a monthly public statement\", but the added workload falls on the Office.",
+      "quote": "every calendar month",
+      "confidence": "medium"
+    },
+    {
+      "changeId": "c2",
+      "verdict": "neutral",
+      "reason": "The retention text is unchanged. It only moves from Section 4 to Section 8, and the Office's oversight power is the same: \"The Office may request those worksheets for program oversight\".",
+      "quote": "The Office may request those worksheets for program oversight",
+      "confidence": "high"
+    },
+    {
+      "changeId": "c3",
+      "verdict": "neutral",
+      "reason": "Halving the cap to \"$60,000 per provider\" lowers the possible reimbursements. The Office's $900,000 appropriation is unchanged, and the cap only limits what it may pay. The effect on the Office is ambiguous, and it could ease budget pressure or weaken the program's incentives.",
+      "quote": "up to $60,000 per provider",
+      "confidence": "low"
+    },
+    {
+      "changeId": "c4",
+      "verdict": "harms",
+      "reason": "The Office now has to give \"twenty business days' written notice\" before an examination, which delays oversight. Providers get only \"ten days\" to correct a deficiency. The shorter correction period could help the Office, but the net effect is more constraint on its examination powers.",
+      "quote": "upon twenty business days' written notice",
+      "confidence": "medium"
+    },
+    {
+      "changeId": "c5",
+      "verdict": "harms",
+      "reason": "Cutting the maximum assessment from $500 to \"$100 for each month\" weakens the Office's enforcement leverage. Providers are less likely to treat the penalty as a deterrent.",
+      "quote": "may assess up to $100 for each month",
+      "confidence": "high"
+    },
+    {
+      "changeId": "c6",
+      "verdict": "neutral",
+      "reason": "Changing \"aggregate\" to \"aggregated\" is a wording change only. It has no substantive effect on the Office's review duties.",
+      "quote": "The review shall use aggregated information",
+      "confidence": "high"
+    },
+    {
+      "changeId": "c7",
+      "verdict": "neutral",
+      "reason": "Changing \"stated\" to \"specified\" is stylistic and does not change how day references are read.",
+      "quote": "unless business days are expressly specified",
+      "confidence": "high"
+    }
+  ]
+}

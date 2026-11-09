@@ -1,0 +1,71 @@
+{
+  "party": "Thistlevane Reclamation LLC",
+  "assessments": [
+    {
+      "changeId": "c1",
+      "verdict": "harms",
+      "reason": "Shortening the installation deadline from sixty to thirty days leaves Operator less time, raising the risk of a missed deadline and stipulated assessments: \"within thirty days after the effective date\".",
+      "quote": "within thirty days after the effective date",
+      "confidence": "high"
+    },
+    {
+      "changeId": "c2",
+      "verdict": "harms",
+      "reason": "Monthly reporting instead of quarterly triples the reporting burden and certification exposure: \"every calendar month for one year\".",
+      "quote": "every calendar month for one year",
+      "confidence": "high",
+      "counter": {
+        "find": "every calendar month for one year",
+        "replace": "every calendar quarter for one year",
+        "effect": "Restores lighter quarterly reporting."
+      }
+    },
+    {
+      "changeId": "c3",
+      "verdict": "helps",
+      "reason": "Longer notice before inspections gives Operator more preparation time: \"upon ten business days' written notice\".",
+      "quote": "upon ten business days' written notice",
+      "confidence": "high"
+    },
+    {
+      "changeId": "c4",
+      "verdict": "neutral",
+      "reason": "The confidentiality paragraph is only moved to Section 9 with identical text, so protection is unchanged: \"designated confidential by Operator\".",
+      "quote": "designated confidential by Operator",
+      "confidence": "medium"
+    },
+    {
+      "changeId": "c5",
+      "verdict": "helps",
+      "reason": "The penalty is halved, reducing Operator's payment: \"$24,000 within thirty days\".",
+      "quote": "administrative penalty of $24,000",
+      "confidence": "high"
+    },
+    {
+      "changeId": "c6",
+      "verdict": "harms",
+      "reason": "The daily stipulated assessment quadruples, increasing exposure for missed deadlines, which are more likely given the shorter deadline: \"$1,000 per day\".",
+      "quote": "stipulated assessment of $1,000 per day",
+      "confidence": "high",
+      "counter": {
+        "find": "$1,000 per day",
+        "replace": "$250 per day",
+        "effect": "Restores the lower daily assessment."
+      }
+    },
+    {
+      "changeId": "c7",
+      "verdict": "neutral",
+      "reason": "Replacing \"keep\" with \"retain\" is stylistic and has no substantive effect: \"shall retain a complete copy\".",
+      "quote": "shall retain a complete copy",
+      "confidence": "high"
+    },
+    {
+      "changeId": "c8",
+      "verdict": "neutral",
+      "reason": "\"becomes effective\" versus \"takes effect\" is a wording change only, with the same timing on signature: \"becomes effective when both authorized representatives sign it\".",
+      "quote": "becomes effective when both authorized representatives sign it",
+      "confidence": "high"
+    }
+  ]
+}

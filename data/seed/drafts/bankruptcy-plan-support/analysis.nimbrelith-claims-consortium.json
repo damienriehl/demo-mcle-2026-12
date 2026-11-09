@@ -1,0 +1,74 @@
+{
+  "party": "Nimbrelith Claims Consortium",
+  "assessments": [
+    {
+      "changeId": "c1",
+      "verdict": "harms",
+      "reason": "The cash distribution to Nimbrelith's allowed unsecured claim falls from \"fifty-five percent\" to \"forty percent\" of its allowed amount, a direct cut in recovery while the balance is still discharged.",
+      "quote": "forty percent of its allowed amount",
+      "confidence": "high",
+      "counter": {
+        "find": "forty percent of its allowed amount",
+        "replace": "fifty-five percent of its allowed amount",
+        "effect": "Restores the original recovery."
+      }
+    },
+    {
+      "changeId": "c2",
+      "verdict": "helps",
+      "reason": "The confirmation deadline shortens from \"one hundred twenty days\" to \"seventy-five days\". That speeds recovery. Nimbrelith may also terminate if the milestone expires without extension, so a tighter deadline gives it an earlier exit right. Execution risk for the debtor is higher, but the creditor is protected.",
+      "quote": "within seventy-five days after commencement",
+      "confidence": "medium"
+    },
+    {
+      "changeId": "c3",
+      "verdict": "harms",
+      "reason": "The permitted interim financing rises from $1,500,000 to $2,500,000, and Nimbrelith must not oppose it. Larger senior financing could dilute recoveries for unsecured creditors. Tribunal approval and creditor protections remain in place, which limits the harm.",
+      "quote": "principal not exceeding $2,500,000",
+      "confidence": "medium",
+      "counter": {
+        "find": "principal not exceeding $2,500,000",
+        "replace": "principal not exceeding $1,500,000",
+        "effect": "Restores the original cap on financing that primes unsecured recoveries."
+      }
+    },
+    {
+      "changeId": "c4",
+      "verdict": "neutral",
+      "reason": "The confidentiality paragraph is unchanged in wording. It was moved into Section 10, which concerns notices and execution. This is organizational only and does not change the duties.",
+      "quote": "Each party shall keep restructuring forecasts and negotiation communications confidential",
+      "confidence": "high"
+    },
+    {
+      "changeId": "c5",
+      "verdict": "harms",
+      "reason": "The cap on adviser expense reimbursement falls from $50,000 to $20,000, so Nimbrelith bears more of its own costs. The change to \"explain its reason\" from \"state its reason\" is immaterial.",
+      "quote": "up to $20,000 in total",
+      "confidence": "high",
+      "counter": {
+        "find": "up to $20,000 in total",
+        "replace": "up to $50,000 in total",
+        "effect": "Restores the original reimbursement cap."
+      }
+    },
+    {
+      "changeId": "c6",
+      "verdict": "harms",
+      "reason": "The cure period for a material breach lengthens from five to \"fifteen business days\". When Debtor is the breaching party, Nimbrelith must wait longer before it can terminate. The milestone and inconsistent-treatment termination rights are unaffected.",
+      "quote": "fifteen business days to cure",
+      "confidence": "medium",
+      "counter": {
+        "find": "fifteen business days to cure",
+        "replace": "five business days to cure",
+        "effect": "Restores the faster termination right."
+      }
+    },
+    {
+      "changeId": "c7",
+      "verdict": "neutral",
+      "reason": "\"constitute\" becomes \"form\" in the counterparts clause. The meaning is the same, so there is no substantive effect.",
+      "quote": "which together form one agreement",
+      "confidence": "high"
+    }
+  ]
+}

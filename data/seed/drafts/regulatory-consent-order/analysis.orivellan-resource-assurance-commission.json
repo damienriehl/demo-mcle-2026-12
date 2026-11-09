@@ -1,0 +1,71 @@
+{
+  "party": "Orivellan Resource Assurance Commission",
+  "assessments": [
+    {
+      "changeId": "c1",
+      "verdict": "helps",
+      "reason": "Shortening the installation deadline from \"sixty days\" to \"thirty days\" speeds corrective metering and gives the Commission earlier enforcement leverage.",
+      "quote": "within thirty days after the effective date",
+      "confidence": "medium"
+    },
+    {
+      "changeId": "c2",
+      "verdict": "helps",
+      "reason": "Moving from \"every calendar quarter\" to \"every calendar month\" gives the Commission more frequent oversight data, though it adds some review workload.",
+      "quote": "every calendar month for one year after installation",
+      "confidence": "medium"
+    },
+    {
+      "changeId": "c3",
+      "verdict": "harms",
+      "reason": "Lengthening notice from five to \"ten business days' written notice\" delays Commission inspections and reduces agency flexibility, although the reservation of independent powers remains.",
+      "quote": "upon ten business days' written notice",
+      "confidence": "high",
+      "counter": {
+        "find": "upon ten business days' written notice",
+        "replace": "upon five business days' written notice",
+        "effect": "Restores the shorter notice period for inspections."
+      }
+    },
+    {
+      "changeId": "c4",
+      "verdict": "neutral",
+      "reason": "The confidentiality paragraph is identical in text and only moves from Section 4 to Section 9, with no change to Commission duties.",
+      "quote": "The Commission shall protect process formulas and customer-specific production data designated confidential by Operator",
+      "confidence": "high"
+    },
+    {
+      "changeId": "c5",
+      "verdict": "harms",
+      "reason": "Halving the administrative penalty reduces the monetary sanction and deterrent value for the alleged violations.",
+      "quote": "administrative penalty of $24,000",
+      "confidence": "high",
+      "counter": {
+        "find": "administrative penalty of $24,000",
+        "replace": "administrative penalty of $48,000",
+        "effect": "Restores the original penalty amount."
+      }
+    },
+    {
+      "changeId": "c6",
+      "verdict": "helps",
+      "reason": "Raising the stipulated assessment from $250 to \"$1,000 per day\" strengthens the deterrent against missed deadlines.",
+      "quote": "stipulated assessment of $1,000 per day",
+      "confidence": "high"
+    },
+    {
+      "changeId": "c7",
+      "verdict": "neutral",
+      "reason": "Changing \"keep\" to \"retain\" has no substantive effect on the copy-keeping duty.",
+      "quote": "Each party shall retain a complete copy of the signed modification.",
+      "confidence": "high"
+    },
+    {
+      "changeId": "c8",
+      "verdict": "neutral",
+      "reason": "\"takes effect\" becomes \"becomes effective\", which is stylistic and does not change timing.",
+      "quote": "This order becomes effective when both authorized representatives sign it.",
+      "confidence": "high"
+    }
+  ]
+}

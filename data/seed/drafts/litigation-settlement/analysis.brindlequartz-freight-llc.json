@@ -1,0 +1,64 @@
+{
+  "party": "Brindlequartz Freight LLC",
+  "assessments": [
+    {
+      "changeId": "c1",
+      "verdict": "helps",
+      "reason": "Extending payment from fifteen to \"forty-five calendar days after execution\" gives Brindlequartz, the payor, more time to arrange funds and lowers default risk.",
+      "quote": "within forty-five calendar days after execution",
+      "confidence": "high"
+    },
+    {
+      "changeId": "c2",
+      "verdict": "helps",
+      "reason": "The release now covers \"all claims arising from any shipment handled by Respondent before execution\" and drops the carve-out for unrelated shipments, so Brindlequartz gets much broader protection for the same payment. Brindlequartz's own release of the freight charge still covers only \"that same shipment\", though the wording is now somewhat ambiguous.",
+      "quote": "all claims arising from any shipment handled by Respondent before execution",
+      "confidence": "high"
+    },
+    {
+      "changeId": "c3",
+      "verdict": "neutral",
+      "reason": "The preservation paragraph is only moved from Section 4 to Section 8. Its text is unchanged, so the substantive effect is nil.",
+      "quote": "The parties shall preserve the delivery photographs, tracking records, and joint inspection notes for two years after execution.",
+      "confidence": "high"
+    },
+    {
+      "changeId": "c4",
+      "verdict": "harms",
+      "reason": "Brindlequartz must now deliver its packaging-check account within \"ten days after execution\" instead of thirty. That shortens its time to perform and raises the risk of breach.",
+      "quote": "within ten days after execution",
+      "confidence": "high",
+      "counter": {
+        "find": "within ten days after execution",
+        "replace": "within thirty days after execution",
+        "effect": "Restores the original thirty-day period for the packaging account."
+      }
+    },
+    {
+      "changeId": "c5",
+      "verdict": "harms",
+      "reason": "The cure period for a payment default drops from ten days to \"three calendar days\". Brindlequartz gets less time to fix a missed payment before Claimant can bring an enforcement claim.",
+      "quote": "allow three calendar days to cure",
+      "confidence": "high",
+      "counter": {
+        "find": "allow three calendar days to cure",
+        "replace": "allow ten calendar days to cure",
+        "effect": "Restores the ten-day cure period."
+      }
+    },
+    {
+      "changeId": "c6",
+      "verdict": "neutral",
+      "reason": "Changing \"contains\" to \"states\" the entire settlement is a stylistic edit with no real effect on the integration clause.",
+      "quote": "This agreement states the entire settlement",
+      "confidence": "high"
+    },
+    {
+      "changeId": "c7",
+      "verdict": "neutral",
+      "reason": "Replacing \"constitute\" with \"form\" one instrument is a wording change only. It has no substantive effect.",
+      "quote": "which together form one instrument",
+      "confidence": "high"
+    }
+  ]
+}

@@ -1,0 +1,32 @@
+{
+  "key": "5f2ba30af3d3aded051b40c056cce3c6bb02b868890aad3cb669bd838e8a3eb1",
+  "parties": [
+    {
+      "name": "Legislature of the State of Northmere",
+      "role": "Enacting legislative body",
+      "isMatterClient": false,
+      "actorIri": "https://folio.openlegalstandard.org/RHEN3LyEdlSl1FOymC97Mj",
+      "actorLabel": "State Legislative Branch"
+    },
+    {
+      "name": "Northmere Water Ledger Office",
+      "role": "Program administrator",
+      "isMatterClient": false,
+      "actorIri": "https://folio.openlegalstandard.org/RDpdutTNI2rbLZMnb9oqlOc",
+      "actorLabel": "State Governmental Body"
+    },
+    {
+      "name": "Kestrivane Cooperative Water District",
+      "role": "Initial participating provider",
+      "isMatterClient": false,
+      "actorIri": "https://folio.openlegalstandard.org/RCsSG3CCLhnxP2AJIMaGhaZ",
+      "actorLabel": "Cooperative"
+    }
+  ],
+  "documentType": {
+    "iri": "https://folio.openlegalstandard.org/RDEUUJX38pZaHpn7lXM0GIV",
+    "label": "Legislation",
+    "family": "legislative"
+  },
+  "modelTags": []
+}
