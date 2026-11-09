@@ -1,6 +1,5 @@
 import type { BetaMessageStreamParams, BetaRawMessageStreamEvent } from '@anthropic-ai/sdk/resources/beta/messages';
 import { createClient } from '../ai';
-import { intakeTool } from './schema';
 
 export type ModelStream = (request: BetaMessageStreamParams, signal: AbortSignal) => AsyncIterable<BetaRawMessageStreamEvent>;
 
@@ -17,6 +16,7 @@ export function modelStream(): ModelStream | null {
 }
 
 class FieldScanner {
+  constructor(private readonly arrayKey: string) {}
   private buffer = '';
   private cursor = 0;
   private started = false;
@@ -29,8 +29,8 @@ class FieldScanner {
   append(chunk: string): unknown[] {
     this.buffer += chunk;
     if (!this.started) {
-      const prefix = /^\s*\{\s*"fields"\s*:\s*\[/.exec(this.buffer);
-      if (!prefix) return [];
+      const prefix = /^\s*\{\s*("(?:\\.|[^"\\])*")\s*:\s*\[/.exec(this.buffer);
+      if (!prefix || JSON.parse(prefix[1]) !== this.arrayKey) return [];
       this.cursor = prefix[0].length;
       this.started = true;
     }
@@ -56,16 +56,16 @@ class FieldScanner {
   }
 }
 
-export async function consumeTool(stream: AsyncIterable<BetaRawMessageStreamEvent>, onField: (field: unknown) => Promise<void>): Promise<unknown> {
+export async function consumeTool(stream: AsyncIterable<BetaRawMessageStreamEvent>, onField: (field: unknown) => Promise<void>, toolName: string, arrayKey: string): Promise<unknown> {
   let activeIndex: number | undefined;
   let input = '';
   let stopped = false;
   let fieldsRead = 0;
   let stopReason: string | null = null;
-  const scanner = new FieldScanner();
+  const scanner = new FieldScanner(arrayKey);
   for await (const event of stream) {
     if (event.type === 'content_block_start' && event.content_block.type === 'tool_use') {
-      if (activeIndex !== undefined || event.content_block.name !== intakeTool.name) throw new Error(`Expected one ${intakeTool.name} tool call`);
+      if (activeIndex !== undefined || event.content_block.name !== toolName) throw new Error(`Expected one ${toolName} tool call`);
       activeIndex = event.index;
     } else if (event.type === 'content_block_delta' && event.index === activeIndex && event.delta.type === 'input_json_delta') {
       input += event.delta.partial_json;
@@ -74,11 +74,12 @@ export async function consumeTool(stream: AsyncIterable<BetaRawMessageStreamEven
     else if (event.type === 'message_delta') stopReason = event.delta.stop_reason;
   }
   if (stopReason === 'max_tokens' || stopReason === 'refusal') throw new IncompleteToolError(`Model stopped with ${stopReason} before a complete tool call.`);
-  if (!stopped) throw new IncompleteToolError(`Model ended without calling ${intakeTool.name}.`);
+  if (!stopped) throw new IncompleteToolError(`Model ended without calling ${toolName}.`);
   const output: unknown = JSON.parse(input);
   // JSON property order is not semantically significant. A reordered tool still validates.
-  if (output && typeof output === 'object' && 'fields' in output && Array.isArray(output.fields)) {
-    for (const field of output.fields.slice(fieldsRead)) await onField(field);
+  if (output && typeof output === 'object' && arrayKey in output) {
+    const fields = (output as Record<string, unknown>)[arrayKey];
+    if (Array.isArray(fields)) for (const field of fields.slice(fieldsRead)) await onField(field);
   }
   return output;
 }

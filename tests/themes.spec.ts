@@ -5,7 +5,10 @@ import { computeDeadline } from '../src/engine';
 
 const fixtures = rawFixtures.map(raw => {
   const matter = matterSchema.parse(raw);
-  return { ...matter, computedDeadlines: Object.fromEntries(matter.deadlines.map(deadline => [deadline.id, computeDeadline(deadline)])) };
+  return { ...matter, computedDeadlines: Object.fromEntries(matter.deadlines.map(deadline => {
+    if (!('date' in deadline.trigger)) throw new Error('Theme fixtures must have stated triggers');
+    return [deadline.id, computeDeadline({ ...deadline, trigger: deadline.trigger })];
+  })) };
 });
 fixtures[0].provenance['parties.0.role'] = { source: 'invented' };
 

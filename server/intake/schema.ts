@@ -42,6 +42,11 @@ function schemaAt(path: string): z.ZodType {
     while (schema instanceof z.ZodDefault || schema instanceof z.ZodOptional || schema instanceof z.ZodPipe) {
       schema = schema instanceof z.ZodPipe ? schema.in as z.ZodType : schema.unwrap() as z.ZodType;
     }
+    if (schema instanceof z.ZodUnion) {
+      const option = schema.options.find((option) => option instanceof z.ZodObject && Object.hasOwn(option.shape, key));
+      if (!(option instanceof z.ZodObject)) throw new Error(`${path}: invalid matter path`);
+      schema = option;
+    }
     if (schema instanceof z.ZodObject && Object.hasOwn(schema.shape, key)) schema = schema.shape[key];
     else if (schema instanceof z.ZodArray && /^(0|[1-9]\d*)$/.test(key)) schema = schema.element as z.ZodType;
     else if (schema instanceof z.ZodRecord) schema = schema.valueType as z.ZodType;

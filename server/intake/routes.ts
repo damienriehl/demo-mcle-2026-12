@@ -82,7 +82,7 @@ export function createIntakeRoutes(options: Options = {}): Hono {
               output_config: { effort: 'low' },
               betas: ['server-side-fallback-2026-07-01'], fallbacks: 'default',
               messages: [{ role: 'user', content: `${todayLine()}\n${JSON.stringify({ mode, ...body, draft, ...(correction ? { correction } : {}) })}` }],
-            }, abort.signal), async (field) => { errors.push(...await accept(field)); });
+            }, abort.signal), async (field) => { errors.push(...await accept(field)); }, intakeTool.name, 'fields');
           } catch (error) {
             if (error instanceof SyntaxError) errors.push('Tool input was not complete valid JSON.');
             else if (error instanceof IncompleteToolError) errors.push(`${error.message} Call ${intakeTool.name} exactly once.`);

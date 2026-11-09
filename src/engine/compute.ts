@@ -40,6 +40,21 @@ export function computeDeadline(input: DeadlineInput): DeadlineResult {
   if (!rule) return uncomputable(`No computed-deadline logic on file for "${input.deadlineRuleId}". Verify independently.`, []);
 
   const steps: Step[] = [];
+  if (rule.kind === 'court-order') {
+    const date = input.inputs?.date;
+    const page = input.inputs?.page;
+    const quote = input.inputs?.quote;
+    if (!isCalendarDate(date)) return uncomputable('The order date must be a valid ISO calendar date (YYYY-MM-DD).', steps);
+    if (typeof page !== 'number' || !Number.isInteger(page) || page < 1) return uncomputable('The order page must be a whole number of at least 1.', steps);
+    if (typeof quote !== 'string' || !quote.trim()) return uncomputable('The order quote must be a nonempty string.', steps);
+    const citation = { ruleId: 'order', subdivision: `p. ${page}` };
+    steps.push({ label: `Trigger: ${rule.triggerEvent}. Matter event: ${input.trigger.event}.`, date, citation });
+    steps.push({ label: input.inputs?.movedFrom
+      ? `Moved on screen from ${input.inputs.movedFrom}. The order, p. ${page}, states: “${quote}”`
+      : `Use the date stated in the order, p. ${page}: “${quote}” No calendar roll applies.`, date, citation });
+    return finish(date, steps, citation, 'date');
+  }
+
   const assumptions: DeadlineInput['assumptions'] = {};
   for (const control of rule.assumptions) {
     const supplied = input.assumptions[control.key] ?? control.default;
@@ -104,7 +119,7 @@ export function computeDeadline(input: DeadlineInput): DeadlineResult {
       : rule.counting.explanation ?? 'Exclude the trigger day; count every intervening calendar day, including weekends and holidays.',
     citation: rule.counting.count,
   });
-  if (rule.direction === 'backward') steps.push({ label: 'Count backward from the hearing; a weekend or holiday landing moves earlier.', citation: rule.counting.direction });
+  if (rule.direction === 'backward') steps.push({ label: `Count backward from ${triggerEvent}; a weekend or holiday landing moves earlier.`, citation: rule.counting.direction });
   steps.push({ label: `Use the ${rule.calendar} legal-holiday calendar.`, citation: rule.counting.holidays });
 
   const signedPeriod = rule.direction === 'backward' ? -period : period;

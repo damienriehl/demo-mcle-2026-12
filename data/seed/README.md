@@ -26,3 +26,31 @@ Today is the machine's local calendar date; day arithmetic uses calendar days ac
 year, and daylight-saving boundaries. Reset validates all materialized matter shapes before
 atomically replacing `data/matters.json`. Catalog validation happens in the running store
 after the deadline engine is injected. Reset never computes or stores due dates.
+
+## Fictional scheduling orders
+
+`orders/` contains three fictional, two-page court orders. Each has an HTML source,
+a committed PDF, and a matching `.extraction.json` with the court-set dates, exact
+quotes, and 1-based page numbers. Every PDF page is marked
+"SYNTHETIC — FOR DEMONSTRATION". Rebuild the PDFs with the installed Playwright Chromium:
+
+```sh
+npx tsx scripts/build-orders.ts
+```
+
+| Order and matching matter ID | Court | Dates |
+| --- | --- | --- |
+| `hennepin-lanternfish` | Hennepin County, Minnesota | Five dates across two pages |
+| `ramsey-copperleaf` | Ramsey County, Minnesota | Four dates across two pages |
+| `dminn-quillfeather` | District of Minnesota | Eight dates across two pages |
+
+The PDFs and canned extractions retain fixed calendar dates so their page quotes stay
+verifiable. The matching seed matters follow the day-offset convention above: their
+timelines end with "Scheduling order entered" relative to reset, rather than purporting
+to match the PDFs' fixed entry dates. Each has one independent pending discovery response
+to keep it visible in the existing demo; no scheduling-order dates or derived deadlines
+are loaded. Upload the matching PDF to populate those dates.
+
+`tests/orders.test.ts` checks page counts, date kinds and page assignments, and verifies
+every canned quote against text extracted from the committed PDF. The federal plaintiff's
+expert disclosure is the `expert-disclosure` entry; the defendant's is `other`.

@@ -1,6 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import { computeDeadline, deadlineCatalog } from '../src/engine/index';
 import type { DeadlineInput, DeadlineResult } from '../src/engine/types';
+import { getRule } from '../data/rules';
+import { rules } from '../src/engine/rules';
 
 function compute(id: string, date: string, assumptions: DeadlineInput['assumptions'] = {}, inputs?: DeadlineInput['inputs']) {
   return computeDeadline({ deadlineRuleId: id, trigger: { event: 'Matter event', date }, assumptions, inputs });
@@ -50,16 +52,127 @@ describe('cited deadline catalog', () => {
     expect(result.steps.some(step => step.citation.ruleId === ruleId && step.citation.subdivision === subdivision)).toBe(true);
   });
 
-  it('exposes 25 rules and the actual assumption controls', () => {
+  it('exposes 35 rules and the actual assumption controls', () => {
     const catalog = deadlineCatalog();
-    expect(catalog).toHaveLength(25);
-    expect(new Set(catalog.map(rule => rule.id)).size).toBe(25);
+    expect(catalog).toHaveLength(35);
+    expect(new Set(catalog.map(rule => rule.id)).size).toBe(35);
     expect(catalog.find(rule => rule.id === 'frcp-12a-answer')?.assumptions).toContainEqual({
       key: 'service', label: 'Service', options: ['personal', 'waiver'], default: 'personal',
     });
     expect(catalog.find(rule => rule.id === 'frcp-33-interrogatories')?.assumptions).toContainEqual({
       key: 'serviceMethod', label: 'Service method', options: ['personal', 'electronic', 'mail'], default: 'personal',
     });
+  });
+});
+
+describe('scheduling-order default deadlines', () => {
+  it.each([
+    ['frcp-26a2d-expert-disclosure', 'frcp:26', 'Absent a stipulation or a court order, the disclosures must be made:'],
+    ['frcp-26a3-pretrial-disclosure', 'frcp:26', 'Unless the court orders otherwise, these disclosures must be made at least 30 days before trial.'],
+    ['mn-civ-26-expert-disclosure', 'mn-civ:26', 'Absent a stipulation or a court order, the disclosures must be made:'],
+    ['mn-civ-26-pretrial-disclosure', 'mn-civ:26', 'Unless the court orders otherwise, these disclosures must be made at least 30 days before trial.'],
+  ])('%s exposes its own court-order exception verbatim from the library', (id, ruleId, sentence) => {
+    const exception = rules.find(rule => rule.id === id)?.orderException;
+    expect(exception).toBe(sentence);
+    expect(getRule(ruleId)!.text).toContain(exception);
+  });
+
+  it.each([
+    ['frcp-26a2d-expert-disclosure', 90, 'backward', 'frcp:26', '(a)(2)(D)(i)', '2027-06-14', '2027-03-16'],
+    ['frcp-26a3-pretrial-disclosure', 30, 'backward', 'frcp:26', '(a)(3)(B)', '2027-06-14', '2027-05-14'],
+    ['frcp-26a3-objections', 14, 'forward', 'frcp:26', '(a)(3)(B)', '2027-05-14', '2027-05-28'],
+    ['mn-civ-26-expert-disclosure', 90, 'backward', 'mn-civ:26', '26.01(b)(4)(A)', '2027-06-14', '2027-03-16'],
+    ['mn-civ-26-pretrial-disclosure', 30, 'backward', 'mn-civ:26', '26.01(c)(2)', '2027-09-13', '2027-08-13'],
+    ['mn-civ-26-objections', 14, 'forward', 'mn-civ:26', '26.01(c)(2)', '2027-05-14', '2027-05-28'],
+    ['mn-gp-115-nondispositive-motion', 21, 'backward', 'mn-gp:115', '115.04(a)', '2026-10-05', '2026-09-14'],
+    ['mn-gp-115-nondispositive-response', 14, 'backward', 'mn-gp:115', '115.04(b)', '2026-10-05', '2026-09-21'],
+    ['mn-gp-115-nondispositive-reply', 7, 'backward', 'mn-gp:115', '115.04(c)', '2026-10-05', '2026-09-28'],
+  ] as const)('%s uses its period, direction, citation and court-order qualification', (id, days, direction, ruleId, subdivision, trigger, due) => {
+    const result = computed(compute(id, trigger));
+    expect(result.dueDate).toBe(due);
+    expect(result.steps).toContainEqual(expect.objectContaining({
+      label: expect.stringContaining(`${direction === 'backward' ? 'Subtract' : 'Add'} ${days} days;`),
+      citation: { ruleId, subdivision },
+    }));
+    expect(result.steps.some(step => step.label.startsWith('Count backward'))).toBe(direction === 'backward');
+    expect(deadlineCatalog().find(rule => rule.id === id)?.description).toContain('unless the court orders otherwise');
+  });
+
+  it('counts federal pretrial disclosures backward from trial and rolls Saturday earlier', () => {
+    const result = computed(compute('frcp-26a3-pretrial-disclosure', '2027-06-14'));
+    expect(result.dueDate).toBe('2027-05-14');
+    expect(result.steps).toContainEqual({
+      label: 'Count backward from the date set for trial; a weekend or holiday landing moves earlier.',
+      citation: { ruleId: 'frcp:6', subdivision: '(a)(5)' },
+    });
+    expect(result.steps).toContainEqual(expect.objectContaining({ date: '2027-05-15', citation: { ruleId: 'frcp:26', subdivision: '(a)(3)(B)' } }));
+    expect(result.steps).toContainEqual(expect.objectContaining({ label: expect.stringContaining('Weekend/holiday landing on Saturday: move earlier'), date: '2027-05-14' }));
+  });
+
+  it.each(['frcp-26a3-objections', 'mn-civ-26-objections'])('%s counts forward from the pretrial disclosures', id => {
+    const result = computed(compute(id, '2027-05-14'));
+    expect(result.dueDate).toBe('2027-05-28');
+    expect(result.steps[0].label).toContain('pretrial disclosures');
+  });
+
+  it('rolls Minnesota pretrial disclosures from Saturday to Friday', () => {
+    const result = computed(compute('mn-civ-26-pretrial-disclosure', '2027-09-13'));
+    expect(result.dueDate).toBe('2027-08-13');
+    expect(result.steps).toContainEqual(expect.objectContaining({ date: '2027-08-14', citation: { ruleId: 'mn-civ:26', subdivision: '26.01(c)(2)' } }));
+    expect(result.steps).toContainEqual(expect.objectContaining({ date: '2027-08-13', citation: { ruleId: 'mn-civ:6', subdivision: '6.01(a)(1)(C)' } }));
+  });
+
+  it.each([
+    ['mn-gp-115-nondispositive-reply', '2027-01-25', '2027-01-18', 'Martin Luther King Jr. Day', '2027-01-15'],
+    ['mn-gp-115-dispositive-reply', '2027-07-12', '2027-07-05', 'Independence Day (observed)', '2027-07-02'],
+  ])('%s rolls a holiday landing earlier', (id, hearing, landing, holiday, due) => {
+    const result = computed(compute(id, hearing));
+    expect(result.dueDate).toBe(due);
+    expect(result.steps).toContainEqual({ label: `${landing}: ${holiday} is a legal holiday.`, citation: { ruleId: 'mn-stat:645.44', subdivision: 'subd. 5' } });
+    expect(result.steps).toContainEqual({ label: 'Count backward from the hearing; a weekend or holiday landing moves earlier.', citation: { ruleId: 'mn-civ:6', subdivision: '6.01(c)' } });
+  });
+
+  it('names the family-motion trigger in its backward-count label', () => {
+    const result = computed(compute('mn-gp-303-family-response', '2026-10-05'));
+    expect(result.steps).toContainEqual({
+      label: 'Count backward from the family motion hearing (not a post-trial motion); a weekend or holiday landing moves earlier.',
+      citation: { ruleId: 'mn-civ:6', subdivision: '6.01(c)' },
+    });
+  });
+});
+
+describe('dates stated in a court order', () => {
+  it.each(['2027-02-01', '2027-02-06'])('uses the stated date %s without a calendar roll', date => {
+    const result = computed(compute('court-order-date', '2026-09-01', {}, { date, page: 2, quote: `Expert disclosures are due ${date}.` }));
+    expect(result.dueDate).toBe(date);
+    expect(result).toHaveProperty('inputKey', 'date');
+    expect(result.steps[0]).toMatchObject({ date, citation: { ruleId: 'order', subdivision: 'p. 2' } });
+    expect(result.steps.at(-1)).toMatchObject({ date, citation: { ruleId: 'order', subdivision: 'p. 2' } });
+    expect(result.steps.every(step => step.citation.ruleId === 'order')).toBe(true);
+    expect(result.steps.some(step => step.label.startsWith('Weekend/holiday landing'))).toBe(false);
+  });
+
+  it('describes the stated date, page and exact quote inputs in the catalog', () => {
+    const description = deadlineCatalog().find(rule => rule.id === 'court-order-date')?.description;
+    expect(description).toMatch(/order.*states/i);
+    for (const input of ['date', 'page', 'exact quote']) expect(description).toContain(input);
+  });
+
+  it.each([
+    [{ page: 2, quote: 'Expert disclosures are due February 1.' }, 'date'],
+    [{ date: '2027-02-30', page: 2, quote: 'Expert disclosures are due February 30.' }, 'date'],
+    [{ date: '2027-02-01', quote: 'Expert disclosures are due February 1.' }, 'page'],
+    [{ date: '2027-02-01', page: 0, quote: 'Expert disclosures are due February 1.' }, 'page'],
+    [{ date: '2027-02-01', page: 1.5, quote: 'Expert disclosures are due February 1.' }, 'page'],
+    [{ date: '2027-02-01', page: '2', quote: 'Expert disclosures are due February 1.' }, 'page'],
+    [{ date: '2027-02-01', page: 2 }, 'quote'],
+    [{ date: '2027-02-01', page: 2, quote: '   ' }, 'quote'],
+    [{ date: '2027-02-01', page: 2, quote: 1 }, 'quote'],
+  ] satisfies [DeadlineInput['inputs'], string][])('requires valid order inputs %j', (inputs, missing) => {
+    const result = compute('court-order-date', '2026-09-01', {}, inputs);
+    expect(result.status).toBe('uncomputable');
+    expect(result).not.toHaveProperty('dueDate');
+    if (result.status === 'uncomputable') expect(result.reason).toContain(missing);
   });
 });
 

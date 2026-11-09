@@ -1,0 +1,42 @@
+{
+  "order": "hennepin-lanternfish",
+  "court": "minnesota",
+  "caption": "Lanternfish Fabrication, LLC v. Brightwater Exhibits, Inc.",
+  "dates": [
+    {
+      "kind": "other",
+      "event": "Order entered",
+      "date": "2026-12-01",
+      "page": 1,
+      "quote": "Order entered: December 1, 2026."
+    },
+    {
+      "kind": "other",
+      "event": "Amend pleadings",
+      "date": "2027-02-01",
+      "page": 1,
+      "quote": "Pleadings shall be amended by February 1, 2027."
+    },
+    {
+      "kind": "other",
+      "event": "Complete discovery",
+      "date": "2027-06-01",
+      "page": 1,
+      "quote": "Discovery shall be completed by June 1, 2027."
+    },
+    {
+      "kind": "dispositive-hearing",
+      "event": "Dispositive motions heard",
+      "date": "2027-07-12",
+      "page": 2,
+      "quote": "Dispositive motions shall be heard by July 12, 2027."
+    },
+    {
+      "kind": "trial",
+      "event": "Trial and trial-ready date",
+      "date": "2027-09-13",
+      "page": 2,
+      "quote": "The case shall be trial-ready for trial on September 13, 2027."
+    }
+  ]
+}

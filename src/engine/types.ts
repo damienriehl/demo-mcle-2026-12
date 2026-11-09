@@ -15,5 +15,6 @@ export type DeadlineRuleSummary = {
   id: string;
   label: string;
   description: string;
+  orderException?: string;
   assumptions: { key: string; label: string; options: (string | boolean)[]; default: string | boolean }[];
 };

@@ -2,7 +2,7 @@ import { mkdirSync, readFileSync, renameSync, watch, writeFileSync } from 'node:
 import { dirname, resolve } from 'node:path';
 import { z } from 'zod';
 import { mattersSchema, matterSchema, type Matter, type MatterWithDeadlines } from '../src/data/schema';
-import type { DeadlineEngine } from '../src/data/engine-types';
+import type { DeadlineEngine, DeadlineResult } from '../src/data/engine-types';
 import { computeDeadline, deadlineCatalog } from '../src/engine/index';
 
 export class StoreValidationError extends Error {
@@ -44,13 +44,45 @@ export function createMatterStore({ filePath, engine: initialEngine, logError = 
   }
 
   function withDeadlines(matter: Matter): MatterWithDeadlines {
+    const deadlines = new Map(matter.deadlines.map(deadline => [deadline.id, deadline]));
+    const results = new Map<string, DeadlineResult>();
+    const visiting: string[] = [];
+
+    function compute(deadline: Matter['deadlines'][number]): DeadlineResult {
+      const cached = results.get(deadline.id);
+      if (cached) return cached;
+      const cycleStart = visiting.indexOf(deadline.id);
+      if (cycleStart !== -1) {
+        for (const id of visiting.slice(cycleStart)) {
+          results.set(id, { status: 'uncomputable', reason: 'Deadline references are circular.', steps: [] });
+        }
+        return results.get(deadline.id)!;
+      }
+      visiting.push(deadline.id);
+      let trigger;
+      let result: DeadlineResult | undefined;
+      if ('date' in deadline.trigger) {
+        trigger = deadline.trigger;
+      } else {
+        const upstream = deadlines.get(deadline.trigger.fromDeadline)!;
+        const upstreamResult = compute(upstream);
+        result = results.get(deadline.id);
+        if (!result) {
+          if (upstreamResult.status === 'computed') trigger = { event: deadline.trigger.event, date: upstreamResult.dueDate };
+          else result = { status: 'uncomputable', reason: `Counts from ${upstream.label}, which has no computed date.`, steps: [] };
+        }
+      }
+      result ??= deadline.deadlineRuleId === 'none'
+        ? { status: 'uncomputable', reason: 'No deadline rule selected.', steps: [] }
+        : engine!.computeDeadline({ ...deadline, trigger: trigger! });
+      visiting.pop();
+      results.set(deadline.id, result);
+      return result;
+    }
+
     return {
       ...matter,
-      computedDeadlines: Object.fromEntries(matter.deadlines.map((deadline) => [deadline.id,
-        deadline.deadlineRuleId === 'none'
-          ? { status: 'uncomputable', reason: 'No deadline rule selected.', steps: [] }
-          : engine!.computeDeadline(deadline),
-      ])),
+      computedDeadlines: Object.fromEntries(matter.deadlines.map(deadline => [deadline.id, compute(deadline)])),
     };
   }
 

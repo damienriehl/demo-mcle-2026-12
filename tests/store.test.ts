@@ -5,7 +5,8 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import { createApp } from '../server/index';
 import { createMatterStore, getMatterStore, type MatterStore } from '../server/store';
 import { matterSchema } from '../src/data/schema';
-import type { DeadlineInput } from '../src/data/engine-types';
+import type { DeadlineEngine, DeadlineInput } from '../src/data/engine-types';
+import { computeDeadline, deadlineCatalog } from '../src/engine';
 import { resetDemo } from '../scripts/reset-demo';
 
 const engine = {
@@ -33,13 +34,13 @@ function matter(id = 'synthetic-one') {
 const cleanups: (() => void)[] = [];
 afterEach(() => { cleanups.splice(0).reverse().forEach((cleanup) => cleanup()); });
 
-function setup() {
+function setup(deadlineEngine: DeadlineEngine = engine) {
   const dir = mkdtempSync(join(tmpdir(), 'matter-store-'));
   cleanups.push(() => rmSync(dir, { recursive: true, force: true }));
   const filePath = join(dir, 'matters.json');
   writeFileSync(filePath, '[]');
   const logError = vi.fn();
-  const store = createMatterStore({ filePath, engine, logError });
+  const store = createMatterStore({ filePath, engine: deadlineEngine, logError });
   cleanups.push(() => store.close());
   return { dir, filePath, store, logError, app: createApp({}, store) };
 }
@@ -58,6 +59,90 @@ async function connect(app: ReturnType<typeof createApp>) {
 }
 
 describe('shared matter store', () => {
+  function chainedMatter() {
+    return { ...matter(), deadlines: [
+      { id: 'answer', label: 'Answer', deadlineRuleId: 'mn-civ-12-answer',
+        trigger: { event: 'New trial motion due', fromDeadline: 'new-trial' }, assumptions: {} },
+      { id: 'new-trial', label: 'New trial motion', deadlineRuleId: 'frcp-59-new-trial',
+        trigger: { event: 'Judgment entered', date: '2026-01-05' }, assumptions: {} },
+      { id: 'independent', label: 'Independent motion', deadlineRuleId: 'frcp-59-new-trial',
+        trigger: { event: 'Separate judgment entered', date: '2026-01-05' }, assumptions: {} },
+    ] };
+  }
+
+  it('counts from an upstream computed date regardless of order and recomputes after upsert', () => {
+    const { store, filePath } = setup({ computeDeadline, deadlineCatalog });
+    const input = chainedMatter();
+    const first = store.upsert(input);
+    expect(first.computedDeadlines['new-trial']).toMatchObject({ status: 'computed', dueDate: '2026-02-02' });
+    expect(first.computedDeadlines.answer).toMatchObject({ status: 'computed', dueDate: '2026-02-23' });
+    expect(first.computedDeadlines.answer.steps[0].date).toBe('2026-02-02');
+    input.deadlines[1].trigger = { event: 'Judgment entered', date: '2026-01-12' };
+    const changed = store.upsert(input);
+    expect(changed.computedDeadlines['new-trial']).toMatchObject({ status: 'computed', dueDate: '2026-02-09' });
+    expect(changed.computedDeadlines.answer).toMatchObject({ status: 'computed', dueDate: '2026-03-02' });
+    expect(store.get(input.id)?.computedDeadlines.answer.steps[0].date).toBe('2026-02-09');
+    expect(store.list()[0].computedDeadlines.independent).toEqual(first.computedDeadlines.independent);
+    const persisted = JSON.parse(readFileSync(filePath, 'utf8'))[0];
+    expect(persisted.deadlines[0].trigger).toEqual({ event: 'New trial motion due', fromDeadline: 'new-trial' });
+    expect(persisted).not.toHaveProperty('computedDeadlines');
+    expect(readFileSync(filePath, 'utf8')).not.toContain('dueDate');
+  });
+
+  it('names the upstream label when it has no computed date', () => {
+    const { store } = setup({ computeDeadline, deadlineCatalog });
+    const input = chainedMatter();
+    input.deadlines[1].deadlineRuleId = 'none';
+    expect(store.upsert(input).computedDeadlines.answer).toEqual({
+      status: 'uncomputable', reason: 'Counts from New trial motion, which has no computed date.', steps: [],
+    });
+  });
+
+  it('accepts circular references but makes both cycle members uncomputable', () => {
+    const { store } = setup({ computeDeadline, deadlineCatalog });
+    const input = chainedMatter();
+    input.deadlines[1].trigger = { event: 'Answer due', fromDeadline: 'answer' };
+    const result = store.upsert(input);
+    for (const id of ['answer', 'new-trial']) {
+      expect(result.computedDeadlines[id]).toMatchObject({ status: 'uncomputable', reason: expect.stringMatching(/circular/i), steps: [] });
+    }
+    expect(result.computedDeadlines.independent.status).toBe('computed');
+  });
+
+  it.each([
+    ['trigger.fromDeadline', 'missing'], ['trigger.fromDeadline', 'answer'],
+    ['supersededBy', 'missing'], ['supersededBy', 'answer'],
+  ])('rejects %s pointing at %s with the failing dot path', async (field, reference) => {
+    const { app, store } = setup();
+    const deadline = { ...matter().deadlines[0], ...(field === 'supersededBy'
+      ? { supersededBy: reference } : { trigger: { event: 'Other deadline due', fromDeadline: reference } }) };
+    const response = await app.request('/api/matters', {
+      method: 'POST', headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ ...matter(), deadlines: [deadline] }),
+    });
+    expect(response.status).toBe(400);
+    const error = await response.text();
+    expect(error).toContain(`deadlines.0.${field}`);
+    expect(error).toContain(reference === 'answer' ? 'cannot name itself' : 'Unknown deadline id');
+    expect(store.list()).toEqual([]);
+  });
+
+  it('still computes a deadline that names its superseding deadline', () => {
+    const { store } = setup({ computeDeadline, deadlineCatalog });
+    const input = chainedMatter();
+    input.deadlines = input.deadlines.map(deadline => ({ ...deadline, ...(deadline.id === 'independent' ? { supersededBy: 'new-trial' } : {}) }));
+    expect(store.upsert(input).computedDeadlines.independent).toMatchObject({ status: 'computed', dueDate: '2026-02-02' });
+  });
+
+  it.each([
+    { event: 'Judgment entered', date: '2026-01-05', fromDeadline: 'new-trial' },
+    { event: 'Judgment entered', fromDeadline: 'new-trial', extra: true },
+  ])('rejects extra fields in a deadline trigger: %j', (trigger) => {
+    const { store } = setup({ computeDeadline, deadlineCatalog });
+    const input = chainedMatter();
+    expect(() => store.upsert({ ...input, deadlines: [{ ...input.deadlines[0], trigger }, ...input.deadlines.slice(1)] })).toThrow();
+  });
+
   it('persists API changes and broadcasts full computed lists to two SSE clients', async () => {
     const { app, store, filePath } = setup();
     const first = await connect(app);
