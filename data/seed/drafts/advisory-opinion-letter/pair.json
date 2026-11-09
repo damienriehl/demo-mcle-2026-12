@@ -1,0 +1,73 @@
+{
+  "title": "Quillavern Equipment Closing Opinion",
+  "family": "advisory",
+  "parties": [
+    {
+      "name": "Veylora & Quenwick Counsel LLP",
+      "role": "opinion counsel"
+    },
+    {
+      "name": "Pelluvane Lending Cooperative",
+      "role": "opinion recipient and lender"
+    }
+  ],
+  "matterHint": "transactional",
+  "intendedChanges": [
+    {
+      "summary": "Remove the express manager-inquiry requirement; Lender can counter by requiring reasonable inquiry on authority and factual assumptions.",
+      "section": "Section 3",
+      "harms": "Pelluvane Lending Cooperative",
+      "helps": "Veylora & Quenwick Counsel LLP",
+      "counterOpportunity": true
+    },
+    {
+      "summary": "Expand permitted reliance from Lender alone to Lender and its subsequent assignees, and remove subsequent assignees from the consent-required list to implement that right.",
+      "section": "Section 7",
+      "harms": "Veylora & Quenwick Counsel LLP",
+      "helps": "Pelluvane Lending Cooperative",
+      "counterOpportunity": false
+    },
+    {
+      "summary": "Extend notice of discovered false closing facts from five to twenty business days; Lender can counter with prompt notice subject to a five-day maximum.",
+      "section": "Section 8",
+      "harms": "Pelluvane Lending Cooperative",
+      "helps": "Veylora & Quenwick Counsel LLP",
+      "counterOpportunity": true
+    },
+    {
+      "summary": "Reduce the preparation and delivery fee from $8,000 to $5,000.",
+      "section": "Section 9",
+      "harms": "Veylora & Quenwick Counsel LLP",
+      "helps": "Pelluvane Lending Cooperative",
+      "counterOpportunity": false
+    },
+    {
+      "summary": "Move the unchanged excluded-regulatory-subjects clause from Section 6 to Section 1.",
+      "section": "Section 6 \u2192 Section 1",
+      "harms": "none",
+      "helps": "none",
+      "counterOpportunity": false
+    },
+    {
+      "summary": "Replace uncapped contractual liability with a fee-based cap; Lender can counter with an exception for fraud and gross negligence.",
+      "section": "Section 9",
+      "harms": "Pelluvane Lending Cooperative",
+      "helps": "Veylora & Quenwick Counsel LLP",
+      "counterOpportunity": true
+    },
+    {
+      "summary": "Replace retained with kept in the electronic-copy sentence as a neutral wording clean-up.",
+      "section": "Section 10",
+      "harms": "none",
+      "helps": "none",
+      "counterOpportunity": false
+    },
+    {
+      "summary": "Replace principally with primarily without changing the knowledge group.",
+      "section": "Section 3",
+      "harms": "none",
+      "helps": "none",
+      "counterOpportunity": false
+    }
+  ]
+}

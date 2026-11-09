@@ -1,0 +1,73 @@
+{
+  "title": "Northmere Community Water Ledger Bill",
+  "family": "legislative",
+  "parties": [
+    {
+      "name": "Northmere Water Ledger Office",
+      "role": "administering office"
+    },
+    {
+      "name": "Kestrivane Cooperative Water District",
+      "role": "participating water district"
+    }
+  ],
+  "matterHint": "none",
+  "intendedChanges": [
+    {
+      "summary": "Increase provider publication frequency from quarterly to monthly.",
+      "section": "Section 3",
+      "harms": "Kestrivane Cooperative Water District",
+      "helps": "Northmere Water Ledger Office",
+      "counterOpportunity": false
+    },
+    {
+      "summary": "Reduce the grant ceiling from $120,000 to $60,000; District can counter with a higher ceiling for documented accessibility costs.",
+      "section": "Section 5",
+      "harms": "Kestrivane Cooperative Water District",
+      "helps": "Northmere Water Ledger Office",
+      "counterOpportunity": true
+    },
+    {
+      "summary": "Extend record-examination notice from ten to twenty business days, delaying Office oversight.",
+      "section": "Section 6",
+      "harms": "Northmere Water Ledger Office",
+      "helps": "Kestrivane Cooperative Water District",
+      "counterOpportunity": false
+    },
+    {
+      "summary": "Shorten deficiency correction from thirty to ten days; District can counter with an extension upon timely submission of a corrective schedule.",
+      "section": "Section 6",
+      "harms": "Kestrivane Cooperative Water District",
+      "helps": "Northmere Water Ledger Office",
+      "counterOpportunity": true
+    },
+    {
+      "summary": "Reduce the maximum monthly assessment from $500 to $100, weakening the Office enforcement remedy.",
+      "section": "Section 7",
+      "harms": "Northmere Water Ledger Office",
+      "helps": "Kestrivane Cooperative Water District",
+      "counterOpportunity": false
+    },
+    {
+      "summary": "Move the unchanged worksheet-retention clause from Section 4 to Section 8.",
+      "section": "Section 4 \u2192 Section 8",
+      "harms": "none",
+      "helps": "none",
+      "counterOpportunity": false
+    },
+    {
+      "summary": "Use aggregated instead of aggregate in the annual-review description as a neutral wording clean-up.",
+      "section": "Section 8",
+      "harms": "none",
+      "helps": "none",
+      "counterOpportunity": false
+    },
+    {
+      "summary": "Replace stated with specified in the day-count convention without changing its operation.",
+      "section": "Section 10",
+      "harms": "none",
+      "helps": "none",
+      "counterOpportunity": false
+    }
+  ]
+}

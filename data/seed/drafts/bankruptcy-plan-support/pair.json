@@ -1,0 +1,73 @@
+{
+  "title": "Sablequoin Plan Support Agreement",
+  "family": "bankruptcy",
+  "parties": [
+    {
+      "name": "Sablequoin Alloyworks LLC",
+      "role": "debtor"
+    },
+    {
+      "name": "Nimbrelith Claims Consortium",
+      "role": "supporting unsecured creditor"
+    }
+  ],
+  "matterHint": "bankruptcy",
+  "intendedChanges": [
+    {
+      "summary": "Reduce the unsecured cash recovery from fifty-five to forty percent; Supporting Creditor can counter with a supplemental distribution from proceeds above the plan forecast.",
+      "section": "Section 1",
+      "harms": "Nimbrelith Claims Consortium",
+      "helps": "Sablequoin Alloyworks LLC",
+      "counterOpportunity": true
+    },
+    {
+      "summary": "Accelerate confirmation from 120 days to 75 days; Debtor can counter with an extension for tribunal scheduling delays outside its control.",
+      "section": "Section 3",
+      "harms": "Sablequoin Alloyworks LLC",
+      "helps": "Nimbrelith Claims Consortium",
+      "counterOpportunity": true
+    },
+    {
+      "summary": "Increase the financing principal that Supporting Creditor agrees not to oppose from $1.5 million to $2.5 million, increasing potential priority exposure subject to approval.",
+      "section": "Section 4",
+      "harms": "Nimbrelith Claims Consortium",
+      "helps": "Sablequoin Alloyworks LLC",
+      "counterOpportunity": false
+    },
+    {
+      "summary": "Reduce the approved adviser-expense reimbursement ceiling from $50,000 to $20,000.",
+      "section": "Section 7",
+      "harms": "Nimbrelith Claims Consortium",
+      "helps": "Sablequoin Alloyworks LLC",
+      "counterOpportunity": false
+    },
+    {
+      "summary": "Extend the mutual breach cure period from five to fifteen business days; the creditor loses speed in exiting for Debtor breach and can counter with five days for a failure to deliver required cash forecasts.",
+      "section": "Section 8",
+      "harms": "Nimbrelith Claims Consortium",
+      "helps": "Sablequoin Alloyworks LLC",
+      "counterOpportunity": true
+    },
+    {
+      "summary": "Move the unchanged confidentiality clause from Section 5 to Section 10.",
+      "section": "Section 5 \u2192 Section 10",
+      "harms": "none",
+      "helps": "none",
+      "counterOpportunity": false
+    },
+    {
+      "summary": "Replace constitute with form in the electronic-counterparts sentence without changing its effect.",
+      "section": "Section 10",
+      "harms": "none",
+      "helps": "none",
+      "counterOpportunity": false
+    },
+    {
+      "summary": "Replace state with explain in the invoice-dispute sentence as a neutral wording clean-up.",
+      "section": "Section 7",
+      "harms": "none",
+      "helps": "none",
+      "counterOpportunity": false
+    }
+  ]
+}

@@ -1,0 +1,73 @@
+{
+  "title": "Vellunspur Workshop Asset Purchase",
+  "family": "transactional",
+  "parties": [
+    {
+      "name": "Vellunspur Fabrication LLC",
+      "role": "seller"
+    },
+    {
+      "name": "Quorrelith Components LLC",
+      "role": "buyer"
+    }
+  ],
+  "matterHint": "transactional",
+  "intendedChanges": [
+    {
+      "summary": "Reduce Seller indemnity from the full Purchase Price to 10%; Buyer can counter with a carve-out for fraud and breaches of fundamental representations.",
+      "section": "Section 6",
+      "harms": "Quorrelith Components LLC",
+      "helps": "Vellunspur Fabrication LLC",
+      "counterOpportunity": true
+    },
+    {
+      "summary": "Increase the signing deposit from $240,000 to $360,000, tying up more Buyer funds.",
+      "section": "Section 2",
+      "harms": "Quorrelith Components LLC",
+      "helps": "Vellunspur Fabrication LLC",
+      "counterOpportunity": false
+    },
+    {
+      "summary": "Limit the consent closing condition to contracts above $50,000 annually; Buyer can counter by including all operationally essential contracts.",
+      "section": "Section 4",
+      "harms": "Quorrelith Components LLC",
+      "helps": "Vellunspur Fabrication LLC",
+      "counterOpportunity": true
+    },
+    {
+      "summary": "Extend representation survival from eighteen to twenty-four months.",
+      "section": "Section 5",
+      "harms": "Vellunspur Fabrication LLC",
+      "helps": "Quorrelith Components LLC",
+      "counterOpportunity": false
+    },
+    {
+      "summary": "Double the included transition instruction from forty to eighty staff hours.",
+      "section": "Section 7",
+      "harms": "Vellunspur Fabrication LLC",
+      "helps": "Quorrelith Components LLC",
+      "counterOpportunity": false
+    },
+    {
+      "summary": "Move the unchanged Confidentiality clause from Section 7 to Section 3.",
+      "section": "Section 7 \u2192 Section 3",
+      "harms": "none",
+      "helps": "none",
+      "counterOpportunity": false
+    },
+    {
+      "summary": "Replace after business hours with outside business hours as a neutral wording clean-up.",
+      "section": "Section 9",
+      "harms": "none",
+      "helps": "none",
+      "counterOpportunity": false
+    },
+    {
+      "summary": "Replace treated with deemed in the counterparts sentence without changing its effect.",
+      "section": "Section 10",
+      "harms": "none",
+      "helps": "none",
+      "counterOpportunity": false
+    }
+  ]
+}
