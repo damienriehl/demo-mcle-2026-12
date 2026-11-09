@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import type { ClientTask, Proposal, Task, TaskStatus } from './types';
+import type { ClientTask, Proposal, Task, TaskOwner, TaskStatus } from './types';
 
 const BASE = '/api/features/task-board';
 export type View = 'client' | 'lawyer';
@@ -25,8 +25,8 @@ async function call(path: string, init: RequestInit) {
 }
 const post = (path: string, body: unknown) => call(path, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
 
-export const moveTask = (matterId: string, id: string, view: View, status: TaskStatus) =>
-  call(`/tasks/${id}`, { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ matterId, view, status }) });
+export const moveTask = (matterId: string, id: string, view: View, status: TaskStatus, waitingOn?: TaskOwner) =>
+  call(`/tasks/${id}`, { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ matterId, view, status, ...(waitingOn ? { waitingOn } : {}) }) });
 export const shareTask = (matterId: string, id: string, sharedWithClient: boolean) =>
   call(`/tasks/${id}`, { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ matterId, view: 'lawyer', sharedWithClient }) });
 export const draftTasks = (matterId: string) => post('/draft', { matterId });

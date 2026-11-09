@@ -1,14 +1,13 @@
 import { Hono } from 'hono';
 import { createClient, modelName, NEEDS_KEY_MESSAGE, needsKeyResponse } from '../ai';
 import { getMatterStore } from '../store';
-import type { TaskBoard, TaskStatus } from '../../src/features/task-board/types';
-import { analyzeUpload, applyAnalysis, clientView, deadlineTasks, draftWithModel, makeTask, mergeTasks, nextStepTasks } from '../tasks/logic';
+import type { TaskBoard } from '../../src/features/task-board/types';
+import { analyzeUpload, applyAnalysis, clientView, deadlineTasks, draftWithModel, makeTask, mergeTasks, nextStepTasks, patchTask, type TaskPatch } from '../tasks/logic';
 import { approveProposal, ingestUpload, UploadError } from '../tasks/service';
 import { getTaskStore } from '../tasks/store';
 
 type View = 'client' | 'lawyer';
 const viewOf = (value: string | undefined): View => (value === 'lawyer' ? 'lawyer' : 'client');
-const STATUSES = new Set<TaskStatus>(['todo', 'doing', 'done']);
 
 function project(matterId: string, board: TaskBoard, view: View) {
   return view === 'lawyer' ? board : clientView(board, getMatterStore().get(matterId));
@@ -76,21 +75,15 @@ export default new Hono()
     }
   })
   .patch('/tasks/:id', async (c) => {
-    const body = await c.req.json().catch(() => ({})) as { matterId?: string; status?: TaskStatus; sharedWithClient?: boolean; view?: string };
+    const body = await c.req.json().catch(() => ({})) as TaskPatch & { matterId?: string; view?: string };
     const matter = matterOr404(body.matterId);
     if (!matter) return c.json(notFound, 404);
     const view = viewOf(body.view);
     const task = getTaskStore().read(matter.id).tasks.find(item => item.id === c.req.param('id'));
     if (!task) return c.json({ error: 'not_found', message: 'That task is no longer on the board.' }, 404);
-    if (view === 'client' && (task.owner !== 'client' || body.sharedWithClient !== undefined)) {
-      return c.json({ error: 'forbidden', message: 'Only your lawyer can change that task.' }, 403);
-    }
-    if (body.status !== undefined && !STATUSES.has(body.status)) return c.json({ error: 'invalid', message: 'Unknown status.' }, 400);
-    const board = getTaskStore().update(matter.id, current => ({ ...current, tasks: current.tasks.map(item => (item.id === task.id ? {
-      ...item,
-      ...(body.status ? { status: body.status } : {}),
-      ...(typeof body.sharedWithClient === 'boolean' && item.owner === 'lawyer' ? { sharedWithClient: body.sharedWithClient } : {}),
-    } : item)) }));
+    const result = patchTask(task, body, view);
+    if (!result.ok) return c.json({ error: result.error, message: result.message }, result.code);
+    const board = getTaskStore().update(matter.id, current => ({ ...current, tasks: current.tasks.map(item => (item.id === task.id ? result.task : item)) }));
     return c.json(project(matter.id, board, view));
   })
   .delete('/tasks/:id', (c) => {

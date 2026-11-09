@@ -3,7 +3,7 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { afterEach, describe, expect, it } from 'vitest';
 import type { Matter, MatterWithDeadlines } from '../src/data/schema';
-import { applyAnalysis, checkDraftedTasks, checkUploadAnalysis, clientView, deadlineTasks, makeTask, mergeTasks, nextStepTasks, verifyQuote } from '../server/tasks/logic';
+import { applyAnalysis, checkDraftedTasks, checkUploadAnalysis, clientView, deadlineTasks, makeTask, mergeTasks, nextStepTasks, patchTask, verifyQuote } from '../server/tasks/logic';
 import { approveProposal, ingestUpload } from '../server/tasks/service';
 import { createTaskStore } from '../server/tasks/store';
 
@@ -152,5 +152,44 @@ describe('store', () => {
     expect(tasks.read('other').tasks).toEqual([]);
     expect(tasks.read('../escape').tasks).toEqual([]);
     expect(() => tasks.write('../escape', { tasks: [], proposals: [] })).toThrow();
+  });
+});
+
+describe('waiting-on status', () => {
+  const lawyerTask = () => makeTask({ owner: 'lawyer', title: 'File the motion', source: { kind: 'rule', ref: 'frcp:12' }, sharedWithClient: true });
+  const clientTask = () => makeTask({ owner: 'client', title: 'Sign the affidavit', source: { kind: 'verify', ref: 'x' } });
+
+  it('accepts waiting with waitingOn, and defaults waitingOn to the other side', () => {
+    const explicit = patchTask(lawyerTask(), { status: 'waiting', waitingOn: 'lawyer' }, 'lawyer');
+    expect(explicit).toMatchObject({ ok: true, task: { status: 'waiting', waitingOn: 'lawyer' } });
+    expect(patchTask(lawyerTask(), { status: 'waiting' }, 'lawyer')).toMatchObject({ ok: true, task: { waitingOn: 'client' } });
+    expect(patchTask(clientTask(), { status: 'waiting' }, 'client')).toMatchObject({ ok: true, task: { waitingOn: 'lawyer' } });
+  });
+
+  it('clears waitingOn when the task leaves waiting', () => {
+    const waiting = patchTask(lawyerTask(), { status: 'waiting', waitingOn: 'client' }, 'lawyer');
+    if (!waiting.ok) throw new Error('expected ok');
+    const back = patchTask(waiting.task, { status: 'doing' }, 'lawyer');
+    expect(back.ok && back.task.status).toBe('doing');
+    expect(back.ok && 'waitingOn' in back.task).toBe(false);
+  });
+
+  it('rejects an invalid waitingOn, and waitingOn on a task that is not waiting', () => {
+    expect(patchTask(lawyerTask(), { status: 'waiting', waitingOn: 'judge' }, 'lawyer')).toMatchObject({ ok: false, code: 400 });
+    expect(patchTask(lawyerTask(), { status: 'doing', waitingOn: 'client' }, 'lawyer')).toMatchObject({ ok: false, code: 400 });
+    expect(patchTask(lawyerTask(), { status: 'paused' }, 'lawyer')).toMatchObject({ ok: false, code: 400 });
+  });
+
+  it('forbids the client view from setting waiting on a lawyer task', () => {
+    expect(patchTask(lawyerTask(), { status: 'waiting', waitingOn: 'client' }, 'client')).toMatchObject({ ok: false, code: 403 });
+  });
+
+  it('shows a shared waiting lawyer task, with waitingOn, in the client view; unshared ones stay hidden', () => {
+    const waiting = patchTask(lawyerTask(), { status: 'waiting', waitingOn: 'client' }, 'lawyer');
+    if (!waiting.ok) throw new Error('expected ok');
+    const hidden = { ...waiting.task, id: 'hidden', sharedWithClient: false };
+    const view = clientView({ tasks: [waiting.task, hidden], proposals: [] });
+    expect(view.tasks).toHaveLength(1);
+    expect(view.tasks[0]).toMatchObject({ owner: 'lawyer', status: 'waiting', waitingOn: 'client' });
   });
 });

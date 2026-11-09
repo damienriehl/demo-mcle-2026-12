@@ -1,5 +1,6 @@
 export type TaskOwner = 'client' | 'lawyer';
-export type TaskStatus = 'todo' | 'doing' | 'done';
+export type TaskStatus = 'todo' | 'doing' | 'waiting' | 'done';
+export const TASK_STATUSES: TaskStatus[] = ['todo', 'doing', 'waiting', 'done'];
 export type TaskSource = {
   kind: 'document' | 'deadline' | 'rule' | 'verify';
   /** Document ID, deadline ID, rule ID, or a matter field path. */
@@ -17,6 +18,8 @@ export type Task = {
   title: string;
   detail: string;
   status: TaskStatus;
+  /** Who the task waits on. Set only while status is 'waiting'. */
+  waitingOn?: TaskOwner;
   sharedWithClient: boolean;
   dueDate?: string;
   source: TaskSource;
@@ -37,6 +40,6 @@ export type Proposal = {
   createdAt: string;
 };
 export type TaskBoard = { tasks: Task[]; proposals: Proposal[] };
-export type ClientTask = Pick<Task, 'id' | 'owner' | 'title' | 'status' | 'sharedWithClient' | 'dueDate' | 'needsUpload' | 'uploadedDocumentId'> & { detail?: string; source?: TaskSource };
+export type ClientTask = Pick<Task, 'id' | 'owner' | 'title' | 'status' | 'sharedWithClient' | 'dueDate' | 'needsUpload' | 'uploadedDocumentId' | 'waitingOn'> & { detail?: string; source?: TaskSource };
 
-export const STATUS_LABEL: Record<TaskStatus, string> = { todo: 'To do', doing: 'Doing', done: 'Done' };
+export const STATUS_LABEL: Record<TaskStatus, string> = { todo: 'To do', doing: 'Doing', waiting: 'Waiting on', done: 'Done' };
