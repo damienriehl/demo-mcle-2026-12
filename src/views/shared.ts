@@ -3,7 +3,7 @@ import type { DeadlineResult } from '../engine/types';
 
 export type Selection = { matterId: string; label: string; value?: string; deadlineId?: string; result?: DeadlineResult };
 export type ViewProps = { matters: MatterWithDeadlines[]; activeMatter: MatterWithDeadlines | undefined; onVerify: (selection: Selection) => void };
-export const practiceAreas = ['litigation', 'transactional', 'patent', 'bankruptcy', 'family', 'employment', 'regulatory'] as const;
+export { practiceAreas } from '../data/practiceAreas';
 export function dateLabel(date: string) {
   return new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric', year: 'numeric', timeZone: 'UTC' }).format(new Date(`${date}T12:00:00Z`));
 }

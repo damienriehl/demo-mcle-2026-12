@@ -43,19 +43,25 @@ export function createMatterStore({ filePath, engine: initialEngine, logError = 
     return parsed;
   }
 
-  function list(): MatterWithDeadlines[] {
-    return structuredClone(matters).map((matter) => ({
+  function withDeadlines(matter: Matter): MatterWithDeadlines {
+    return {
       ...matter,
       computedDeadlines: Object.fromEntries(matter.deadlines.map((deadline) => [deadline.id,
         deadline.deadlineRuleId === 'none'
           ? { status: 'uncomputable', reason: 'No deadline rule selected.', steps: [] }
           : engine!.computeDeadline(deadline),
       ])),
-    }));
+    };
+  }
+
+  function list(): MatterWithDeadlines[] {
+    return structuredClone(matters).map(withDeadlines);
   }
 
   function broadcast() {
-    for (const listener of listeners) listener(list());
+    if (!listeners.size) return;
+    const snapshot = list();
+    for (const listener of listeners) listener(snapshot);
   }
 
   function reload() {
@@ -91,7 +97,10 @@ export function createMatterStore({ filePath, engine: initialEngine, logError = 
 
   return {
     list,
-    get: (id: string) => list().find((matter) => matter.id === id),
+    get(id: string) {
+      const matter = matters.find((existing) => existing.id === id);
+      return matter && withDeadlines(structuredClone(matter));
+    },
     upsert(value: unknown) {
       let matter: Matter;
       try { matter = matterSchema.parse(value); }

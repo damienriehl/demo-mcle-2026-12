@@ -1,9 +1,8 @@
-import { Hono } from 'hono';
+import { Hono, type Context } from 'hono';
 import { matterEvents } from './events';
 import { getMatterStore, type MatterStore } from './store';
 import { createIntakeRoutes } from './intake/routes';
 
-/** A module loaded from server/features/*.ts. Its default export should be a Hono app. */
 export type FeatureModule = { default?: unknown };
 
 const SLUG = /^[a-z0-9][a-z0-9-]*$/;
@@ -24,7 +23,6 @@ function isHonoApp(value: unknown): value is Hono {
   );
 }
 
-/** Mounts feature sub-apps under /api/features/<slug> and returns the mounted slugs. */
 export function mountFeatures(app: Hono, modules: Record<string, FeatureModule>): string[] {
   const mounted: string[] = [];
   for (const [path, mod] of Object.entries(modules)) {
@@ -52,7 +50,7 @@ export function createApp(modules: Record<string, FeatureModule> = featureFiles,
     const matter = store.get(c.req.param('id'));
     return matter ? c.json(matter) : c.json({ error: 'not_found' }, 404);
   });
-  const writeMatter = async (c: import('hono').Context) => {
+  const writeMatter = async (c: Context) => {
     try {
       const value: unknown = await c.req.json();
       const id = c.req.param('id');

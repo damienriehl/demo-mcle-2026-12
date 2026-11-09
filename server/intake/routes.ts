@@ -5,7 +5,7 @@ import { streamSSE } from 'hono/streaming';
 import Anthropic from '@anthropic-ai/sdk';
 import { z } from 'zod';
 import type { Matter } from '../../src/data/schema';
-import { modelName, needsKeyResponse } from '../ai';
+import { modelName, NEEDS_KEY_MESSAGE } from '../ai';
 import { getMatterStore, type MatterStore } from '../store';
 import { cannedMatter } from './canned';
 import { consumeTool, IncompleteToolError, modelStream, type ModelStream } from './client';
@@ -45,8 +45,7 @@ export function createIntakeRoutes(options: Options = {}): Hono {
         if (initial.errors.length) throw new Error(initial.errors.join('; '));
         const source = options.stream === undefined ? modelStream() : options.stream;
         if (!source && mode !== 'surprise') {
-          const { message } = await needsKeyResponse().json() as { message: string };
-          await send({ type: 'needs_key', message });
+          await send({ type: 'needs_key', message: NEEDS_KEY_MESSAGE });
           return;
         }
         const store = options.store ?? getMatterStore();
@@ -86,7 +85,7 @@ export function createIntakeRoutes(options: Options = {}): Hono {
             }, abort.signal), async (field) => { errors.push(...await accept(field)); });
           } catch (error) {
             if (error instanceof SyntaxError) errors.push('Tool input was not complete valid JSON.');
-            else if (error instanceof IncompleteToolError) errors.push(`${error.message} Call structure_matter exactly once.`);
+            else if (error instanceof IncompleteToolError) errors.push(`${error.message} Call ${intakeTool.name} exactly once.`);
             else throw error;
           }
           const parsed = outputSchema.safeParse(output);

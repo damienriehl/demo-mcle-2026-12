@@ -4,7 +4,6 @@ import { intakeTool } from './schema';
 
 export type ModelStream = (request: BetaMessageStreamParams, signal: AbortSignal) => AsyncIterable<BetaRawMessageStreamEvent>;
 
-/** The model ended its turn without one complete tool call; the route retries once. */
 export class IncompleteToolError extends Error {}
 
 export function modelStream(): ModelStream | null {
@@ -66,7 +65,7 @@ export async function consumeTool(stream: AsyncIterable<BetaRawMessageStreamEven
   const scanner = new FieldScanner();
   for await (const event of stream) {
     if (event.type === 'content_block_start' && event.content_block.type === 'tool_use') {
-      if (activeIndex !== undefined || event.content_block.name !== intakeTool.name) throw new Error('Expected one structure_matter tool call');
+      if (activeIndex !== undefined || event.content_block.name !== intakeTool.name) throw new Error(`Expected one ${intakeTool.name} tool call`);
       activeIndex = event.index;
     } else if (event.type === 'content_block_delta' && event.index === activeIndex && event.delta.type === 'input_json_delta') {
       input += event.delta.partial_json;
@@ -75,7 +74,7 @@ export async function consumeTool(stream: AsyncIterable<BetaRawMessageStreamEven
     else if (event.type === 'message_delta') stopReason = event.delta.stop_reason;
   }
   if (stopReason === 'max_tokens' || stopReason === 'refusal') throw new IncompleteToolError(`Model stopped with ${stopReason} before a complete tool call.`);
-  if (!stopped) throw new IncompleteToolError('Model ended without calling structure_matter.');
+  if (!stopped) throw new IncompleteToolError(`Model ended without calling ${intakeTool.name}.`);
   const output: unknown = JSON.parse(input);
   // JSON property order is not semantically significant. A reordered tool still validates.
   if (output && typeof output === 'object' && 'fields' in output && Array.isArray(output.fields)) {

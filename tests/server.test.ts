@@ -53,6 +53,7 @@ describe('AI helper', () => {
 
   it('reads the key from MATTER_COCKPIT_API_KEY', () => {
     const env = { MATTER_COCKPIT_API_KEY: 'test-key-from-env', MATTER_COCKPIT_API_KEY_FILE: missingKeyFile };
+    expect(readKey(env)).toBe('test-key-from-env');
     expect(hasKey(env)).toBe(true);
   });
 

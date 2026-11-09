@@ -1,4 +1,4 @@
-import { addDays, weekday } from '../dates';
+import { addDays, dateOf, weekday } from '../dates';
 import type { Step } from '../types';
 
 export type Holiday = { name: string; citation: Step['citation'] };
@@ -11,12 +11,8 @@ export type Holiday = { name: string; citation: Step['citation'] };
 // Movable holidays: third Monday Jan/Feb, last Monday May, first Monday Sep,
 // second Monday Oct, fourth Thursday Nov. No ad hoc proclamations or local closures.
 // A Saturday New Year's observance belongs to the preceding calendar year.
-function dateInYear(year: number, month: number, day: number): string {
-  return new Date(Date.UTC(year, month - 1, day)).toISOString().slice(0, 10);
-}
-
 function nthWeekday(year: number, month: number, dayOfWeek: number, occurrence: number): string {
-  const first = dateInYear(year, month, 1);
+  const first = dateOf(year, month, 1);
   return addDays(first, (dayOfWeek - weekday(first) + 7) % 7 + (occurrence - 1) * 7);
 }
 
@@ -32,7 +28,7 @@ function generateFederalHolidays(): Record<string, Holiday> {
       [12, 25, 'Christmas Day'],
     ] as const;
     for (const [month, day, name] of fixed) {
-      const date = dateInYear(year, month, day);
+      const date = dateOf(year, month, day);
       holidays[date] = { name, citation };
       const dayOfWeek = weekday(date);
       if (dayOfWeek === 6 || dayOfWeek === 0) {
@@ -41,7 +37,7 @@ function generateFederalHolidays(): Record<string, Holiday> {
         holidays[observed] = { name: `${observedName} (observed)`, citation };
       }
     }
-    const may31 = dateInYear(year, 5, 31);
+    const may31 = dateOf(year, 5, 31);
     const movable = [
       [nthWeekday(year, 1, 1, 3), 'Martin Luther King Jr. Day'],
       [nthWeekday(year, 2, 1, 3), "Washington's Birthday"],

@@ -1,4 +1,4 @@
-/* Live theme tweaks belong here. Keep the 18px projector floor and readable ink.
+/* Keep the 18px projector floor and readable ink.
    --mc-warning is the amber "verify independently" color: keep it apart from the accent and from error red, at 7:1 on bg and surface. */
 :root,
 [data-appearance='law-review'] {

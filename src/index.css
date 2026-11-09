@@ -1,7 +1,6 @@
 @import 'tailwindcss';
 @import './theme/tokens.css';
 
-/* Expose the tokens as Tailwind utilities (bg-bg, text-ink, font-display, ...). */
 @theme inline {
   --color-bg: var(--mc-bg);
   --color-surface: var(--mc-surface);

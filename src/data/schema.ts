@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import type { DeadlineResult } from './engine-types';
+import { practiceAreas } from './practiceAreas';
 
 const text = z.string().min(1);
 export const provenanceSchema = z.strictObject({
@@ -22,7 +23,7 @@ export const INTERNAL_ONLY_FIELDS = ['reasoning', 'provenance.*.evidence'] as co
 export const matterSchema = z.strictObject({
   id: text,
   title: text,
-  practiceArea: z.enum(['litigation', 'transactional', 'patent', 'bankruptcy', 'family', 'employment', 'regulatory']),
+  practiceArea: z.enum(practiceAreas),
   forum: text,
   synthetic: z.literal(true),
   client: z.strictObject({ name: text, contact: text }),

@@ -10,6 +10,8 @@ import { MathSteps } from './MathSteps';
 import { RuleText } from './RuleText';
 import './verify.css';
 
+const NO_REASONING = 'No AI reasoning chain on file.';
+
 export type VerifySelection = Selection & { context?: FactContext };
 
 function DeadlineVerification({ selection, matter }: { selection: VerifySelection; matter?: MatterWithDeadlines }) {
@@ -42,7 +44,7 @@ function DeadlineVerification({ selection, matter }: { selection: VerifySelectio
       {catalog && <li><span>{catalog.description}</span><SourceLabel source={ruleContext?.provenance?.source} /></li>}
       {deadline && <li><span>Trigger: {deadline.trigger.event} · {dateLabel(deadline.trigger.date)}.</span><SourceLabel source={triggerContext?.provenance?.source} /></li>}
       {catalog?.assumptions.map(control => <li key={control.key}><span>{control.label}: {assumptionLabel(assumptions[control.key] ?? control.default)}.</span><span className="source-label">Local preview</span></li>)}
-      <li><span>{matter?.reasoning || 'No AI reasoning chain on file.'}</span><SourceLabel source={matter ? factContext(matter, 'reasoning').provenance?.source : undefined} /></li>
+      <li><span>{matter?.reasoning || NO_REASONING}</span><SourceLabel source={matter ? factContext(matter, 'reasoning').provenance?.source : undefined} /></li>
     </ol></section>
     {citation && <RuleText key={`${citation.ruleId}:${citation.subdivision}`} citation={citation} />}
   </>;
@@ -55,7 +57,7 @@ export function VerifyDrawer({ selection, matter, onClose, onOpenMatter }: { sel
       {selection.deadlineId ? <DeadlineVerification key={`${selection.matterId}:${selection.deadlineId}`} selection={selection} matter={matter} />
         : <><section className="verify-fact-source"><p>{selection.label}</p><h3>{selection.value}</h3><SourceLabel source={context?.provenance?.source} /><p>This fact has no computed due date.</p></section>
           <section className="verify-evidence"><h3>Evidence</h3>{context?.provenance?.evidence ? <blockquote>{context.provenance.evidence}</blockquote> : <p>No evidence quote on file.</p>}</section>
-          <section data-verify-section="reasoning" className="verify-reasoning"><h3>Reasoning chain</h3><p>{context?.reasoning || 'No AI reasoning chain on file.'}</p></section></>}
+          <section data-verify-section="reasoning" className="verify-reasoning"><h3>Reasoning chain</h3><p>{context?.reasoning || NO_REASONING}</p></section></>}
     </div>
     {onOpenMatter && <button className="primary-button verify-open-matter" onClick={onOpenMatter}>Open matter</button>}
   </Overlay>;

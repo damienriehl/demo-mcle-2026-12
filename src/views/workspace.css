@@ -114,8 +114,6 @@
 .intake-actions { position: sticky; bottom: -1.4rem; padding: .9rem 0 1.4rem; background: var(--mc-bg); border-top: 1px solid var(--mc-border); }
 .intake-actions p { margin-top: .5rem; }
 .button-row { display: flex; gap: .6rem; }
-.verify-result { padding: 1rem; border-left: 4px solid var(--mc-ink); background: var(--mc-surface); }
-.verify-result strong { display: block; font-family: var(--mc-font-heading); font-size: var(--mc-text-xl); font-weight: 500; margin-top: .5rem; }
 .arrival-label { font-weight: 700; border: 1px solid var(--mc-ink); padding: 0 .3rem; }
 .matter-arrival { animation: matter-arrive 650ms ease-out; }
 .feature-section { margin-top: 1rem; }
@@ -132,7 +130,6 @@
 .radar-band .source-field strong { font-weight: inherit; }
 @media (max-width: 700px) { .matter-app { padding-bottom: 6rem; } .drawer-backdrop { bottom: 6rem; } }
 
-/* Labels and provenance keep the same ink contrast when emphasis changes. */
 .workspace-section > h3, .matter-rail h2 {
   font-family: var(--mc-font-heading);
   font-weight: var(--mc-weight-label);

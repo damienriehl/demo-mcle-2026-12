@@ -1,16 +1,13 @@
 import { useRef, useState } from 'react';
 import { Overlay } from '../components/Overlay';
 import { SourceField } from './SourceLabel';
+import { fieldLabel } from './fieldLabel';
 import { applyField, intakeStream, type Draft, type Question } from './stream';
 import type { Selection } from '../views/shared';
 
 type Stage = 'idle' | 'streaming' | 'awaiting follow-up' | 'embellishing' | 'partial failure' | 'needs a key' | 'done';
 const stageLabels: Record<Stage, string> = { idle: 'Ready for your story', streaming: 'Building your matter', 'awaiting follow-up': 'A question for you', embellishing: 'Embellishing', 'partial failure': 'Partial matter', 'needs a key': 'Needs a key', done: 'Matter added' };
 const required = ['title', 'practiceArea', 'forum', 'client.name', 'client.contact', 'parties', 'timeline', 'documents', 'deadlines', 'clientFacing.status', 'clientFacing.nextSteps'];
-function fieldLabel(path: string) {
-  const roots: Record<string, string> = { title: 'Matter title', practiceArea: 'Practice area', forum: 'Court or forum', client: 'Client', parties: 'Party', timeline: 'Timeline event', documents: 'Document', deadlines: 'Deadline', clientFacing: 'Client update' };
-  return path.split('.').map((part, i) => i === 0 ? roots[part] ?? part : /^\d+$/.test(part) ? String(Number(part) + 1) : part.replace(/([a-z])([A-Z])/g, '$1 $2').toLowerCase()).join(' ');
-}
 function draftValue(draft: Draft, path: string): unknown {
   return path.split('.').reduce<unknown>((value, key) => value && typeof value === 'object' ? (value as Record<string, unknown>)[key] : undefined, draft);
 }
@@ -40,18 +37,22 @@ export function useRamble() {
     let failed = false;
     let nextQuestions = remaining;
     let terminal = false;
+    const fail = (nextStage: Stage, text: string) => {
+      failed = true;
+      if (endpoint === 'answer') setQuestions(pendingQuestions);
+      setStage(nextStage);
+      setMessage(text);
+    };
     try {
       await intakeStream(endpoint, body, event => {
         switch (event.type) {
           case 'field': updateDraft(applyField(draftRef.current, event)); break;
           case 'followups': nextQuestions = event.questions; setQuestions(nextQuestions); break;
           case 'done': updateDraft(event.matter); setStage('done'); setMessage(`${event.matter.title} is now in the shared workspace.`); terminal = true; break;
-          case 'needs_key': failed = true; if (endpoint === 'answer') setQuestions(pendingQuestions); setStage('needs a key'); setMessage(`${event.message} Live Ramble and Embellish need a configured model key. Surprise Me works from canned synthetic matters without one.`); terminal = true; break;
+          case 'needs_key': fail('needs a key', `${event.message} Live Ramble and Embellish need a configured model key. Surprise Me works from canned synthetic matters without one.`); terminal = true; break;
           case 'error':
-            failed = true;
-            if (endpoint === 'answer') setQuestions(pendingQuestions);
             if (event.partial) updateDraft({ ...draftRef.current, ...event.partial, provenance: { ...draftRef.current.provenance, ...event.partial.provenance } });
-            setStage('partial failure'); setMessage(event.message); terminal = true; break;
+            fail('partial failure', event.message); terminal = true; break;
         }
       });
       if (!terminal) {
@@ -60,10 +61,7 @@ export function useRamble() {
         if (!nextQuestions.length) setMessage('Your extracted facts are kept. Use Embellish to fill the remaining fields.');
       }
     } catch (error) {
-      failed = true;
-      if (endpoint === 'answer') setQuestions(pendingQuestions);
-      setStage('partial failure');
-      setMessage(error instanceof Error && error.message.startsWith('Could not reach intake') ? error.message : 'Could not reach intake. Your facts are kept. Use Embellish when the service is available.');
+      fail('partial failure', error instanceof Error && error.message.startsWith('Could not reach intake') ? error.message : 'Could not reach intake. Your facts are kept. Use Embellish when the service is available.');
     } finally { busyRef.current = false; }
     return !failed;
   }

@@ -11,6 +11,10 @@ function iso(milliseconds: number): string {
   return new Date(milliseconds).toISOString().slice(0, 10);
 }
 
+export function dateOf(year: number, month: number, day: number): string {
+  return iso(Date.UTC(year, month - 1, day));
+}
+
 export function isCalendarDate(value: unknown): value is string {
   return typeof value === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(value)
     && Number.isFinite(utc(value)) && iso(utc(value)) === value;

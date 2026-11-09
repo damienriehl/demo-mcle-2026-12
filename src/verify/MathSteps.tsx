@@ -2,7 +2,7 @@ import type { Step } from '../engine';
 import { getRule } from '../../data/rules';
 import { dateLabel } from '../views/shared';
 
-export function citationLabel(citation: Step['citation']) {
+function citationLabel(citation: Step['citation']) {
   const rule = getRule(citation.ruleId);
   return `${rule?.citation ?? citation.ruleId}${citation.subdivision ?? ''}`;
 }

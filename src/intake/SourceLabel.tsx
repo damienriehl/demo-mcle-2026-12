@@ -1,21 +1,11 @@
 import type { ReactNode } from 'react';
 import type { Matter } from '../data/schema';
+import { provenanceAt } from '../data/provenance';
 
 type Source = Matter['provenance'][string]['source'];
 const labels: Record<Source, string> = { stated: 'You said', inferred: 'AI inferred', invented: 'AI invented' };
 export function sourceFor(provenance: Matter['provenance'], path: string) {
-  let field = path;
-  while (field) {
-    if (provenance[field]) return provenance[field].source;
-    const fieldParts = field.split('.');
-    const match = Object.entries(provenance).find(([pattern]) => {
-      const patternParts = pattern.split('.');
-      return pattern.includes('*') && patternParts.length === fieldParts.length && patternParts.every((part, i) => part === '*' || part === fieldParts[i]);
-    });
-    if (match) return match[1].source;
-    field = field.split('.').slice(0, -1).join('.');
-  }
-  return undefined;
+  return provenanceAt(provenance, path)?.source;
 }
 export function SourceLabel({ source }: { source?: Source }) {
   return <span className="source-label">{source ? labels[source] : 'Source not recorded'}</span>;
