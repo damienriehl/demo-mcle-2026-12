@@ -296,13 +296,24 @@ test.describe('shared matter views', () => {
 
   test('a folder registers a Cockpit tab automatically without a host edit', async ({ page }) => {
     await open(page);
-    await page.getByRole('button', { name: /Cedar House acquisition/ }).click();
     await mkdir(featurePath, { recursive: true });
     try {
       await writeFile(resolve(featurePath, 'index.tsx'), `import { registerFeature } from '../registry';\nregisterFeature({ id: ${JSON.stringify(example.id)}, title: ${JSON.stringify(example.title)}, slot: 'cockpit.tab', component: ({ activeMatter }) => <p>${example.body}: {activeMatter?.title}</p> });\n`);
       await page.getByRole('tab', { name: example.title }).click();
+      await page.getByRole('button', { name: /Cedar House acquisition/ }).click();
       await expect(page.getByText(`${example.body}: Cedar House acquisition`, { exact: true })).toBeVisible();
-    } finally { await rm(featurePath, { recursive: true, force: true }); }
+    } finally {
+      await rm(featurePath, { recursive: true, force: true });
+      // Filesystem removal finishes before Vite invalidates the eager glob import.
+      await expect.poll(async () => {
+        const loader = await page.request.get('/src/features/load.ts');
+        expect(loader.ok()).toBe(true);
+        return loader.text();
+      }).not.toContain('fixture-brief');
+    }
+    await page.reload();
+    await expect(page.getByRole('button', { name: /Northstar Studio v. Vale/ })).toBeVisible();
+    await expect(page.getByRole('tab', { name: example.title })).toHaveCount(0);
   });
 
   test('projected text stays legible and narrow screens remain navigable', async ({ page }) => {
