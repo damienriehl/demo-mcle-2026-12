@@ -28,7 +28,8 @@ export async function convertDraft(bytes: Uint8Array, format: DraftFormat): Prom
   try {
     const input = join(dir, `draft.${format}`);
     await writeFile(input, bytes);
-    await run(exe, ['--headless', '--convert-to', 'docx', '--outdir', dir, input], { timeout: 60_000 });
+    const inputFilter = format === 'html' ? ['--infilter=HTML (StarWriter)'] : [];
+    await run(exe, ['--headless', ...inputFilter, '--convert-to', 'docx:MS Word 2007 XML', '--outdir', dir, input], { timeout: 60_000 });
     return new Uint8Array(await readFile(join(dir, 'draft.docx')));
   } finally {
     await rm(dir, { recursive: true, force: true });

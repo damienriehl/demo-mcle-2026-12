@@ -21,5 +21,11 @@ done
 if [[ ${#mounts[@]} -eq 4 && ${mounts[1]} == "${mounts[3]}" ]]; then
   mounts=("${mounts[@]:0:2}")
 fi
-exec docker run --rm --network none --user "$(id -u):$(id -g)" \
+docker_user="$(id -u):$(id -g)"
+security_options=$(docker info --format '{{.SecurityOptions}}')
+if [[ $security_options == *rootless* ]]; then
+  # Rootless container root maps to the host user who owns the private temp directory.
+  docker_user=0:0
+fi
+exec docker run --rm --network none --user "$docker_user" \
   -e HOME=/tmp "${mounts[@]}" matter-cockpit-soffice:1 soffice "${args[@]}"

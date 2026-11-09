@@ -1,6 +1,8 @@
+import { execFile } from 'node:child_process';
 import { chmodSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
-import { join } from 'node:path';
+import { join, resolve } from 'node:path';
+import { promisify } from 'node:util';
 import { load } from 'cheerio';
 import { getRevisions, openDocxSession } from 'docxodus/core';
 import { afterEach, describe, expect, it, vi } from 'vitest';
@@ -199,7 +201,10 @@ describe('draft engine', () => {
     expect(result.formattingCompared).toBe(false);
   });
 
-  it('converts an ODT detected by its ZIP contents with the configured executable', async () => {
+  it.each([
+    { format: 'odt', bytes: odt() },
+    { format: 'html', bytes: utf8('<html><body><p>Converted agreement.</p></body></html>') },
+  ])('converts detected $format input with the configured executable and filters', async ({ format, bytes }) => {
     const dir = mkdtempSync(join(tmpdir(), 'draft-converter-test-'));
     scratch.push(dir);
     const prepared = (await word('Converted agreement.')).docx;
@@ -209,11 +214,31 @@ describe('draft engine', () => {
     chmodSync(exe, 0o755);
     vi.stubEnv('MATTER_COCKPIT_SOFFICE', exe);
     expect(await converterAvailable()).toBe(true);
-    const result = await normalizeDraft({ filename: 'misnamed.txt', bytes: odt() });
-    expect(result.format).toBe('odt');
+    const result = await normalizeDraft({ filename: format === 'html' ? 'draft.html' : 'misnamed.txt', bytes });
+    expect(result.format).toBe(format);
     expect(result.docx).toEqual(prepared);
     expect(result.text).toBe('Converted agreement.');
-    expect(readFileSync(join(dir, 'args'), 'utf8')).toContain('--convert-to\ndocx\n');
+    const args = readFileSync(join(dir, 'args'), 'utf8');
+    if (format === 'html') expect(args).toContain('--infilter=HTML (StarWriter)\n');
+    else expect(args).not.toContain('--infilter');
+    expect(args).toContain('--convert-to\ndocx:MS Word 2007 XML\n');
+  });
+
+  it.each([
+    { securityOptions: '[name=seccomp,profile=builtin name=rootless]', user: '0:0' },
+    { securityOptions: '[name=seccomp,profile=builtin]', user: `${process.getuid!()}:${process.getgid!()}` },
+  ])('runs the container as $user for Docker security options $securityOptions', async ({ securityOptions, user }) => {
+    const dir = mkdtempSync(join(tmpdir(), 'draft-docker-test-'));
+    scratch.push(dir);
+    const docker = join(dir, 'docker');
+    writeFileSync(docker, `#!/bin/sh\nif [ "$1" = info ]; then\n  printf '%s\\n' "$@" > '${dir}/info-args'\n  printf '%s\\n' '${securityOptions}'\nelse\n  printf '%s\\n' "$@" > '${dir}/run-args'\nfi\n`);
+    chmodSync(docker, 0o755);
+    await promisify(execFile)(resolve('scripts/soffice-container.sh'), ['--version'], {
+      env: { ...process.env, PATH: `${dir}:${process.env.PATH}` },
+    });
+    expect(readFileSync(join(dir, 'run-args'), 'utf8')).toContain(`--user\n${user}\n`);
+    expect(readFileSync(join(dir, 'run-args'), 'utf8')).toContain('--network\nnone\n');
+    expect(readFileSync(join(dir, 'info-args'), 'utf8')).toBe('info\n--format\n{{.SecurityOptions}}\n');
   });
 
   it('sanitizes active HTML and external URLs while retaining revision links and image data', () => {
