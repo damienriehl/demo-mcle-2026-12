@@ -1,0 +1,168 @@
+import { readFileSync } from 'node:fs';
+import type { FolioTag } from '../drafts/types';
+
+interface Concept {
+  iri: string;
+  label: string;
+  alt: string[];
+  branch: string;
+}
+
+interface Match {
+  concept: Concept;
+  preferred: boolean;
+}
+
+interface Trie {
+  children: Map<string, Trie>;
+  matches?: Match[];
+}
+
+const canonical = (text: string) => text.toLowerCase()
+  .replace(/[‘’‚‛]/gu, "'")
+  .replace(/[“”„‟]/gu, '"')
+  .replace(/[\p{Dash_Punctuation}\u2212]/gu, '-')
+  .replace(/\s/gu, ' ');
+
+function normalize(text: string) {
+  const chars: string[] = [];
+  const starts: number[] = [];
+  const ends: number[] = [];
+  let offset = 0;
+  for (const original of text) {
+    const end = offset + original.length;
+    const normalized = canonical(original);
+    for (const char of normalized.split('')) {
+      if (char === ' ' && chars.at(-1) === ' ') {
+        ends[ends.length - 1] = end;
+      } else {
+        chars.push(char);
+        starts.push(offset);
+        ends.push(end);
+      }
+    }
+    offset = end;
+  }
+  return { value: chars.join(''), starts, ends };
+}
+
+const key = (text: string) => canonical(text).replace(/ +/gu, ' ').trim();
+const tokens = /[\p{L}\p{M}\p{N}_]+|[^\p{L}\p{M}\p{N}_]/gu;
+const trieNode = (): Trie => ({ children: new Map() });
+const compareIri = (a: Match, b: Match) => Number(b.preferred) - Number(a.preferred)
+  || (a.concept.iri < b.concept.iri ? -1 : a.concept.iri > b.concept.iri ? 1 : 0);
+
+let singleton: {
+  byIri: Map<string, Concept>;
+  blocked: Map<string, Set<string>>;
+  trie: Trie;
+} | undefined;
+
+function getIndex() {
+  if (singleton) return singleton;
+  const { concepts } = JSON.parse(readFileSync(new URL('../../data/folio/folio-index.json', import.meta.url), 'utf8')) as { concepts: Concept[] };
+  const { blocked_aliases } = JSON.parse(readFileSync(new URL('../../data/folio/alias-blocklist.json', import.meta.url), 'utf8')) as {
+    blocked_aliases: { surface_term: string; blocked_iri: string }[];
+  };
+  const byIri = new Map<string, Concept>();
+  const blocked = new Map<string, Set<string>>();
+  const trie = trieNode();
+  for (const entry of blocked_aliases) {
+    const surface = key(entry.surface_term);
+    if (!blocked.has(surface)) blocked.set(surface, new Set());
+    blocked.get(surface)!.add(entry.blocked_iri);
+  }
+  for (const concept of concepts) {
+    byIri.set(concept.iri, concept);
+    const preferred = key(concept.label);
+    for (const label of new Set([preferred, ...concept.alt.map(key)])) {
+      if (!label) continue;
+      const match = { concept, preferred: label === preferred };
+      let node = trie;
+      for (const token of label.match(tokens)!) {
+        let next = node.children.get(token);
+        if (!next) {
+          next = trieNode();
+          node.children.set(token, next);
+        }
+        node = next;
+      }
+      (node.matches ??= []).push(match);
+      if (node.matches.length > 1) node.matches.sort(compareIri);
+    }
+  }
+  singleton = { byIri, blocked, trie };
+  return singleton;
+}
+
+/** Find an indexed concept by its exact IRI. */
+export function lookup(iri: string): Concept | undefined {
+  return getIndex().byIri.get(iri);
+}
+
+/** Return preferred-label matches first, followed by alternative-label matches. */
+export function findByLabel(label: string): Concept[] {
+  let node = getIndex().trie;
+  for (const token of key(label).match(tokens) ?? []) {
+    const next = node.children.get(token);
+    if (!next) return [];
+    node = next;
+  }
+  return (node.matches ?? []).map((match) => match.concept);
+}
+
+const isWord = (char: string | undefined) => char !== undefined && /[\p{L}\p{M}\p{N}_]/u.test(char);
+
+/** Tag nonoverlapping label occurrences with offsets into the original draft text. */
+export function tagText(text: string, draft: FolioTag['draft']): FolioTag[] {
+  const index = getIndex();
+  const { value, starts, ends } = normalize(text);
+  const words = [...value.matchAll(tokens)];
+  const candidates: (Match & { start: number; end: number })[] = [];
+  for (let start = 0; start < words.length; start++) {
+    if (isWord(words[start - 1]?.[0])) continue;
+    let node = index.trie;
+    for (let end = start; end < words.length; end++) {
+      const next = node.children.get(words[end][0]);
+      if (!next) break;
+      node = next;
+      if (!node.matches || isWord(words[end + 1]?.[0])) continue;
+      const first = words[start].index;
+      const last = words[end].index + words[end][0].length - 1;
+      const literal = text.slice(starts[first], ends[last]);
+      const surface = value.slice(first, last + 1);
+      const letters = surface.match(/\p{L}/gu) ?? [];
+      if (letters.length <= 3 && letters.length > 0
+        && (literal !== literal.toUpperCase() || literal === literal.toLowerCase())) continue;
+      for (const match of node.matches) {
+        if (!index.blocked.get(surface)?.has(match.concept.iri)) {
+          candidates.push({ ...match, start: starts[first], end: ends[last] });
+        }
+      }
+    }
+  }
+  candidates.sort((a, b) => (b.end - b.start) - (a.end - a.start) || compareIri(a, b) || a.start - b.start);
+  const selected: typeof candidates = [];
+  for (const candidate of candidates) {
+    let low = 0;
+    let high = selected.length;
+    while (low < high) {
+      const middle = (low + high) >>> 1;
+      if (selected[middle].start < candidate.start) low = middle + 1;
+      else high = middle;
+    }
+    if (low > 0 && selected[low - 1].end > candidate.start) continue;
+    if (low < selected.length && selected[low].start < candidate.end) continue;
+    selected.splice(low, 0, candidate);
+  }
+  return selected.map(({ concept, start, end }) => ({
+    iri: concept.iri,
+    label: concept.label,
+    branch: concept.branch,
+    draft,
+    start,
+    end,
+    text: text.slice(start, end),
+    source: 'index',
+  }));
+}

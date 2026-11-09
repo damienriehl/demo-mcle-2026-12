@@ -1,0 +1,30 @@
+{
+  "notice": "MIT License — folio-resolve, Copyright (c) Damien Riehl. Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the \"Software\"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions: The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software. THE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.",
+  "blocked_aliases": [
+    {
+      "surface_term": "Action",
+      "blocked_iri": "https://folio.openlegalstandard.org/R8kOvHwkY6TrQmB7RnYiWNO",
+      "reason": "Ch02 unit 4b06a90c: 'Action != Auction'. Homonym; the fuzzy matcher paired the litigation term 'Action' with the auction-sale Event (score 92.3)."
+    },
+    {
+      "surface_term": "justice",
+      "blocked_iri": "https://folio.openlegalstandard.org/R0DB70442Cf8b73D9275F14a",
+      "reason": "Ch01/Ch02 agency homonym: generic 'justice' over-scores onto 'U.S. Dept. of Justice' (Governmental Body, score 90)."
+    },
+    {
+      "surface_term": "state",
+      "blocked_iri": "https://folio.openlegalstandard.org/R0480ee8B57a1441863FE362",
+      "reason": "Ch01/Ch02 agency homonym: generic 'state' over-scores onto 'U.S. Dept. of State' (Governmental Body, score 100)."
+    },
+    {
+      "surface_term": "tax",
+      "blocked_iri": "https://folio.openlegalstandard.org/R1B9b8f8D5c8164D9da3B238",
+      "reason": "Ch01/Ch02 agency homonym: generic 'tax' over-scores onto 'U.S. Tax Court' (Governmental Body, score 100)."
+    },
+    {
+      "surface_term": "arb",
+      "blocked_iri": "https://folio.openlegalstandard.org/R3BA59dC5F90217F1ca0F87b",
+      "reason": "Ch01/Ch02 agency homonym: abbreviation 'arb' over-scores onto 'U.S. Bankruptcy Court - D. Arizona' (Governmental Body, score 100)."
+    }
+  ]
+}
