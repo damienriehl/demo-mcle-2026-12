@@ -49,7 +49,9 @@ export function computeDeadline(input: DeadlineInput): DeadlineResult {
     if (typeof quote !== 'string' || !quote.trim()) return uncomputable('The order quote must be a nonempty string.', steps);
     const citation = { ruleId: 'order', subdivision: `p. ${page}` };
     steps.push({ label: `Trigger: ${rule.triggerEvent}. Matter event: ${input.trigger.event}.`, date, citation });
-    steps.push({ label: `Use the date stated in the order, p. ${page}: “${quote}” No calendar roll applies.`, date, citation });
+    steps.push({ label: input.inputs?.movedFrom
+      ? `Moved on screen from ${input.inputs.movedFrom}. The order, p. ${page}, states: “${quote}”`
+      : `Use the date stated in the order, p. ${page}: “${quote}” No calendar roll applies.`, date, citation });
     return finish(date, steps, citation, 'date');
   }
 

@@ -1,3 +1,4 @@
+import { courtDateSource } from './source';
 import { getRule } from '../../../data/rules';
 import type { MatterWithDeadlines } from '../../data/schema';
 import { isCourtOrderDate } from '../../engine';
@@ -33,7 +34,7 @@ export function buildCalendar(matter: MatterWithDeadlines, now = new Date()): st
       return `${rule?.citation ?? citation.ruleId}${suffix}`;
     }))];
     const description = isCourtOrderDate(deadline)
-      ? `From the order, p. ${deadline.inputs?.page}: ${deadline.inputs?.quote}`
+      ? `${courtDateSource(deadline)}: ${deadline.inputs?.quote}`
       : `Code computed under ${citations.join('; ')}`;
     lines.push('BEGIN:VEVENT',
       `UID:${encodeURIComponent(matter.id)}/${encodeURIComponent(deadline.id)}@matter-cockpit`,

@@ -1,3 +1,4 @@
+import { courtDateSource } from '../features/scheduling-order/source';
 import { useState } from 'react';
 import { Overlay } from '../components/Overlay';
 import type { MatterWithDeadlines } from '../data/schema';
@@ -47,7 +48,7 @@ function DeadlineVerification({ selection, matter }: { selection: VerifySelectio
   return <>
     <section data-verify-section="due" className="verify-due" aria-live="polite" aria-atomic="true"><p>{selection.label}</p>
       {result?.status === 'computed' ? <><strong data-due-date>{dateLabel(result.dueDate)}</strong>{orderDate
-        ? <span>From the order, p. {deadline.inputs?.page}</span> : inputKey
+        ? <span>{courtDateSource(deadline)}</span> : inputKey
         ? <><span>From the matter</span><SourceLabel source={inputSource} /></> : <span>Code computed</span>}</>
         : <><strong data-no-source>No source on file. Verify independently.</strong><p>{result?.reason}</p></>}
     </section>
@@ -59,9 +60,10 @@ function DeadlineVerification({ selection, matter }: { selection: VerifySelectio
     <section data-verify-section="reasoning" className="verify-reasoning"><h3>Reasoning chain</h3><ol>
       {catalog && <li><span>{catalog.description}</span><SourceLabel source={ruleContext?.provenance?.source} /></li>}
       {upstream ? <li><span>Counts from {upstream.label} · {triggerDate ? dateLabel(triggerDate) : 'No computed date'}</span>
-        <span className="source-label">{isCourtOrderDate(upstream) ? `From the order, p. ${upstream.inputs?.page}` : 'Code computed'}</span></li>
+        <span className="source-label">{isCourtOrderDate(upstream) ? courtDateSource(upstream) : 'Code computed'}</span></li>
         : deadline && <li><span>Trigger: {deadline.trigger.event} · {triggerDate ? dateLabel(triggerDate) : 'No computed date'}.</span><SourceLabel source={triggerContext?.provenance?.source} /></li>}
-      {superseding && <li><span>The order sets this date: {superseding.label}, {governingResult?.status === 'computed' ? dateLabel(governingResult.dueDate) : 'No computed date'} (p. {superseding.inputs?.page})</span>
+      {superseding && <li><span>{superseding.inputs?.movedFrom ? 'Governing date' : 'The order sets this date'}: {superseding.label}, {governingResult?.status === 'computed' ? dateLabel(governingResult.dueDate) : 'No computed date'}{superseding.inputs?.movedFrom
+        ? <> · {courtDateSource(superseding)}</> : <> (p. {superseding.inputs?.page})</>}</span>
         {exceptionSentence && <blockquote>{exceptionSentence}</blockquote>}</li>}
       {catalog?.assumptions.map(control => <li key={control.key}><span>{control.label}: {assumptionLabel(assumptions[control.key] ?? control.default)}.</span><span className="source-label">Local preview</span></li>)}
       <li><span>{matter?.reasoning || NO_REASONING}</span><SourceLabel source={matter ? factContext(matter, 'reasoning').provenance?.source : undefined} /></li>

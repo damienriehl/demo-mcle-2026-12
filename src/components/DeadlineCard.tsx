@@ -1,3 +1,4 @@
+import { courtDateSource } from '../features/scheduling-order/source';
 import { useEffect, useRef } from 'react';
 import type { MatterWithDeadlines } from '../data/schema';
 import { isCourtOrderDate } from '../engine';
@@ -19,9 +20,11 @@ export function DeadlineCard({ matter, index, onVerify, focused = false, showMat
     <SourceField path={`deadlines.${index}.label`} provenance={matter.provenance}><strong>{deadline.label}</strong></SourceField>
     {superseding ? <>
       {governingResult?.status === 'computed' && <span className="due-date">{dateLabel(governingResult.dueDate)}</span>}
-      <span className="source-label">Superseded — the order sets this date (p. {superseding.inputs?.page})</span>
+      <span className="source-label">{superseding.inputs?.movedFrom
+        ? <>Superseded · {courtDateSource(superseding)}</>
+        : <>Superseded — the order sets this date (p. {superseding.inputs?.page})</>}</span>
     </> : result.status === 'computed' ? <><span className="due-date">{dateLabel(result.dueDate)}</span><span className="countdown">{countdown(daysFromToday(result.dueDate))}{isCourtOrderDate(deadline)
-      ? <span className="source-label">From the order, p. {deadline.inputs?.page}</span> : result.inputKey
+      ? <span className="source-label">{courtDateSource(deadline)}</span> : result.inputKey
       ? <><span>From the matter</span><SourceLabel source={sourceFor(matter.provenance, `deadlines.${index}.inputs.${result.inputKey}`)} /></>
       : <span className="source-label">Code computed</span>}</span></>
       : <><span className="verification-marker" data-verification-marker>△ Needs verification</span><span>{result.reason}</span></>}

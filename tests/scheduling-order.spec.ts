@@ -71,8 +71,15 @@ test('upload streams quotes in arrival order, groups the live schedule, moves tr
   const { computedDeadlines: _computed, ...stored } = schedule;
   const expected = structuredClone(stored);
   expected.deadlines[0].inputs!.date = '2027-06-21';
+  Object.assign(expected.deadlines[0].inputs!, { movedFrom: '2027-06-14' });
+  expected.timeline[0].date = '2027-06-21';
   expected.deadlines[0].trigger = { event: expected.deadlines[0].trigger.event, date: '2027-06-21' };
-  Object.assign(expected.provenance, { 'deadlines.0.inputs.date': { source: 'stated', evidence: 'Moved on screen from 2027-06-14' } });
+  Object.assign(expected.provenance, {
+    'deadlines.0.inputs.date': { source: 'stated', evidence: 'Moved on screen from 2027-06-14' },
+    'deadlines.0.trigger.date': { source: 'stated', evidence: 'Moved on screen from 2027-06-14' },
+    'timeline.0.date': { source: 'stated', evidence: 'Moved on screen from 2027-06-14' },
+    'deadlines.0.inputs.movedFrom': { source: 'stated', evidence: 'Original order date: 2027-06-14' },
+  });
   await page.route(`**/api/matters/${schedule.id}`, async route => {
     expect(route.request().method()).toBe('PUT');
     expect(route.request().headers()['content-type']).toBe('application/json');
@@ -212,4 +219,177 @@ test('successful extraction waits for its live snapshot before allowing a court 
   await publish(page, extracted);
   for (const input of await page.getByLabel('Move', { exact: true }).all()) await expect(input).toBeEnabled();
   await expect(page.getByRole('button', { name: 'Drop a scheduling order' })).toBeEnabled();
+});
+
+test('moving a court date keeps the original source, timeline, card and drawer honest', async ({ page }) => {
+  await open(page, schedule);
+  const writes: typeof schedule[] = [];
+  await page.route(`**/api/matters/${schedule.id}`, async route => {
+    const body = route.request().postDataJSON();
+    writes.push(body);
+    await route.fulfill({ json: body });
+    const moved = structuredClone(schedule);
+    Object.assign(moved, body);
+    moved.computedDeadlines[trialId].dueDate = body.deadlines[0].inputs.date;
+    await publish(page, moved);
+  });
+  const input = page.locator(`[data-court-date="${trialId}"]`).getByLabel('Move', { exact: true });
+  for (const date of ['2027-06-21', '2027-06-28', '2027-06-14']) {
+    await input.fill(date);
+    await input.blur();
+    await expect.poll(() => writes.length).toBe(['2027-06-21', '2027-06-28', '2027-06-14'].indexOf(date) + 1);
+    const body = writes.at(-1)!;
+    expect(body.timeline.find(event => event.id === `${trialId}-event`)?.date).toBe(date);
+    expect(body.deadlines[0].inputs).toMatchObject({ date });
+    if (date === '2027-06-14') expect(body.deadlines[0].inputs).not.toHaveProperty('movedFrom');
+    else expect(body.deadlines[0].inputs).toHaveProperty('movedFrom', '2027-06-14');
+    expect(body.provenance['deadlines.0.inputs.date'].evidence).toBe(`Moved on screen from ${writes.length === 1 ? '2027-06-14' : writes.length === 2 ? '2027-06-21' : '2027-06-28'}`);
+    await expect(input).toBeEnabled();
+  }
+  await input.fill('2027-06-21');
+  await input.blur();
+  await expect(input).toBeEnabled();
+  await page.getByRole('tab', { name: 'Overview', exact: true }).click();
+  const card = page.locator(`[data-deadline-id="${trialId}"]`);
+  await expect(card).toContainText('Moved on screen · order p. 2 said Jun 14, 2027');
+  await card.click();
+  await expect(page.getByRole('dialog')).toContainText('Moved on screen · order p. 2 said Jun 14, 2027');
+});
+
+test('keyboard date edits wait for blur or Enter and reject years outside the calendar', async ({ page }) => {
+  await open(page, schedule);
+  const writes: unknown[] = [];
+  await page.route(`**/api/matters/${schedule.id}`, async route => {
+    const body = route.request().postDataJSON();
+    writes.push(body);
+    await route.fulfill({ json: body });
+    await publish(page, { ...schedule, ...body });
+  });
+  const input = page.locator(`[data-court-date="${trialId}"]`).getByLabel('Move', { exact: true });
+  await input.focus();
+  // Chromium starts with the month segment selected; move to the year and type it.
+  await input.press('ArrowRight');
+  await input.press('ArrowRight');
+  await input.pressSequentially('2028');
+  await expect(input).toHaveValue('2028-06-14');
+  expect(writes).toHaveLength(0);
+  await input.press('Enter');
+  await expect.poll(() => writes.length).toBe(1);
+  await expect(input).toBeEnabled();
+  await input.focus();
+  await input.press('ArrowRight');
+  await input.press('ArrowRight');
+  await input.pressSequentially('2');
+  await expect(input).toHaveValue('0002-06-14');
+  expect(writes).toHaveLength(1);
+  await input.blur();
+  expect(writes).toHaveLength(1);
+  await expect(input).toHaveValue('2028-06-14');
+  await input.focus();
+  await input.press('ArrowRight');
+  await input.press('ArrowRight');
+  await input.pressSequentially('2029');
+  await expect(input).toHaveValue('2029-06-14');
+  expect(writes).toHaveLength(1);
+  await input.blur();
+  await expect.poll(() => writes.length).toBe(2);
+  await expect(input).toBeEnabled();
+});
+
+for (const destination of ['tab', 'matter']) test(`in-flight extraction arrivals and snapshot lock survive changing the ${destination}`, async ({ page }) => {
+  await page.addInitScript(() => {
+    const original = window.fetch;
+    window.fetch = (input, init) => {
+      if (input !== '/api/features/scheduling-order/extract') return original(input, init);
+      const encoder = new TextEncoder();
+      const stream = new ReadableStream({ start(controller) {
+        window.addEventListener('order-chunk', event => {
+          const value = (event as CustomEvent).detail;
+          controller.enqueue(encoder.encode(`data: ${JSON.stringify(value)}\n\n`));
+          if (value.type === 'done') controller.close();
+        });
+      } });
+      return Promise.resolve(new Response(stream, { headers: { 'Content-Type': 'text/event-stream' } }));
+    };
+  });
+  await open(page);
+  const other = { ...initial, id: 'another-synthetic-matter', title: 'Another synthetic matter' };
+  if (destination === 'matter') {
+    await page.evaluate(matters => window.dispatchEvent(new CustomEvent('schedule-snapshot', { detail: matters })), [initial, other]);
+  }
+  async function leave() {
+    if (destination === 'tab') await page.getByRole('tab', { name: 'Overview', exact: true }).click();
+    else {
+      await page.getByRole('button', { name: other.title }).click();
+      await expect(page.locator('[data-order-arrival]')).toHaveCount(0);
+      await expect(page.getByRole('button', { name: 'Drop a scheduling order' })).toBeEnabled();
+    }
+  }
+  async function returnToUpload() {
+    if (destination === 'tab') await page.getByRole('tab', { name: 'Scheduling order', exact: true }).click();
+    else await page.getByRole('button', { name: initial.title }).click();
+  }
+  await page.locator('input[type=file]').setInputFiles({ name: 'slow.pdf', mimeType: 'application/pdf', buffer: Buffer.from('synthetic') });
+  await expect(page.getByRole('button', { name: 'Drop a scheduling order' })).toBeDisabled();
+  await page.evaluate(date => window.dispatchEvent(new CustomEvent('order-chunk', { detail: date })), dates[0]);
+  await expect(page.locator('[data-order-arrival]')).toHaveCount(1);
+  await leave();
+  await page.evaluate(date => window.dispatchEvent(new CustomEvent('order-chunk', { detail: date })), dates[1]);
+  await returnToUpload();
+  await expect(page.locator('[data-order-arrival]')).toHaveCount(2);
+  await expect(page.getByRole('button', { name: 'Drop a scheduling order' })).toBeDisabled();
+  await page.evaluate(matter => window.dispatchEvent(new CustomEvent('order-chunk', { detail: { type: 'done', matter, added: { courtDates: 2, derived: 3 } } })), schedule);
+  await expect(page.getByRole('status').filter({ hasText: 'Added 2 court dates' })).toBeVisible();
+  await leave();
+  await returnToUpload();
+  await expect(page.getByRole('button', { name: 'Drop a scheduling order' })).toBeDisabled();
+  await publish(page, schedule);
+  await expect(page.getByRole('button', { name: 'Drop a scheduling order' })).toBeEnabled();
+  await expect(page.locator('[data-order-arrival]')).toHaveCount(2);
+});
+
+
+test('an unchanged done event displays the verification message and unlocks without a new snapshot', async ({ page }) => {
+  const message = 'No dates could be verified; the matter was not changed.';
+  await page.route('**/api/features/scheduling-order/extract', route => route.fulfill({
+    contentType: 'text/event-stream', body: sse([dates[2], {
+      type: 'done', matter: schedule, added: { courtDates: 0, derived: 0 }, unverified: [dates[2]], message,
+    }]),
+  }));
+  await open(page, schedule);
+  await page.locator('input[type=file]').setInputFiles({ name: 'unverified.pdf', mimeType: 'application/pdf', buffer: Buffer.from('synthetic') });
+  await expect(page.getByRole('status').filter({ hasText: message })).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Drop a scheduling order' })).toBeEnabled();
+  await expect(page.locator('[data-court-date]')).toHaveCount(2);
+  await expect(page.locator('[data-order-arrival]')).toContainText('Unverified quote — not added');
+});
+
+test('a rejected move restores the saved date in the input', async ({ page }) => {
+  await open(page, schedule);
+  let writes = 0;
+  await page.route(`**/api/matters/${schedule.id}`, async route => {
+    writes++;
+    await route.fulfill({ status: 500, json: { error: 'Could not save' } });
+  });
+  const input = page.locator(`[data-court-date="${trialId}"]`).getByLabel('Move', { exact: true });
+  await input.fill('2027-06-21');
+  await expect(page.getByRole('status').filter({ hasText: 'Could not move the court date.' })).toBeVisible();
+  await expect(input).toBeEnabled();
+  await expect(input).toHaveValue('2027-06-14');
+  expect(writes).toBe(1);
+});
+
+test('a moved governing date is labeled honestly on its superseded schedule', async ({ page }) => {
+  await open(page, schedule);
+  await page.route(`**/api/matters/${schedule.id}`, async route => {
+    const body = route.request().postDataJSON();
+    await route.fulfill({ json: body });
+    const moved = { ...structuredClone(schedule), ...body };
+    moved.computedDeadlines['order-demo-date-2'].dueDate = '2027-02-08';
+    await publish(page, moved);
+  });
+  await page.locator('[data-court-date="order-demo-date-2"]').getByLabel('Move', { exact: true }).fill('2027-02-08');
+  const superseded = page.locator('[data-court-date]').filter({ has: page.locator('.order-superseded') }).locator('.order-superseded');
+  await expect(superseded).toContainText('Moved on screen · order p. 1 said Feb 1, 2027');
+  await expect(superseded).not.toContainText('the order sets this date');
 });

@@ -78,7 +78,7 @@ export function createSchedulingOrderRoutes(options: Options = {}): Hono {
         const body = pastedSchema.parse(await c.req.json());
         matterId = body.matterId;
         pages = textPages(body.text);
-        orderSlug = 'pasted-order';
+        orderSlug = `pasted-${createHash('sha256').update(body.text).digest('hex').slice(0, 8)}`;
       } else {
         const body = await c.req.formData();
         matterId = z.string().min(1).parse(body.get('matterId'));
@@ -134,9 +134,14 @@ export function createSchedulingOrderRoutes(options: Options = {}): Hono {
         await send({ type: 'error', message: 'Unknown matter.' });
         return;
       }
+      const courtDates = accepted.filter(date => date.verified).length;
+      if (!courtDates) {
+        await send({ type: 'done', matter: toStoredMatter(current), added: { courtDates: 0, derived: 0 },
+          unverified: accepted, message: 'No dates could be verified; the matter was not changed.' });
+        return;
+      }
       const matter = applySchedulingOrder(toStoredMatter(current), { ...extraction, dates: accepted }, orderSlug);
       store.upsert(matter);
-      const courtDates = accepted.filter(date => date.verified).length;
       const derived = matter.deadlines.filter(deadline => deadline.id.startsWith(orderIds(orderSlug).prefix)).length - courtDates;
       await send({ type: 'done', matter, added: { courtDates, derived }, unverified: accepted.filter(date => !date.verified) });
     } catch (error) {

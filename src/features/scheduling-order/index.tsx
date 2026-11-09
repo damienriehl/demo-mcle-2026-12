@@ -7,12 +7,14 @@ import { VerifyDrawer } from '../../verify/VerifyDrawer';
 import { dateLabel, type Selection } from '../../views/shared';
 import { registerFeature, type FeatureProps } from '../registry';
 import { buildCalendar } from './ics';
+import { courtDateSource } from './source';
+import { appendArrival, updateUpload, useUploadState, type Arrival } from './upload-state';
+import { MoveDateInput } from './move-date-input';
 import './scheduling-order.css';
 
 type CourtDate = MatterWithDeadlines['deadlines'][number];
-type Arrival = { type: 'date'; kind: string; event: string; date: string; page: number; quote: string; verified: boolean; reason?: string };
 type OrderEvent = Arrival | { type: 'pages'; count: number }
-  | { type: 'done'; matter: Matter; added: { courtDates: number; derived: number } }
+  | { type: 'done'; matter: Matter; added: { courtDates: number; derived: number }; message?: string }
   | { type: 'needs_key' | 'error'; message: string };
 
 async function extract(body: FormData | string, onEvent: (event: OrderEvent) => void) {
@@ -42,16 +44,14 @@ function storedSnapshot(matter: Matter | MatterWithDeadlines): string {
 function SchedulingOrder({ matter }: { matter: MatterWithDeadlines }) {
   const picker = useRef<HTMLInputElement>(null);
   const [text, setText] = useState('');
-  const [busy, setBusy] = useState(false);
-  const [awaitingSnapshot, setAwaitingSnapshot] = useState<string>();
+  const { running, awaitingSnapshot, message, arrivals } = useUploadState(matter.id);
+  const busy = running || !!awaitingSnapshot;
+  const setMessage = (message: string) => updateUpload(matter.id, { message });
   useEffect(() => {
     if (awaitingSnapshot && storedSnapshot(matter) === awaitingSnapshot) {
-      setAwaitingSnapshot(undefined);
-      setBusy(false);
+      updateUpload(matter.id, { awaitingSnapshot: undefined });
     }
   }, [matter, awaitingSnapshot]);
-  const [message, setMessage] = useState('');
-  const [arrivals, setArrivals] = useState<Arrival[]>([]);
   const [selection, setSelection] = useState<Selection>();
   const [moving, setMoving] = useState<{ id: string; date: string }>();
   useEffect(() => {
@@ -75,23 +75,19 @@ function SchedulingOrder({ matter }: { matter: MatterWithDeadlines }) {
 
   async function upload(body: FormData | string) {
     if (busy || moving) return;
-    setBusy(true);
-    setArrivals([]);
-    setMessage('Reading the scheduling order…');
-    let completed = false;
+    updateUpload(matter.id, { running: true, arrivals: [], message: 'Reading the scheduling order…' });
     try {
       await extract(body, event => {
-        if (event.type === 'date') setArrivals(current => [...current, event]);
+        if (event.type === 'date') appendArrival(matter.id, event);
         else if (event.type === 'pages') setMessage(`Reading ${event.count} pages — court dates appear as they arrive.`);
         else if (event.type === 'done') {
-          completed = true;
-          setAwaitingSnapshot(storedSnapshot(event.matter));
-          setMessage(`Added ${event.added.courtDates} court dates and ${event.added.derived} rule-derived deadlines.`);
+          updateUpload(matter.id, { awaitingSnapshot: storedSnapshot(event.matter) });
+          setMessage(event.message ?? `Added ${event.added.courtDates} court dates and ${event.added.derived} rule-derived deadlines.`);
         }
         else setMessage(event.message);
       });
     } catch (error) { setMessage(error instanceof Error ? error.message : 'Scheduling order extraction could not finish.'); }
-    finally { if (!completed) setBusy(false); }
+    finally { updateUpload(matter.id, { running: false }); }
   }
   function uploadFile(file?: File) {
     if (!file || busy || moving) return;
@@ -105,11 +101,26 @@ function SchedulingOrder({ matter }: { matter: MatterWithDeadlines }) {
     if (!date || date === old || busy || moving) return;
     const stored = toStoredMatter(matter);
     const index = matter.deadlines.indexOf(deadline);
+    const original = String(deadline.inputs?.movedFrom ?? old);
+    const inputs: NonNullable<CourtDate['inputs']> = { ...deadline.inputs, date };
+    if (date === original) delete inputs.movedFrom;
+    else inputs.movedFrom = original;
+    const provenance = { ...stored.provenance,
+      [`deadlines.${index}.inputs.date`]: { source: 'stated' as const, evidence: `Moved on screen from ${old}` },
+      [`deadlines.${index}.trigger.date`]: { source: 'stated' as const, evidence: `Moved on screen from ${old}` },
+    };
+    if (inputs.movedFrom) provenance[`deadlines.${index}.inputs.movedFrom`] = {
+      source: 'stated', evidence: `Original order date: ${original}`,
+    };
+    else delete provenance[`deadlines.${index}.inputs.movedFrom`];
+    const timelineIndex = stored.timeline.findIndex(item => item.id === `${deadline.id}-event`);
+    if (timelineIndex !== -1) provenance[`timeline.${timelineIndex}.date`] = { source: 'stated', evidence: `Moved on screen from ${old}` };
     const next = {
       ...stored,
+      timeline: stored.timeline.map(item => item.id === `${deadline.id}-event` ? { ...item, date } : item),
       deadlines: stored.deadlines.map(item => item.id === deadline.id
-        ? { ...item, inputs: { ...item.inputs, date }, trigger: { ...item.trigger, date } } : item),
-      provenance: { ...stored.provenance, [`deadlines.${index}.inputs.date`]: { source: 'stated', evidence: `Moved on screen from ${old}` } },
+        ? { ...item, inputs, trigger: { ...item.trigger, date } } : item),
+      provenance,
     };
     setMoving({ id: deadline.id, date });
     try {
@@ -173,8 +184,8 @@ function SchedulingOrder({ matter }: { matter: MatterWithDeadlines }) {
         const index = matter.deadlines.indexOf(court);
         const evidence = matter.provenance[`deadlines.${index}.inputs.date`]?.evidence;
         return <section key={court.id} data-court-date={court.id} className="order-group" aria-label={court.label}>
-          <header className="order-court-heading"><div><h3>{court.label}</h3><time dateTime={String(court.inputs?.date)}>{dateLabel(String(court.inputs?.date))}</time><p>From the order, p. {court.inputs?.page}</p></div>
-            <label>Move<input type="date" value={String(court.inputs?.date)} disabled={busy || !!moving} onChange={event => void move(court, event.target.value)} /></label>
+          <header className="order-court-heading"><div><h3>{court.label}</h3><time dateTime={String(court.inputs?.date)}>{dateLabel(String(court.inputs?.date))}</time><p>{courtDateSource(court)}</p></div>
+            <MoveDateInput date={String(court.inputs?.date)} disabled={busy || !!moving} onCommit={date => void move(court, date)} />
           </header>
           {evidence?.startsWith('Moved on screen from ') && <p className="order-move-note">{evidence} · original order quote below.</p>}
           <blockquote>{court.inputs?.quote}</blockquote>
@@ -182,7 +193,9 @@ function SchedulingOrder({ matter }: { matter: MatterWithDeadlines }) {
             {grouped.get(court.id)?.map(({ deadline, index: deadlineIndex }) => {
               const governing = deadline.supersededBy ? byId.get(deadline.supersededBy) : undefined;
               return <div key={deadline.id} className={`${governing ? 'order-superseded' : ''}${changed.has(deadline.id) ? ' order-changed' : ''}`}>
-                {governing && <p>Superseded — the order sets this date (p. {governing.inputs?.page})<br />Governing court date: {governing.label}</p>}
+                {governing && <p>{governing.inputs?.movedFrom
+                  ? <>Superseded · {courtDateSource(governing)}</>
+                  : <>Superseded — the order sets this date (p. {governing.inputs?.page})</>}<br />Governing court date: {governing.label}</p>}
                 {changed.has(deadline.id) && <p className="order-change-label">Date changed</p>}
                 <DeadlineCard matter={matter} index={deadlineIndex} onVerify={setSelection} />
               </div>;

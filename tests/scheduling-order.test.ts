@@ -1,3 +1,4 @@
+import { createHash } from 'node:crypto';
 import { mkdtempSync, readFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
@@ -140,6 +141,7 @@ describe('scheduling order extraction', () => {
     const { app, store } = setup(fake(extraction).stream);
     const pages = await pageTexts(new Uint8Array(readFileSync(`data/seed/orders/${slugs[0]}.pdf`)));
     const text = `${pages.join('\n')}\n${quote}`;
+    const pastedPrefix = `order-pasted-${createHash('sha256').update(text).digest('hex').slice(0, 8)}-`;
     // Pasted text is one page, including former PDF page two.
     extraction.dates.forEach(date => { date.page = 1; });
     await events(await paste(app, text));
@@ -153,7 +155,7 @@ describe('scheduling order extraction', () => {
     const other = createSchedulingOrderRoutes({ store, stream: null });
     await events(await upload(other));
     const { computedDeadlines: _before, ...withInternal } = store.get(slugs[0])!;
-    const ownIndex = withInternal.deadlines.findIndex(d => d.id.startsWith('order-pasted-order-'));
+    const ownIndex = withInternal.deadlines.findIndex(d => d.id.startsWith(pastedPrefix));
     const otherIndex = withInternal.deadlines.findIndex(d => d.id.startsWith(`order-${slugs[0]}-`));
     withInternal.internalOnly.push(`deadlines.${ownIndex}.inputs.quote`, `deadlines.${otherIndex}.inputs.quote`);
     const retainedProvenance = { source: 'stated' as const, evidence: 'Synthetic annotation on the other uploaded order.' };
@@ -163,13 +165,47 @@ describe('scheduling order extraction', () => {
     extraction.dates = [extraction.dates[0]];
     await events(await paste(app, text));
     matter = store.get(slugs[0])!;
-    expect(matter.deadlines.filter(d => d.id.startsWith('order-pasted-order-'))).toHaveLength(1);
+    expect(matter.deadlines.filter(d => d.id.startsWith(pastedPrefix))).toHaveLength(1);
     expect(matter.deadlines.filter(d => d.id.startsWith(`order-${slugs[0]}-`))).toHaveLength(11);
     expect(matter.internalOnly).toEqual(['reasoning', 'provenance.*.evidence', 'deadlines.1.inputs.quote']);
     expect(matter.provenance['internalOnly.2']).toEqual(retainedProvenance);
     const { computedDeadlines: _computed, ...stored } = matter;
     expect(readDraft(stored).errors).toEqual([]);
     expect(Object.keys(matter.provenance).filter(p => p.startsWith('deadlines.')).every(p => Number(p.split('.')[1]) < matter.deadlines.length)).toBe(true);
+  });
+
+  it('preserves a verified upload when the same slug is reuploaded with no verified dates', async () => {
+    const extraction = canned();
+    const { app, store } = setup(fake(extraction).stream);
+    await events(await upload(app));
+    const before = store.get(slugs[0])!;
+    const upsert = vi.spyOn(store, 'upsert');
+    extraction.dates = [{ ...extraction.dates[0], quote: 'Not in the order: November 20, 2026.' }];
+    const result = await events(await upload(app));
+    expect(store.get(slugs[0])).toEqual(before);
+    expect(upsert).not.toHaveBeenCalled();
+    expect(result.at(-1)).toMatchObject({
+      type: 'done', added: { courtDates: 0, derived: 0 },
+      message: 'No dates could be verified; the matter was not changed.',
+      unverified: [expect.objectContaining({ verified: false })],
+    });
+    expect(result.at(-1).matter.deadlines).toEqual(before.deadlines);
+  });
+
+  it('gives different pasted texts distinct hash slugs and preserves both schedules', async () => {
+    const extraction = canned();
+    extraction.dates = [{ ...extraction.dates[0], page: 1 }];
+    const { app, store } = setup(fake(extraction).stream);
+    const text = extraction.dates[0].quote;
+    await events(await paste(app, text));
+    const first = store.get(slugs[0])!.deadlines.filter(d => d.id.startsWith('order-'));
+    expect(first[0].id).toMatch(/^order-pasted-[a-f0-9]{8}-date-1$/);
+    await events(await paste(app, text + '\nAnother order.'));
+    const second = store.get(slugs[0])!.deadlines.filter(d => d.id.startsWith('order-'));
+    expect(second).toHaveLength(2);
+    expect(second).toContainEqual(first[0]);
+    await events(await paste(app, text));
+    expect(store.get(slugs[0])!.deadlines.filter(d => d.id.startsWith('order-'))).toHaveLength(2);
   });
 
   it('answers needs_key for an unknown PDF', async () => {
