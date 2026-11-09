@@ -1,0 +1,1635 @@
+[
+  {
+    "id": "view-0",
+    "title": "Northstar Studio v. Vale",
+    "practiceArea": "litigation",
+    "forum": "Synthetic demonstration forum",
+    "synthetic": true,
+    "client": {
+      "name": "Northstar Client",
+      "contact": "client0@example.invalid"
+    },
+    "parties": [
+      {
+        "name": "Fictional Counterparty",
+        "role": "Other party"
+      }
+    ],
+    "timeline": [
+      {
+        "id": "event",
+        "event": "Initial review completed",
+        "date": "2026-11-01"
+      }
+    ],
+    "documents": [
+      {
+        "id": "shared",
+        "title": "Your matter overview",
+        "kind": "Summary",
+        "body": "We have reviewed your documents. Please send the signed copy.",
+        "shared": true
+      },
+      {
+        "id": "private",
+        "title": "Private strategy memorandum",
+        "kind": "Internal",
+        "body": "CONFIDENTIAL STRATEGY",
+        "shared": false
+      },
+      {
+        "id": "restricted",
+        "title": "Restricted shared document",
+        "kind": "Letter",
+        "body": "HIDDEN SHARED BODY",
+        "shared": true
+      }
+    ],
+    "deadlines": [
+      {
+        "id": "due",
+        "label": "Review and response",
+        "deadlineRuleId": "contract-deadline",
+        "trigger": {
+          "event": "Agreement signed",
+          "date": "2026-11-01"
+        },
+        "assumptions": {},
+        "inputs": {
+          "dueDate": "2026-11-05",
+          "section": "4"
+        }
+      }
+    ],
+    "clientFacing": {
+      "status": "We are reviewing the next steps with you.",
+      "nextSteps": [
+        "Send us the signed copy.",
+        "Call us to discuss your questions.",
+        "HIDDEN NEXT STEP"
+      ]
+    },
+    "reasoning": "INTERNAL REASONING CHAIN",
+    "internalOnly": [
+      "client.contact",
+      "documents.2",
+      "clientFacing.nextSteps.2"
+    ],
+    "provenance": {
+      "id": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "title": {
+        "source": "stated",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "practiceArea": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "forum": {
+        "source": "stated",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "synthetic": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "client.name": {
+        "source": "stated",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "client.contact": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "parties.0.name": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "parties.0.role": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "timeline.0.id": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "timeline.0.event": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "timeline.0.date": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "documents.0.id": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "documents.0.title": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "documents.0.kind": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "documents.0.body": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "documents.0.shared": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "documents.1.id": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "documents.1.title": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "documents.1.kind": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "documents.1.body": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "documents.1.shared": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "documents.2.id": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "documents.2.title": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "documents.2.kind": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "documents.2.body": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "documents.2.shared": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "deadlines.0.id": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "deadlines.0.label": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "deadlines.0.deadlineRuleId": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "deadlines.0.trigger.event": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "deadlines.0.trigger.date": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "deadlines.0.inputs.dueDate": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "deadlines.0.inputs.section": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "clientFacing.status": {
+        "source": "invented",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "clientFacing.nextSteps.0": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "clientFacing.nextSteps.1": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "clientFacing.nextSteps.2": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "reasoning": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      }
+    }
+  },
+  {
+    "id": "view-1",
+    "title": "Cedar House acquisition",
+    "practiceArea": "transactional",
+    "forum": "Synthetic demonstration forum",
+    "synthetic": true,
+    "client": {
+      "name": "Cedar Client",
+      "contact": "client1@example.invalid"
+    },
+    "parties": [
+      {
+        "name": "Fictional Counterparty",
+        "role": "Other party"
+      }
+    ],
+    "timeline": [
+      {
+        "id": "event",
+        "event": "Initial review completed",
+        "date": "2026-11-01"
+      }
+    ],
+    "documents": [
+      {
+        "id": "shared",
+        "title": "Your matter overview",
+        "kind": "Summary",
+        "body": "We have reviewed your documents. Please send the signed copy.",
+        "shared": true
+      },
+      {
+        "id": "private",
+        "title": "Private strategy memorandum",
+        "kind": "Internal",
+        "body": "CONFIDENTIAL STRATEGY",
+        "shared": false
+      },
+      {
+        "id": "restricted",
+        "title": "Restricted shared document",
+        "kind": "Letter",
+        "body": "HIDDEN SHARED BODY",
+        "shared": true
+      }
+    ],
+    "deadlines": [
+      {
+        "id": "due",
+        "label": "Review and response",
+        "deadlineRuleId": "contract-deadline",
+        "trigger": {
+          "event": "Agreement signed",
+          "date": "2026-11-01"
+        },
+        "assumptions": {},
+        "inputs": {
+          "dueDate": "2026-11-10",
+          "section": "4"
+        }
+      }
+    ],
+    "clientFacing": {
+      "status": "We are reviewing the next steps with you.",
+      "nextSteps": [
+        "Send us the signed copy.",
+        "Call us to discuss your questions.",
+        "HIDDEN NEXT STEP"
+      ]
+    },
+    "reasoning": "INTERNAL REASONING CHAIN",
+    "internalOnly": [
+      "client.contact",
+      "documents.2",
+      "clientFacing.nextSteps.2"
+    ],
+    "provenance": {
+      "id": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "title": {
+        "source": "stated",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "practiceArea": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "forum": {
+        "source": "stated",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "synthetic": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "client.name": {
+        "source": "stated",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "client.contact": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "parties.0.name": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "parties.0.role": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "timeline.0.id": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "timeline.0.event": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "timeline.0.date": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "documents.0.id": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "documents.0.title": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "documents.0.kind": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "documents.0.body": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "documents.0.shared": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "documents.1.id": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "documents.1.title": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "documents.1.kind": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "documents.1.body": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "documents.1.shared": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "documents.2.id": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "documents.2.title": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "documents.2.kind": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "documents.2.body": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "documents.2.shared": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "deadlines.0.id": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "deadlines.0.label": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "deadlines.0.deadlineRuleId": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "deadlines.0.trigger.event": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "deadlines.0.trigger.date": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "deadlines.0.inputs.dueDate": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "deadlines.0.inputs.section": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "clientFacing.status": {
+        "source": "invented",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "clientFacing.nextSteps.0": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "clientFacing.nextSteps.1": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "clientFacing.nextSteps.2": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "reasoning": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      }
+    }
+  },
+  {
+    "id": "view-2",
+    "title": "Lumen optics application",
+    "practiceArea": "patent",
+    "forum": "Synthetic demonstration forum",
+    "synthetic": true,
+    "client": {
+      "name": "Lumen Client",
+      "contact": "client2@example.invalid"
+    },
+    "parties": [
+      {
+        "name": "Fictional Counterparty",
+        "role": "Other party"
+      }
+    ],
+    "timeline": [
+      {
+        "id": "event",
+        "event": "Initial review completed",
+        "date": "2026-11-01"
+      }
+    ],
+    "documents": [
+      {
+        "id": "shared",
+        "title": "Your matter overview",
+        "kind": "Summary",
+        "body": "We have reviewed your documents. Please send the signed copy.",
+        "shared": true
+      },
+      {
+        "id": "private",
+        "title": "Private strategy memorandum",
+        "kind": "Internal",
+        "body": "CONFIDENTIAL STRATEGY",
+        "shared": false
+      },
+      {
+        "id": "restricted",
+        "title": "Restricted shared document",
+        "kind": "Letter",
+        "body": "HIDDEN SHARED BODY",
+        "shared": true
+      }
+    ],
+    "deadlines": [
+      {
+        "id": "due",
+        "label": "Review and response",
+        "deadlineRuleId": "contract-deadline",
+        "trigger": {
+          "event": "Agreement signed",
+          "date": "2026-11-01"
+        },
+        "assumptions": {},
+        "inputs": {
+          "dueDate": "2026-11-19",
+          "section": "4"
+        }
+      }
+    ],
+    "clientFacing": {
+      "status": "We are reviewing the next steps with you.",
+      "nextSteps": [
+        "Send us the signed copy.",
+        "Call us to discuss your questions.",
+        "HIDDEN NEXT STEP"
+      ]
+    },
+    "reasoning": "INTERNAL REASONING CHAIN",
+    "internalOnly": [
+      "client.contact",
+      "documents.2",
+      "clientFacing.nextSteps.2"
+    ],
+    "provenance": {
+      "id": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "title": {
+        "source": "stated",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "practiceArea": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "forum": {
+        "source": "stated",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "synthetic": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "client.name": {
+        "source": "stated",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "client.contact": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "parties.0.name": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "parties.0.role": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "timeline.0.id": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "timeline.0.event": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "timeline.0.date": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "documents.0.id": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "documents.0.title": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "documents.0.kind": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "documents.0.body": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "documents.0.shared": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "documents.1.id": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "documents.1.title": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "documents.1.kind": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "documents.1.body": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "documents.1.shared": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "documents.2.id": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "documents.2.title": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "documents.2.kind": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "documents.2.body": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "documents.2.shared": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "deadlines.0.id": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "deadlines.0.label": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "deadlines.0.deadlineRuleId": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "deadlines.0.trigger.event": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "deadlines.0.trigger.date": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "deadlines.0.inputs.dueDate": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "deadlines.0.inputs.section": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "clientFacing.status": {
+        "source": "invented",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "clientFacing.nextSteps.0": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "clientFacing.nextSteps.1": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "clientFacing.nextSteps.2": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "reasoning": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      }
+    }
+  },
+  {
+    "id": "view-3",
+    "title": "Harbor Works reorganization",
+    "practiceArea": "bankruptcy",
+    "forum": "Synthetic demonstration forum",
+    "synthetic": true,
+    "client": {
+      "name": "Harbor Client",
+      "contact": "client3@example.invalid"
+    },
+    "parties": [
+      {
+        "name": "Fictional Counterparty",
+        "role": "Other party"
+      }
+    ],
+    "timeline": [
+      {
+        "id": "event",
+        "event": "Initial review completed",
+        "date": "2026-11-01"
+      }
+    ],
+    "documents": [
+      {
+        "id": "shared",
+        "title": "Your matter overview",
+        "kind": "Summary",
+        "body": "We have reviewed your documents. Please send the signed copy.",
+        "shared": true
+      },
+      {
+        "id": "private",
+        "title": "Private strategy memorandum",
+        "kind": "Internal",
+        "body": "CONFIDENTIAL STRATEGY",
+        "shared": false
+      },
+      {
+        "id": "restricted",
+        "title": "Restricted shared document",
+        "kind": "Letter",
+        "body": "HIDDEN SHARED BODY",
+        "shared": true
+      }
+    ],
+    "deadlines": [
+      {
+        "id": "due",
+        "label": "Review and response",
+        "deadlineRuleId": "contract-deadline",
+        "trigger": {
+          "event": "Agreement signed",
+          "date": "2026-11-01"
+        },
+        "assumptions": {},
+        "inputs": {
+          "dueDate": "2026-12-18",
+          "section": "4"
+        }
+      }
+    ],
+    "clientFacing": {
+      "status": "We are reviewing the next steps with you.",
+      "nextSteps": [
+        "Send us the signed copy.",
+        "Call us to discuss your questions.",
+        "HIDDEN NEXT STEP"
+      ]
+    },
+    "reasoning": "INTERNAL REASONING CHAIN",
+    "internalOnly": [
+      "client.contact",
+      "documents.2",
+      "clientFacing.nextSteps.2"
+    ],
+    "provenance": {
+      "id": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "title": {
+        "source": "stated",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "practiceArea": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "forum": {
+        "source": "stated",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "synthetic": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "client.name": {
+        "source": "stated",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "client.contact": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "parties.0.name": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "parties.0.role": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "timeline.0.id": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "timeline.0.event": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "timeline.0.date": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "documents.0.id": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "documents.0.title": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "documents.0.kind": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "documents.0.body": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "documents.0.shared": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "documents.1.id": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "documents.1.title": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "documents.1.kind": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "documents.1.body": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "documents.1.shared": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "documents.2.id": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "documents.2.title": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "documents.2.kind": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "documents.2.body": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "documents.2.shared": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "deadlines.0.id": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "deadlines.0.label": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "deadlines.0.deadlineRuleId": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "deadlines.0.trigger.event": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "deadlines.0.trigger.date": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "deadlines.0.inputs.dueDate": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "deadlines.0.inputs.section": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "clientFacing.status": {
+        "source": "invented",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "clientFacing.nextSteps.0": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "clientFacing.nextSteps.1": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "clientFacing.nextSteps.2": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "reasoning": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      }
+    }
+  },
+  {
+    "id": "view-4",
+    "title": "Rivera parenting plan",
+    "practiceArea": "family",
+    "forum": "Synthetic demonstration forum",
+    "synthetic": true,
+    "client": {
+      "name": "Rivera Client",
+      "contact": "client4@example.invalid"
+    },
+    "parties": [
+      {
+        "name": "Fictional Counterparty",
+        "role": "Other party"
+      }
+    ],
+    "timeline": [
+      {
+        "id": "event",
+        "event": "Initial review completed",
+        "date": "2026-11-01"
+      }
+    ],
+    "documents": [
+      {
+        "id": "shared",
+        "title": "Your matter overview",
+        "kind": "Summary",
+        "body": "We have reviewed your documents. Please send the signed copy.",
+        "shared": true
+      },
+      {
+        "id": "private",
+        "title": "Private strategy memorandum",
+        "kind": "Internal",
+        "body": "CONFIDENTIAL STRATEGY",
+        "shared": false
+      },
+      {
+        "id": "restricted",
+        "title": "Restricted shared document",
+        "kind": "Letter",
+        "body": "HIDDEN SHARED BODY",
+        "shared": true
+      }
+    ],
+    "deadlines": [
+      {
+        "id": "due",
+        "label": "Review and response",
+        "deadlineRuleId": "contract-deadline",
+        "trigger": {
+          "event": "Agreement signed",
+          "date": "2026-11-01"
+        },
+        "assumptions": {},
+        "inputs": {
+          "dueDate": "2026-11-13",
+          "section": "4"
+        }
+      }
+    ],
+    "clientFacing": {
+      "status": "We are reviewing the next steps with you.",
+      "nextSteps": [
+        "Send us the signed copy.",
+        "Call us to discuss your questions.",
+        "HIDDEN NEXT STEP"
+      ]
+    },
+    "reasoning": "INTERNAL REASONING CHAIN",
+    "internalOnly": [
+      "client.contact",
+      "documents.2",
+      "clientFacing.nextSteps.2"
+    ],
+    "provenance": {
+      "id": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "title": {
+        "source": "stated",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "practiceArea": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "forum": {
+        "source": "stated",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "synthetic": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "client.name": {
+        "source": "stated",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "client.contact": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "parties.0.name": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "parties.0.role": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "timeline.0.id": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "timeline.0.event": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "timeline.0.date": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "documents.0.id": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "documents.0.title": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "documents.0.kind": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "documents.0.body": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "documents.0.shared": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "documents.1.id": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "documents.1.title": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "documents.1.kind": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "documents.1.body": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "documents.1.shared": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "documents.2.id": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "documents.2.title": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "documents.2.kind": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "documents.2.body": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "documents.2.shared": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "deadlines.0.id": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "deadlines.0.label": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "deadlines.0.deadlineRuleId": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "deadlines.0.trigger.event": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "deadlines.0.trigger.date": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "deadlines.0.inputs.dueDate": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "deadlines.0.inputs.section": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "clientFacing.status": {
+        "source": "invented",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "clientFacing.nextSteps.0": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "clientFacing.nextSteps.1": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "clientFacing.nextSteps.2": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "reasoning": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      }
+    }
+  },
+  {
+    "id": "view-5",
+    "title": "Juniper workplace review",
+    "practiceArea": "employment",
+    "forum": "Synthetic demonstration forum",
+    "synthetic": true,
+    "client": {
+      "name": "Juniper Client",
+      "contact": "client5@example.invalid"
+    },
+    "parties": [
+      {
+        "name": "Fictional Counterparty",
+        "role": "Other party"
+      }
+    ],
+    "timeline": [
+      {
+        "id": "event",
+        "event": "Initial review completed",
+        "date": "2026-11-01"
+      }
+    ],
+    "documents": [
+      {
+        "id": "shared",
+        "title": "Your matter overview",
+        "kind": "Summary",
+        "body": "We have reviewed your documents. Please send the signed copy.",
+        "shared": true
+      },
+      {
+        "id": "private",
+        "title": "Private strategy memorandum",
+        "kind": "Internal",
+        "body": "CONFIDENTIAL STRATEGY",
+        "shared": false
+      },
+      {
+        "id": "restricted",
+        "title": "Restricted shared document",
+        "kind": "Letter",
+        "body": "HIDDEN SHARED BODY",
+        "shared": true
+      }
+    ],
+    "deadlines": [
+      {
+        "id": "due",
+        "label": "Review and response",
+        "deadlineRuleId": "contract-deadline",
+        "trigger": {
+          "event": "Agreement signed",
+          "date": "2026-11-01"
+        },
+        "assumptions": {},
+        "inputs": {
+          "dueDate": "2026-11-25",
+          "section": "4"
+        }
+      }
+    ],
+    "clientFacing": {
+      "status": "We are reviewing the next steps with you.",
+      "nextSteps": [
+        "Send us the signed copy.",
+        "Call us to discuss your questions.",
+        "HIDDEN NEXT STEP"
+      ]
+    },
+    "reasoning": "INTERNAL REASONING CHAIN",
+    "internalOnly": [
+      "client.contact",
+      "documents.2",
+      "clientFacing.nextSteps.2"
+    ],
+    "provenance": {
+      "id": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "title": {
+        "source": "stated",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "practiceArea": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "forum": {
+        "source": "stated",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "synthetic": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "client.name": {
+        "source": "stated",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "client.contact": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "parties.0.name": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "parties.0.role": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "timeline.0.id": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "timeline.0.event": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "timeline.0.date": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "documents.0.id": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "documents.0.title": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "documents.0.kind": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "documents.0.body": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "documents.0.shared": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "documents.1.id": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "documents.1.title": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "documents.1.kind": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "documents.1.body": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "documents.1.shared": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "documents.2.id": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "documents.2.title": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "documents.2.kind": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "documents.2.body": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "documents.2.shared": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "deadlines.0.id": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "deadlines.0.label": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "deadlines.0.deadlineRuleId": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "deadlines.0.trigger.event": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "deadlines.0.trigger.date": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "deadlines.0.inputs.dueDate": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "deadlines.0.inputs.section": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "clientFacing.status": {
+        "source": "invented",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "clientFacing.nextSteps.0": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "clientFacing.nextSteps.1": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "clientFacing.nextSteps.2": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "reasoning": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      }
+    }
+  },
+  {
+    "id": "view-6",
+    "title": "Clearwater comment letter",
+    "practiceArea": "regulatory",
+    "forum": "Synthetic demonstration forum",
+    "synthetic": true,
+    "client": {
+      "name": "Clearwater Client",
+      "contact": "client6@example.invalid"
+    },
+    "parties": [
+      {
+        "name": "Fictional Counterparty",
+        "role": "Other party"
+      }
+    ],
+    "timeline": [
+      {
+        "id": "event",
+        "event": "Initial review completed",
+        "date": "2026-11-01"
+      }
+    ],
+    "documents": [
+      {
+        "id": "shared",
+        "title": "Your matter overview",
+        "kind": "Summary",
+        "body": "We have reviewed your documents. Please send the signed copy.",
+        "shared": true
+      },
+      {
+        "id": "private",
+        "title": "Private strategy memorandum",
+        "kind": "Internal",
+        "body": "CONFIDENTIAL STRATEGY",
+        "shared": false
+      },
+      {
+        "id": "restricted",
+        "title": "Restricted shared document",
+        "kind": "Letter",
+        "body": "HIDDEN SHARED BODY",
+        "shared": true
+      }
+    ],
+    "deadlines": [
+      {
+        "id": "due",
+        "label": "Review and response",
+        "deadlineRuleId": "none",
+        "trigger": {
+          "event": "Agreement signed",
+          "date": "2026-11-01"
+        },
+        "assumptions": {}
+      }
+    ],
+    "clientFacing": {
+      "status": "We are reviewing the next steps with you.",
+      "nextSteps": [
+        "Send us the signed copy.",
+        "Call us to discuss your questions.",
+        "HIDDEN NEXT STEP"
+      ]
+    },
+    "reasoning": "INTERNAL REASONING CHAIN",
+    "internalOnly": [
+      "client.contact",
+      "documents.2",
+      "clientFacing.nextSteps.2"
+    ],
+    "provenance": {
+      "id": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "title": {
+        "source": "stated",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "practiceArea": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "forum": {
+        "source": "stated",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "synthetic": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "client.name": {
+        "source": "stated",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "client.contact": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "parties.0.name": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "parties.0.role": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "timeline.0.id": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "timeline.0.event": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "timeline.0.date": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "documents.0.id": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "documents.0.title": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "documents.0.kind": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "documents.0.body": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "documents.0.shared": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "documents.1.id": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "documents.1.title": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "documents.1.kind": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "documents.1.body": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "documents.1.shared": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "documents.2.id": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "documents.2.title": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "documents.2.kind": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "documents.2.body": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "documents.2.shared": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "deadlines.0.id": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "deadlines.0.label": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "deadlines.0.deadlineRuleId": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "deadlines.0.trigger.event": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "deadlines.0.trigger.date": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "clientFacing.status": {
+        "source": "invented",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "clientFacing.nextSteps.0": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "clientFacing.nextSteps.1": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "clientFacing.nextSteps.2": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      },
+      "reasoning": {
+        "source": "inferred",
+        "evidence": "SECRET EVIDENCE"
+      }
+    }
+  }
+]

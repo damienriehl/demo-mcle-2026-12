@@ -1,0 +1,27 @@
+{
+  "output": null,
+  "events": [
+    {"type":"content_block_start","index":0,"content_block":{"type":"tool_use","id":"tool-fictional-intake","name":"structure_matter","input":{}}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"{\"fields\":[{\"path\":"}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"\"client.name\",\"valu"}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"e\":\"Mira Example\",\""}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"source\":\"stated\",\"e"}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"vidence\":\"My fictio"}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"nal client Mira Exa"}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"mple\"},{\"path\":\"pra"}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"cticeArea\",\"value\":"}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"\"employment\",\"sourc"}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"e\":\"inferred\",\"evid"}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"ence\":\"was fired fo"}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"r reporting discrim"}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"ination\"}],\"followu"}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"ps\":[{\"id\":\"deadlin"}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"es.0.trigger.date\","}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"\"question\":\"When wa"}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"s the termination?\""}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":",\"field\":\"deadlines"}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":".0.trigger.date\"}]"}},
+    {"type":"content_block_stop","index":0},
+    {"type":"message_stop"}
+  ]
+}

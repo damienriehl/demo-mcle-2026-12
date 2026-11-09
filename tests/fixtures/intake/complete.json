@@ -1,0 +1,272 @@
+{
+  "output": {
+    "fields": [
+      {
+        "path": "id",
+        "value": "fictional-employment",
+        "source": "invented"
+      },
+      {
+        "path": "title",
+        "value": "Mira Example — synthetic workplace claim",
+        "source": "invented"
+      },
+      {
+        "path": "forum",
+        "value": "EEOC — Minnesota",
+        "source": "invented"
+      },
+      {
+        "path": "synthetic",
+        "value": true,
+        "source": "invented"
+      },
+      {
+        "path": "client.contact",
+        "value": "mira@example.invalid",
+        "source": "invented"
+      },
+      {
+        "path": "parties.0.name",
+        "value": "Mira Example",
+        "source": "invented"
+      },
+      {
+        "path": "parties.0.role",
+        "value": "employee",
+        "source": "invented"
+      },
+      {
+        "path": "parties.1.name",
+        "value": "Juniper Example Works",
+        "source": "invented"
+      },
+      {
+        "path": "parties.1.role",
+        "value": "employer",
+        "source": "invented"
+      },
+      {
+        "path": "timeline.0.id",
+        "value": "termination",
+        "source": "invented"
+      },
+      {
+        "path": "timeline.0.event",
+        "value": "Termination after reporting discrimination",
+        "source": "invented"
+      },
+      {
+        "path": "timeline.0.date",
+        "value": "2026-01-05",
+        "source": "invented"
+      },
+      {
+        "path": "documents.0.id",
+        "value": "intake-note",
+        "source": "invented"
+      },
+      {
+        "path": "documents.0.title",
+        "value": "Synthetic intake note",
+        "source": "invented"
+      },
+      {
+        "path": "documents.0.kind",
+        "value": "note",
+        "source": "invented"
+      },
+      {
+        "path": "documents.0.body",
+        "value": "Fictional employee reported discrimination and was terminated. No real person or employer is depicted.",
+        "source": "invented"
+      },
+      {
+        "path": "documents.0.shared",
+        "value": true,
+        "source": "invented"
+      },
+      {
+        "path": "deadlines.0.id",
+        "value": "charge",
+        "source": "invented"
+      },
+      {
+        "path": "deadlines.0.label",
+        "value": "EEOC charge",
+        "source": "invented"
+      },
+      {
+        "path": "deadlines.0.deadlineRuleId",
+        "value": "eeoc-charge",
+        "source": "invented"
+      },
+      {
+        "path": "deadlines.0.trigger.event",
+        "value": "discriminatory act — termination",
+        "source": "invented"
+      },
+      {
+        "path": "deadlines.0.trigger.date",
+        "value": "2026-01-05",
+        "source": "invented"
+      },
+      {
+        "path": "deadlines.0.assumptions",
+        "value": {},
+        "source": "invented"
+      },
+      {
+        "path": "clientFacing.status",
+        "value": "Reviewing your fictional workplace concern.",
+        "source": "invented"
+      },
+      {
+        "path": "clientFacing.nextSteps.0",
+        "value": "Confirm the termination date.",
+        "source": "invented"
+      },
+      {
+        "path": "clientFacing.nextSteps.1",
+        "value": "Collect the synthetic termination notice.",
+        "source": "invented"
+      },
+      {
+        "path": "reasoning",
+        "value": "The fictional termination suggests an EEOC charge. State proceedings qualify for the catalog’s 300-day window; no tolling or earlier termination notice is assumed. The engine computes the filing date.",
+        "source": "invented"
+      }
+    ],
+    "followups": []
+  },
+  "events": [
+    {"type":"content_block_start","index":0,"content_block":{"type":"tool_use","id":"tool-fictional-intake","name":"structure_matter","input":{}}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"{\"fields\":[{\"path\":"}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"\"id\",\"value\":\"ficti"}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"onal-employment\",\"s"}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"ource\":\"invented\"},"}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"{\"path\":\"title\",\"va"}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"lue\":\"Mira Example "}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"\\u2014 synthetic wo"}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"rkplace claim\",\"sou"}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"rce\":\"invented\"},{\""}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"path\":\"forum\",\"valu"}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"e\":\"EEOC \\u2014 Min"}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"nesota\",\"source\":\"i"}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"nvented\"},{\"path\":\""}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"synthetic\",\"value\":"}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"true,\"source\":\"inve"}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"nted\"},{\"path\":\"cli"}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"ent.contact\",\"value"}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"\":\"mira@example.inv"}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"alid\",\"source\":\"inv"}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"ented\"},{\"path\":\"pa"}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"rties.0.name\",\"valu"}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"e\":\"Mira Example\",\""}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"source\":\"invented\"}"}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":",{\"path\":\"parties.0"}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":".role\",\"value\":\"emp"}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"loyee\",\"source\":\"in"}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"vented\"},{\"path\":\"p"}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"arties.1.name\",\"val"}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"ue\":\"Juniper Exampl"}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"e Works\",\"source\":\""}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"invented\"},{\"path\":"}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"\"parties.1.role\",\"v"}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"alue\":\"employer\",\"s"}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"ource\":\"invented\"},"}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"{\"path\":\"timeline.0"}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":".id\",\"value\":\"termi"}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"nation\",\"source\":\"i"}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"nvented\"},{\"path\":\""}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"timeline.0.event\",\""}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"value\":\"Termination"}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":" after reporting di"}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"scrimination\",\"sour"}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"ce\":\"invented\"},{\"p"}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"ath\":\"timeline.0.da"}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"te\",\"value\":\"2026-0"}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"1-05\",\"source\":\"inv"}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"ented\"},{\"path\":\"do"}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"cuments.0.id\",\"valu"}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"e\":\"intake-note\",\"s"}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"ource\":\"invented\"},"}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"{\"path\":\"documents."}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"0.title\",\"value\":\"S"}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"ynthetic intake not"}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"e\",\"source\":\"invent"}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"ed\"},{\"path\":\"docum"}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"ents.0.kind\",\"value"}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"\":\"note\",\"source\":\""}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"invented\"},{\"path\":"}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"\"documents.0.body\","}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"\"value\":\"Fictional "}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"employee reported d"}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"iscrimination and w"}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"as terminated. No r"}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"eal person or emplo"}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"yer is depicted.\",\""}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"source\":\"invented\"}"}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":",{\"path\":\"documents"}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":".0.shared\",\"value\":"}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"true,\"source\":\"inve"}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"nted\"},{\"path\":\"dea"}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"dlines.0.id\",\"value"}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"\":\"charge\",\"source\""}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":":\"invented\"},{\"path"}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"\":\"deadlines.0.labe"}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"l\",\"value\":\"EEOC ch"}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"arge\",\"source\":\"inv"}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"ented\"},{\"path\":\"de"}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"adlines.0.deadlineR"}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"uleId\",\"value\":\"eeo"}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"c-charge\",\"source\":"}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"\"invented\"},{\"path\""}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":":\"deadlines.0.trigg"}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"er.event\",\"value\":\""}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"discriminatory act "}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"\\u2014 termination\""}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":",\"source\":\"invented"}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"\"},{\"path\":\"deadlin"}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"es.0.trigger.date\","}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"\"value\":\"2026-01-05"}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"\",\"source\":\"invente"}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"d\"},{\"path\":\"deadli"}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"nes.0.assumptions\","}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"\"value\":{},\"source\""}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":":\"invented\"},{\"path"}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"\":\"clientFacing.sta"}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"tus\",\"value\":\"Revie"}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"wing your fictional"}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":" workplace concern."}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"\",\"source\":\"invente"}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"d\"},{\"path\":\"client"}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"Facing.nextSteps.0\""}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":",\"value\":\"Confirm t"}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"he termination date"}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":".\",\"source\":\"invent"}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"ed\"},{\"path\":\"clien"}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"tFacing.nextSteps.1"}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"\",\"value\":\"Collect "}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"the synthetic termi"}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"nation notice.\",\"so"}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"urce\":\"invented\"},{"}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"\"path\":\"reasoning\","}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"\"value\":\"The fictio"}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"nal termination sug"}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"gests an EEOC charg"}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"e. State proceeding"}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"s qualify for the c"}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"atalog\\u2019s 300-d"}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"ay window; no tolli"}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"ng or earlier termi"}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"nation notice is as"}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"sumed. The engine c"}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"omputes the filing "}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"date.\",\"source\":\"in"}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"vented\"}],\"followup"}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"s\":[]}"}},
+    {"type":"content_block_stop","index":0},
+    {"type":"message_stop"}
+  ]
+}

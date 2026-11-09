@@ -1,0 +1,251 @@
+{
+  "id": "canned-snowglobe-signal",
+  "title": "Proposed rule on beacon markings — comments",
+  "practiceArea": "regulatory",
+  "forum": "Federal notice-and-comment rulemaking; simulated docket",
+  "synthetic": true,
+  "client": {
+    "name": "Norvale Signal Cooperative",
+    "contact": "coordinator@norvale-signal.example.invalid"
+  },
+  "parties": [
+    {
+      "name": "Norvale Signal Cooperative",
+      "role": "Client; prospective commenter"
+    },
+    {
+      "name": "Office of Beacon Marking Standards",
+      "role": "Simulated federal rulemaking office"
+    }
+  ],
+  "timeline": [
+    {
+      "id": "event-1",
+      "event": "Fictional federal notice proposed new beacon markings",
+      "date": "-26"
+    },
+    {
+      "id": "event-2",
+      "event": "Cooperative tested a sample marking",
+      "date": "-14"
+    },
+    {
+      "id": "event-3",
+      "event": "Members approved the outline of a comment",
+      "date": "-3"
+    },
+    {
+      "id": "event-4",
+      "event": "Notice’s stated comment close",
+      "date": "+17"
+    }
+  ],
+  "documents": [
+    {
+      "id": "doc-1",
+      "title": "Beacon proposal notice excerpt",
+      "kind": "notice",
+      "body": "SYNTHETIC DEMO DOCUMENT. This is a fictional proposal in a simulated federal docket. The notice expressly closes comments forty-three calendar days after the proposed rulemaking notice was issued, with no inferred universal period or court-calendar adjustment.",
+      "shared": true
+    },
+    {
+      "id": "doc-2",
+      "title": "Sample marking test note",
+      "kind": "technical",
+      "body": "SYNTHETIC DEMO DOCUMENT. The proposed large marking obscures the snow-level window. Members suggest a narrow stripe and include sample visibility measurements for the comment.",
+      "shared": false
+    }
+  ],
+  "deadlines": [
+    {
+      "id": "comment",
+      "label": "Submit beacon comments by stated notice close",
+      "deadlineRuleId": "apa-comment-close",
+      "trigger": {
+        "event": "Synthetic federal proposal notice published",
+        "date": "-26"
+      },
+      "assumptions": {},
+      "inputs": {
+        "noticeCloseDate": "+17"
+      }
+    }
+  ],
+  "clientFacing": {
+    "status": "Your comment outline is ready for review before the notice closes.",
+    "nextSteps": [
+      "Confirm the sample marking measurements.",
+      "Approve the final comment for submission."
+    ]
+  },
+  "provenance": {
+    "id": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "title": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "practiceArea": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "forum": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "synthetic": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "client.name": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "client.contact": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "parties.0.name": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "parties.0.role": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "parties.1.name": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "parties.1.role": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "timeline.0.id": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "timeline.0.event": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "timeline.0.date": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "timeline.1.id": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "timeline.1.event": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "timeline.1.date": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "timeline.2.id": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "timeline.2.event": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "timeline.2.date": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "timeline.3.id": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "timeline.3.event": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "timeline.3.date": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "documents.0.id": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "documents.0.title": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "documents.0.kind": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "documents.0.body": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "documents.0.shared": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "documents.1.id": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "documents.1.title": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "documents.1.kind": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "documents.1.body": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "documents.1.shared": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "deadlines.0.id": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "deadlines.0.label": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "deadlines.0.deadlineRuleId": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "deadlines.0.trigger.event": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "deadlines.0.trigger.date": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "deadlines.0.inputs.noticeCloseDate": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "clientFacing.status": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "clientFacing.nextSteps.0": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "clientFacing.nextSteps.1": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    }
+  }
+}

@@ -1,0 +1,61 @@
+{
+  "output": {
+    "fields": [
+      {
+        "path": "client.name",
+        "value": "Mira Example",
+        "source": "stated",
+        "evidence": "My fictional client Mira Example"
+      },
+      {
+        "path": "practiceArea",
+        "value": "employment",
+        "source": "inferred"
+      },
+      {
+        "path": "deadlines.0.trigger.date",
+        "value": "not-a-date",
+        "source": "invented"
+      },
+      {
+        "path": "deadlines.0.dueDate",
+        "value": "2026-09-09",
+        "source": "invented"
+      },
+      {
+        "path": "title",
+        "value": "Useful partial title",
+        "source": "invented"
+      }
+    ],
+    "followups": []
+  },
+  "events": [
+    {"type":"content_block_start","index":0,"content_block":{"type":"tool_use","id":"tool-fictional-intake","name":"structure_matter","input":{}}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"{\"fields\":[{\"path\":"}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"\"client.name\",\"valu"}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"e\":\"Mira Example\",\""}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"source\":\"stated\",\"e"}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"vidence\":\"My fictio"}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"nal client Mira Exa"}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"mple\"},{\"path\":\"pra"}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"cticeArea\",\"value\":"}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"\"employment\",\"sourc"}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"e\":\"inferred\"},{\"pa"}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"th\":\"deadlines.0.tr"}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"igger.date\",\"value\""}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":":\"not-a-date\",\"sour"}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"ce\":\"invented\"},{\"p"}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"ath\":\"deadlines.0.d"}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"ueDate\",\"value\":\"20"}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"26-09-09\",\"source\":"}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"\"invented\"},{\"path\""}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":":\"title\",\"value\":\"U"}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"seful partial title"}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"\",\"source\":\"invente"}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"d\"}],\"followups\":[]"}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"}"}},
+    {"type":"content_block_stop","index":0},
+    {"type":"message_stop"}
+  ]
+}

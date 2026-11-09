@@ -1,0 +1,330 @@
+{
+  "id": "canned-cobalt-biscuit",
+  "title": "In re Merehaven Party Supply LLC",
+  "practiceArea": "bankruptcy",
+  "forum": "U.S. Bankruptcy Court, District of Minnesota; voluntary Chapter 7 asset case",
+  "synthetic": true,
+  "client": {
+    "name": "Fenridge Display Fixtures LLC",
+    "contact": "coordinator@fenridge-fixtures.example.invalid"
+  },
+  "parties": [
+    {
+      "name": "Fenridge Display Fixtures LLC",
+      "role": "Client; ordinary unsecured trade creditor"
+    },
+    {
+      "name": "Merehaven Party Supply LLC",
+      "role": "Chapter 7 debtor"
+    }
+  ],
+  "timeline": [
+    {
+      "id": "event-1",
+      "event": "Balloon racks delivered",
+      "date": "-88"
+    },
+    {
+      "id": "event-2",
+      "event": "Voluntary Chapter 7 petition and order for relief",
+      "date": "-52"
+    },
+    {
+      "id": "event-3",
+      "event": "Asset-case notice received",
+      "date": "-44"
+    },
+    {
+      "id": "event-4",
+      "event": "Client assembled rack invoices",
+      "date": "-5"
+    },
+    {
+      "id": "event-5",
+      "event": "Client workplan signed; draft delivery agreed for thirteen days after signing",
+      "date": "-3"
+    }
+  ],
+  "documents": [
+    {
+      "id": "doc-1",
+      "title": "Asset-case notice excerpt",
+      "kind": "notice",
+      "body": "SYNTHETIC DEMO DOCUMENT. The voluntary Chapter 7 order for relief entered forty-nine days before the client workplan was signed. Ordinary trade claim; assets are expected. No government claim, Rule 3002(c) exception, later asset notice, or different bar date applies.",
+      "shared": true
+    },
+    {
+      "id": "doc-2",
+      "title": "Rack invoice packet",
+      "kind": "financial",
+      "body": "SYNTHETIC DEMO DOCUMENT. Four spiral balloon racks remain unpaid, totaling $7,200. The packet includes signed delivery slips and omits bank details.",
+      "shared": false
+    },
+    {
+      "id": "doc-3",
+      "title": "Agreed workplan",
+      "kind": "agreement",
+      "body": "SYNTHETIC DEMO DOCUMENT. Workplan § 3: Counsel will deliver the proof-of-claim draft and invoice attachment list. Delivery is due thirteen calendar days after the client workplan was signed. This is an agreed draft-delivery milestone, separate from any filing deadline.",
+      "shared": true
+    }
+  ],
+  "deadlines": [
+    {
+      "id": "claim",
+      "label": "File balloon-rack proof of claim",
+      "deadlineRuleId": "frbp-3002-proof-of-claim",
+      "trigger": {
+        "event": "Voluntary Chapter 7 order for relief",
+        "date": "-52"
+      },
+      "assumptions": {}
+    },
+    {
+      "id": "agreed-draft",
+      "label": "Agreed delivery of balloon-rack claim draft",
+      "deadlineRuleId": "contract-deadline",
+      "trigger": {
+        "event": "Synthetic agreement signed",
+        "date": "-3"
+      },
+      "assumptions": {},
+      "inputs": {
+        "dueDate": "+10",
+        "section": "Workplan § 3"
+      }
+    }
+  ],
+  "clientFacing": {
+    "status": "We are preparing the trade claim for your unpaid racks.",
+    "nextSteps": [
+      "Confirm no credit memo reduced the balance.",
+      "Review the claim and delivery-slip attachments."
+    ]
+  },
+  "provenance": {
+    "id": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "title": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "practiceArea": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "forum": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "synthetic": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "client.name": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "client.contact": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "parties.0.name": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "parties.0.role": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "parties.1.name": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "parties.1.role": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "timeline.0.id": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "timeline.0.event": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "timeline.0.date": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "timeline.1.id": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "timeline.1.event": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "timeline.1.date": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "timeline.2.id": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "timeline.2.event": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "timeline.2.date": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "timeline.3.id": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "timeline.3.event": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "timeline.3.date": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "timeline.4.id": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "timeline.4.event": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "timeline.4.date": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "documents.0.id": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "documents.0.title": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "documents.0.kind": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "documents.0.body": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "documents.0.shared": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "documents.1.id": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "documents.1.title": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "documents.1.kind": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "documents.1.body": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "documents.1.shared": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "documents.2.id": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "documents.2.title": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "documents.2.kind": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "documents.2.body": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "documents.2.shared": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "deadlines.0.id": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "deadlines.0.label": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "deadlines.0.deadlineRuleId": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "deadlines.0.trigger.event": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "deadlines.0.trigger.date": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "deadlines.1.id": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "deadlines.1.label": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "deadlines.1.deadlineRuleId": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "deadlines.1.trigger.event": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "deadlines.1.trigger.date": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "deadlines.1.inputs.dueDate": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "deadlines.1.inputs.section": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "clientFacing.status": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "clientFacing.nextSteps.0": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "clientFacing.nextSteps.1": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    }
+  }
+}

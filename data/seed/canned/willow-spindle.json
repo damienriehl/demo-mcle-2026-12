@@ -1,0 +1,372 @@
+{
+  "id": "canned-willow-spindle",
+  "title": "In re the Marriage of Willow Spindale and Cedar Rillmere",
+  "practiceArea": "family",
+  "forum": "Hennepin County District Court, Family Division; dissolution with custody",
+  "synthetic": true,
+  "client": {
+    "name": "Willow Spindale",
+    "contact": "coordinator@willow-spindale.example.invalid"
+  },
+  "parties": [
+    {
+      "name": "Willow Spindale",
+      "role": "Client; moving parent"
+    },
+    {
+      "name": "Cedar Rillmere",
+      "role": "Other parent"
+    },
+    {
+      "name": "Finn Spindale-Rillmere",
+      "role": "Minor child"
+    }
+  ],
+  "timeline": [
+    {
+      "id": "event-1",
+      "event": "Dissolution with custody filed",
+      "date": "-75"
+    },
+    {
+      "id": "event-2",
+      "event": "Parents tested a weekend exchange schedule",
+      "date": "-22"
+    },
+    {
+      "id": "event-3",
+      "event": "Ordinary temporary-custody hearing scheduled",
+      "date": "-6"
+    },
+    {
+      "id": "event-4",
+      "event": "Client workplan signed; draft delivery agreed for thirteen days after signing",
+      "date": "-3"
+    },
+    {
+      "id": "event-5",
+      "event": "Temporary-custody hearing",
+      "date": "+34"
+    }
+  ],
+  "documents": [
+    {
+      "id": "doc-1",
+      "title": "Family motion hearing notice",
+      "kind": "notice",
+      "body": "SYNTHETIC DEMO DOCUMENT. The ordinary temporary-custody motion hearing is set for forty days after it was scheduled. No emergency, post-trial motion, or special scheduling order. Client is moving for a stable exchange schedule.",
+      "shared": true
+    },
+    {
+      "id": "doc-2",
+      "title": "Exchange schedule proposal",
+      "kind": "family-plan",
+      "body": "SYNTHETIC DEMO DOCUMENT. The puppet trunk travels with Finn for weekend performances. The proposed exchange includes a trunk checklist and one neutral pickup point; it is not an existing order.",
+      "shared": false
+    },
+    {
+      "id": "doc-3",
+      "title": "Agreed workplan",
+      "kind": "agreement",
+      "body": "SYNTHETIC DEMO DOCUMENT. Workplan § 6: Counsel will deliver the motion draft and proposed exchange schedule. Delivery is due thirteen calendar days after the client workplan was signed. This is an agreed draft-delivery milestone, separate from any filing deadline.",
+      "shared": true
+    }
+  ],
+  "deadlines": [
+    {
+      "id": "motion",
+      "label": "Serve and file custody motion",
+      "deadlineRuleId": "mn-gp-303-family-motion",
+      "trigger": {
+        "event": "Scheduled ordinary family motion hearing",
+        "date": "+34"
+      },
+      "assumptions": {}
+    },
+    {
+      "id": "response",
+      "label": "Track responsive custody papers",
+      "deadlineRuleId": "mn-gp-303-family-response",
+      "trigger": {
+        "event": "Scheduled ordinary family motion hearing",
+        "date": "+34"
+      },
+      "assumptions": {}
+    },
+    {
+      "id": "agreed-draft",
+      "label": "Agreed delivery of custody schedule draft",
+      "deadlineRuleId": "contract-deadline",
+      "trigger": {
+        "event": "Synthetic agreement signed",
+        "date": "-3"
+      },
+      "assumptions": {},
+      "inputs": {
+        "dueDate": "+10",
+        "section": "Workplan § 6"
+      }
+    }
+  ],
+  "clientFacing": {
+    "status": "We are preparing a temporary exchange schedule for the hearing.",
+    "nextSteps": [
+      "Check the puppet-trunk checklist.",
+      "Review the proposed pickup arrangements."
+    ]
+  },
+  "provenance": {
+    "id": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "title": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "practiceArea": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "forum": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "synthetic": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "client.name": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "client.contact": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "parties.0.name": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "parties.0.role": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "parties.1.name": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "parties.1.role": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "parties.2.name": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "parties.2.role": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "timeline.0.id": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "timeline.0.event": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "timeline.0.date": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "timeline.1.id": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "timeline.1.event": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "timeline.1.date": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "timeline.2.id": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "timeline.2.event": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "timeline.2.date": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "timeline.3.id": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "timeline.3.event": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "timeline.3.date": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "timeline.4.id": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "timeline.4.event": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "timeline.4.date": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "documents.0.id": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "documents.0.title": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "documents.0.kind": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "documents.0.body": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "documents.0.shared": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "documents.1.id": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "documents.1.title": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "documents.1.kind": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "documents.1.body": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "documents.1.shared": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "documents.2.id": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "documents.2.title": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "documents.2.kind": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "documents.2.body": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "documents.2.shared": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "deadlines.0.id": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "deadlines.0.label": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "deadlines.0.deadlineRuleId": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "deadlines.0.trigger.event": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "deadlines.0.trigger.date": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "deadlines.1.id": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "deadlines.1.label": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "deadlines.1.deadlineRuleId": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "deadlines.1.trigger.event": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "deadlines.1.trigger.date": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "deadlines.2.id": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "deadlines.2.label": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "deadlines.2.deadlineRuleId": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "deadlines.2.trigger.event": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "deadlines.2.trigger.date": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "deadlines.2.inputs.dueDate": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "deadlines.2.inputs.section": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "clientFacing.status": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "clientFacing.nextSteps.0": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "clientFacing.nextSteps.1": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    }
+  }
+}

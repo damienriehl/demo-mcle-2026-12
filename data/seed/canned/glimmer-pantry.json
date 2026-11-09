@@ -1,0 +1,298 @@
+{
+  "id": "canned-glimmer-pantry",
+  "title": "Asset purchase — Lindmere Preserves LLC",
+  "practiceArea": "transactional",
+  "forum": "Minnesota private asset purchase; no court proceeding",
+  "synthetic": true,
+  "client": {
+    "name": "Alderfen Pantry Cooperative",
+    "contact": "coordinator@alderfen-pantry.example.invalid"
+  },
+  "parties": [
+    {
+      "name": "Alderfen Pantry Cooperative",
+      "role": "Client; buyer"
+    },
+    {
+      "name": "Lindmere Preserves LLC",
+      "role": "Seller"
+    }
+  ],
+  "timeline": [
+    {
+      "id": "event-1",
+      "event": "Buyer inspected the preserves cart",
+      "date": "-24"
+    },
+    {
+      "id": "event-2",
+      "event": "Asset purchase agreement signed",
+      "date": "-8"
+    },
+    {
+      "id": "event-3",
+      "event": "Seller supplied equipment list",
+      "date": "-3"
+    },
+    {
+      "id": "event-4",
+      "event": "Closing scheduled under the agreement",
+      "date": "+19"
+    }
+  ],
+  "documents": [
+    {
+      "id": "doc-1",
+      "title": "Cart purchase agreement excerpt",
+      "kind": "agreement",
+      "body": "SYNTHETIC DEMO DOCUMENT. Section 3.4 fixes the equipment objection date seventeen calendar days after the asset purchase agreement was signed. Section 6.1 fixes closing twenty-seven calendar days after the asset purchase agreement was signed. Both are express dates in the agreement with no automatic weekend extension.",
+      "shared": true
+    },
+    {
+      "id": "doc-2",
+      "title": "Equipment list",
+      "kind": "diligence",
+      "body": "SYNTHETIC DEMO DOCUMENT. The cart includes a copper kettle, a vapor condenser, and six jam display trays. The condenser’s replacement filter is missing.",
+      "shared": false
+    }
+  ],
+  "deadlines": [
+    {
+      "id": "equipment-objection",
+      "label": "Deliver equipment objection under Agreement § 3.4",
+      "deadlineRuleId": "contract-deadline",
+      "trigger": {
+        "event": "Synthetic agreement signed",
+        "date": "-8"
+      },
+      "assumptions": {},
+      "inputs": {
+        "dueDate": "+9",
+        "section": "Cart Purchase Agreement § 3.4"
+      }
+    },
+    {
+      "id": "closing",
+      "label": "Close preserves cart purchase",
+      "deadlineRuleId": "contract-deadline",
+      "trigger": {
+        "event": "Synthetic agreement signed",
+        "date": "-8"
+      },
+      "assumptions": {},
+      "inputs": {
+        "dueDate": "+19",
+        "section": "Cart Purchase Agreement § 6.1"
+      }
+    }
+  ],
+  "clientFacing": {
+    "status": "We are checking the cart equipment before closing.",
+    "nextSteps": [
+      "Confirm whether the missing filter needs a seller credit.",
+      "Review the equipment objection notice."
+    ]
+  },
+  "provenance": {
+    "id": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "title": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "practiceArea": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "forum": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "synthetic": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "client.name": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "client.contact": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "parties.0.name": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "parties.0.role": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "parties.1.name": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "parties.1.role": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "timeline.0.id": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "timeline.0.event": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "timeline.0.date": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "timeline.1.id": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "timeline.1.event": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "timeline.1.date": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "timeline.2.id": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "timeline.2.event": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "timeline.2.date": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "timeline.3.id": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "timeline.3.event": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "timeline.3.date": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "documents.0.id": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "documents.0.title": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "documents.0.kind": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "documents.0.body": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "documents.0.shared": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "documents.1.id": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "documents.1.title": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "documents.1.kind": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "documents.1.body": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "documents.1.shared": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "deadlines.0.id": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "deadlines.0.label": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "deadlines.0.deadlineRuleId": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "deadlines.0.trigger.event": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "deadlines.0.trigger.date": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "deadlines.0.inputs.dueDate": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "deadlines.0.inputs.section": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "deadlines.1.id": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "deadlines.1.label": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "deadlines.1.deadlineRuleId": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "deadlines.1.trigger.event": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "deadlines.1.trigger.date": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "deadlines.1.inputs.dueDate": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "deadlines.1.inputs.section": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "clientFacing.status": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "clientFacing.nextSteps.0": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "clientFacing.nextSteps.1": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    }
+  }
+}

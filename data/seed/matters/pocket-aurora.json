@@ -1,0 +1,360 @@
+{
+  "id": "matters-pocket-aurora",
+  "title": "App. No. 18/402,117 — Self-folding shade canopy",
+  "practiceArea": "patent",
+  "forum": "U.S. Patent and Trademark Office; fictional utility application",
+  "synthetic": true,
+  "client": {
+    "name": "Sundmere Canopy Systems LLC",
+    "contact": "coordinator@sundmere-canopy.example.invalid"
+  },
+  "parties": [
+    {
+      "name": "Sundmere Canopy Systems LLC",
+      "role": "Client; applicant"
+    },
+    {
+      "name": "Mira Sundmere",
+      "role": "Inventor"
+    },
+    {
+      "name": "Examiner Evan Rillberg",
+      "role": "Simulated examiner"
+    }
+  ],
+  "timeline": [
+    {
+      "id": "event-1",
+      "event": "Utility application for a self-folding shade canopy filed",
+      "date": "-160"
+    },
+    {
+      "id": "event-2",
+      "event": "Non-final Office action mailed with a three-month response period and six-month maximum",
+      "date": "-72"
+    },
+    {
+      "id": "event-3",
+      "event": "Inventor supplied a hinge sketch distinguishing the cited canopy",
+      "date": "-20"
+    },
+    {
+      "id": "event-4",
+      "event": "Counsel and inventor selected two possible claim amendments",
+      "date": "-4"
+    },
+    {
+      "id": "event-5",
+      "event": "Client workplan signed; draft delivery agreed for thirteen days after signing",
+      "date": "-3"
+    }
+  ],
+  "documents": [
+    {
+      "id": "doc-1",
+      "title": "Non-final Office action",
+      "kind": "office-action",
+      "body": "SYNTHETIC DEMO DOCUMENT. The Office action was mailed sixty-nine days before the client workplan was signed. It expressly notifies a three-calendar-month shortened response period and maximum six-calendar-month period. Claims are rejected over cited folding-canopy references. No extension has been selected; any available extension would require the applicable petition and fee.",
+      "shared": true
+    },
+    {
+      "id": "doc-2",
+      "title": "Inventor hinge sketch note",
+      "kind": "technical",
+      "body": "SYNTHETIC DEMO DOCUMENT. Mira Sundmere describes a spiral hinge that locks the shade canopy without a separate pin. The note supports a proposed amendment but does not concede that the cited references disclose the hinge.",
+      "shared": false
+    },
+    {
+      "id": "doc-3",
+      "title": "Agreed workplan",
+      "kind": "agreement",
+      "body": "SYNTHETIC DEMO DOCUMENT. Workplan § 4: Counsel will deliver proposed claim amendments and a response explanation. Delivery is due thirteen calendar days after the client workplan was signed. This is an agreed draft-delivery milestone, separate from any filing deadline.",
+      "shared": true
+    }
+  ],
+  "deadlines": [
+    {
+      "id": "office-action",
+      "label": "Respond to non-final Office action (no extension selected)",
+      "deadlineRuleId": "patent-office-action-response",
+      "trigger": {
+        "event": "Non-final Office action mailed",
+        "date": "-72"
+      },
+      "assumptions": {
+        "extensionMonths": "0"
+      },
+      "inputs": {
+        "notifiedPeriodMonths": 3,
+        "maximumMonths": 6
+      }
+    },
+    {
+      "id": "agreed-draft",
+      "label": "Agreed delivery of Office action response draft",
+      "deadlineRuleId": "contract-deadline",
+      "trigger": {
+        "event": "Synthetic agreement signed",
+        "date": "-3"
+      },
+      "assumptions": {},
+      "inputs": {
+        "dueDate": "+10",
+        "section": "Workplan § 4"
+      }
+    }
+  ],
+  "clientFacing": {
+    "status": "The examiner has raised objections. We are preparing an explanation of the spiral hinge and proposed claim changes.",
+    "nextSteps": [
+      "Confirm the hinge description matches the original application.",
+      "Review the response draft before we file; no extension has been chosen."
+    ]
+  },
+  "provenance": {
+    "id": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "title": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "practiceArea": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "forum": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "synthetic": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "client.name": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "client.contact": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "parties.0.name": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "parties.0.role": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "parties.1.name": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "parties.1.role": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "parties.2.name": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "parties.2.role": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "timeline.0.id": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "timeline.0.event": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "timeline.0.date": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "timeline.1.id": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "timeline.1.event": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "timeline.1.date": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "timeline.2.id": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "timeline.2.event": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "timeline.2.date": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "timeline.3.id": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "timeline.3.event": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "timeline.3.date": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "timeline.4.id": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "timeline.4.event": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "timeline.4.date": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "documents.0.id": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "documents.0.title": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "documents.0.kind": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "documents.0.body": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "documents.0.shared": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "documents.1.id": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "documents.1.title": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "documents.1.kind": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "documents.1.body": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "documents.1.shared": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "documents.2.id": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "documents.2.title": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "documents.2.kind": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "documents.2.body": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "documents.2.shared": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "deadlines.0.id": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "deadlines.0.label": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "deadlines.0.deadlineRuleId": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "deadlines.0.trigger.event": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "deadlines.0.trigger.date": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "deadlines.0.assumptions.extensionMonths": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "deadlines.0.inputs.notifiedPeriodMonths": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "deadlines.0.inputs.maximumMonths": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "deadlines.1.id": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "deadlines.1.label": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "deadlines.1.deadlineRuleId": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "deadlines.1.trigger.event": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "deadlines.1.trigger.date": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "deadlines.1.inputs.dueDate": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "deadlines.1.inputs.section": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "clientFacing.status": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "clientFacing.nextSteps.0": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    },
+    "clientFacing.nextSteps.1": {
+      "source": "stated",
+      "evidence": "Expressly stated in the matter record."
+    }
+  }
+}

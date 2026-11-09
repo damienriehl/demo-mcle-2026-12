@@ -1,0 +1,25 @@
+{
+  "output": {
+    "fields": [
+      {
+        "path": "deadlines.0.trigger.date",
+        "value": "2026-01-06",
+        "source": "stated",
+        "evidence": "January 6, 2026"
+      }
+    ],
+    "followups": []
+  },
+  "events": [
+    {"type":"content_block_start","index":0,"content_block":{"type":"tool_use","id":"tool-fictional-intake","name":"structure_matter","input":{}}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"{\"fields\":[{\"path\":"}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"\"deadlines.0.trigge"}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"r.date\",\"value\":\"20"}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"26-01-06\",\"source\":"}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"\"stated\",\"evidence\""}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":":\"January 6, 2026\"}"}},
+    {"type":"content_block_delta","index":0,"delta":{"type":"input_json_delta","partial_json":"],\"followups\":[]}"}},
+    {"type":"content_block_stop","index":0},
+    {"type":"message_stop"}
+  ]
+}
