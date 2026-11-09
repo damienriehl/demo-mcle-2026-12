@@ -1,49 +1,163 @@
-/*
- * Design tokens. Every color, font, and size the app uses comes from here,
- * so a theme change or a live tweak is a token edit.
- *
- * Neutral placeholder values. Projector rules every theme must keep:
- *   - body text contrast at least 7:1 against its background
- *   - nothing smaller than 18px at 1920x1080
- *   - never carry meaning by color alone; pair color with text or an icon
- */
-:root {
-  --mc-bg: #f7f7f5;
-  --mc-surface: #ffffff;
-  --mc-border: #5c5c58;
-  --mc-ink: #141414;          /* ~17:1 on --mc-bg */
-  --mc-ink-muted: #3b3b38;    /* ~10:1 on --mc-bg */
-  --mc-accent: #1d4ed8;       /* ~6.6:1 on --mc-bg; use for large text and marks */
-  --mc-accent-ink: #ffffff;
+/* Live theme tweaks belong here. Keep the 18px projector floor and readable ink. */
+:root,
+[data-appearance='law-review'] {
+  color-scheme: light;
+  --mc-bg: #f7f3ea;
+  --mc-surface: #fdfbf6;
+  --mc-border: #c9bfa9;
+  --mc-ink: #1b1a17;
+  --mc-ink-muted: #514c43;
+  --mc-accent: #7a1f1f;
+  --mc-accent-ink: #fdfbf6;
+  --mc-secondary: #7a1f1f;
+  --mc-warning: #7a1f1f;
+  --mc-chip: #e9e0ce;
+  --mc-chip-ink: #1b1a17;
 
-  --mc-font-body: 'Charter', 'Iowan Old Style', 'Palatino Linotype', Georgia, serif;
-  --mc-font-display: 'Charter', 'Iowan Old Style', 'Palatino Linotype', Georgia, serif;
-  --mc-font-mono: ui-monospace, 'SF Mono', 'Cascadia Mono', monospace;
-
-  --mc-text-min: 1.125rem;    /* 18px floor */
-  --mc-text-body: 1.25rem;    /* 20px */
+  --mc-font-body: 'IBM Plex Sans', Arial, sans-serif;
+  --mc-font-display: 'Newsreader', Georgia, serif;
+  --mc-font-mono: 'IBM Plex Mono', monospace;
+  --mc-font-ui: var(--mc-font-body);
+  --mc-font-heading: var(--mc-font-display);
+  --mc-font-date: var(--mc-font-display);
+  --mc-weight-heading: 500;
+  --mc-weight-body: 400;
+  --mc-weight-label: 600;
+  --mc-label-case: uppercase;
+  --mc-label-tracking: .09em;
+  --mc-text-min: 1.125rem;
+  --mc-text-body: 1.25rem;
   --mc-text-lg: 1.5rem;
   --mc-text-xl: 2rem;
   --mc-text-display: 3rem;
+  --mc-text-hero: 2.75rem;
+  --mc-text-section: 1.25rem;
 
-  --mc-radius: 0.5rem;
+  --mc-radius: 0px;
+  --mc-radius-panel: 0px;
+  --mc-border-width: 1px;
+  --mc-header-rule: 2px;
+  --mc-header-rule-color: var(--mc-ink);
+  --mc-shadow: none;
   --mc-space: 1rem;
+  --mc-section-space: 1rem;
+  --mc-card-space: 1rem;
+  --mc-page-space: 1.5rem;
+  --mc-rail-width: 18rem;
+  --mc-drawer-width: 38rem;
+  --mc-area-litigation: #7a1f1f;
+  --mc-area-transactional: #365340;
+  --mc-area-patent: #3e5370;
+  --mc-area-bankruptcy: #645027;
+  --mc-area-family: #73516a;
+  --mc-area-employment: #405c62;
+  --mc-area-regulatory: #514c43;
 }
 
-/* Workspace typography and layout; neutral values for the theme pass. */
-:root {
-  --mc-font-ui: 'IBM Plex Sans', Arial, sans-serif;
-  --mc-font-heading: 'Newsreader', Georgia, serif;
-  --mc-text-hero: 2.6rem;
-  --mc-text-section: 1.6rem;
-  --mc-rail-width: 17rem;
-  --mc-drawer-width: 35rem;
-  --mc-warning: #704b00;
-  --mc-area-litigation: #262626;
-  --mc-area-transactional: #484848;
-  --mc-area-patent: #626262;
-  --mc-area-bankruptcy: #353535;
-  --mc-area-family: #555555;
-  --mc-area-employment: #707070;
-  --mc-area-regulatory: #424242;
+[data-appearance='mission-control'] {
+  color-scheme: dark;
+  --mc-bg: #0d1420;
+  --mc-surface: #131d2e;
+  --mc-border: #24324a;
+  --mc-ink: #eef2f7;
+  --mc-ink-muted: #b9c4d6;
+  --mc-accent: #ffc35a;
+  --mc-accent-ink: #0d1420;
+  --mc-secondary: #5ad1ff;
+  --mc-warning: #ffc35a;
+  --mc-chip: #24324a;
+  --mc-chip-ink: #eef2f7;
+
+  --mc-font-body: 'Space Grotesk', Arial, sans-serif;
+  --mc-font-display: 'Space Grotesk', Arial, sans-serif;
+  --mc-font-mono: 'JetBrains Mono', monospace;
+  --mc-font-ui: var(--mc-font-body);
+  --mc-font-heading: var(--mc-font-display);
+  --mc-font-date: var(--mc-font-mono);
+  --mc-weight-heading: 600;
+  --mc-weight-body: 400;
+  --mc-weight-label: 600;
+  --mc-label-case: none;
+  --mc-label-tracking: -.02em;
+  --mc-text-min: 1.125rem;
+  --mc-text-body: 1.25rem;
+  --mc-text-lg: 1.5rem;
+  --mc-text-xl: 1.875rem;
+  --mc-text-display: 2.75rem;
+  --mc-text-hero: 2.5rem;
+  --mc-text-section: 1.375rem;
+
+  --mc-radius: 12px;
+  --mc-radius-panel: 16px;
+  --mc-border-width: 1px;
+  --mc-header-rule: 1px;
+  --mc-header-rule-color: var(--mc-border);
+  --mc-shadow: 0 8px 24px #00000026;
+  --mc-space: .875rem;
+  --mc-section-space: .875rem;
+  --mc-card-space: 1rem;
+  --mc-page-space: 1.5rem;
+  --mc-rail-width: 18rem;
+  --mc-drawer-width: 40rem;
+  --mc-area-litigation: #ff8a6b;
+  --mc-area-transactional: #5ad1ff;
+  --mc-area-patent: #ffc35a;
+  --mc-area-bankruptcy: #b9c4d6;
+  --mc-area-family: #d6b6ff;
+  --mc-area-employment: #85d6b3;
+  --mc-area-regulatory: #eef2f7;
+}
+
+[data-appearance='boutique-firm'] {
+  color-scheme: light;
+  --mc-bg: #f1ede4;
+  --mc-surface: #fbf9f4;
+  --mc-border: #c8c6b9;
+  --mc-ink: #1c2620;
+  --mc-ink-muted: #4d5a52;
+  --mc-accent: #1f4d3a;
+  --mc-accent-ink: #fbf9f4;
+  --mc-secondary: #9a6b1c;
+  --mc-warning: #1f4d3a;
+  --mc-chip: #e0c58f;
+  --mc-chip-ink: #1c2620;
+
+  --mc-font-body: 'Hanken Grotesk', Arial, sans-serif;
+  --mc-font-display: 'Fraunces', Georgia, serif;
+  --mc-font-mono: 'IBM Plex Mono', monospace;
+  --mc-font-ui: var(--mc-font-body);
+  --mc-font-heading: var(--mc-font-display);
+  --mc-font-date: var(--mc-font-display);
+  --mc-weight-heading: 500;
+  --mc-weight-body: 400;
+  --mc-weight-label: 500;
+  --mc-label-case: none;
+  --mc-label-tracking: 0em;
+  --mc-text-min: 1.125rem;
+  --mc-text-body: 1.25rem;
+  --mc-text-lg: 1.625rem;
+  --mc-text-xl: 2rem;
+  --mc-text-display: 3rem;
+  --mc-text-hero: 2.625rem;
+  --mc-text-section: 1.5rem;
+
+  --mc-radius: 16px;
+  --mc-radius-panel: 16px;
+  --mc-border-width: 1px;
+  --mc-header-rule: 1px;
+  --mc-header-rule-color: var(--mc-secondary);
+  --mc-shadow: 0 5px 18px #1f4d3a0d;
+  --mc-space: 1.125rem;
+  --mc-section-space: 1.25rem;
+  --mc-card-space: 1.25rem;
+  --mc-page-space: 1.75rem;
+  --mc-rail-width: 19rem;
+  --mc-drawer-width: 39rem;
+  --mc-area-litigation: #1f4d3a;
+  --mc-area-transactional: #9a6b1c;
+  --mc-area-patent: #485c72;
+  --mc-area-bankruptcy: #735e47;
+  --mc-area-family: #825c70;
+  --mc-area-employment: #447069;
+  --mc-area-regulatory: #4d5a52;
 }

@@ -1,6 +1,6 @@
 import type { MatterWithDeadlines } from '../data/schema';
 import { FeatureSlot } from '../components/FeatureSlot';
-import { SourceField } from '../intake/SourceLabel';
+import { sourceFor } from '../intake/SourceLabel';
 import { dateLabel, daysFromToday, deadlineResult, type ViewProps } from './shared';
 
 function hidden(path: string[], patterns: string[]) {
@@ -47,15 +47,21 @@ export function Portal({ matters, activeMatter, onVerify }: ViewProps) {
   const safeMatters = matters.map(portalProjection);
   const matter = safeMatters.find(item => item.id === activeMatter?.id);
   if (!matter) return <div className="empty-state"><h2>A clear view for your client.</h2><p>Select a matter to see its next steps and shared documents.</p></div>;
-  const field = (path: string, value?: string) => value && <SourceField path={path} provenance={matter.provenance ?? {}} onVerify={() => onVerify({ matterId: matter.id, label: 'Client update', value })}>{value}</SourceField>;
+  const field = (path: string, value?: string) => {
+    if (!value) return null;
+    const source = sourceFor(matter.provenance ?? {}, path);
+    return source === 'inferred' || source === 'invented'
+      ? <button className="portal-field" onClick={() => onVerify({ matterId: matter.id, label: 'Client update', value })}>{value}</button>
+      : <span className="portal-field">{value}</span>;
+  };
   return <div className="portal-view"><header className="view-heading"><div><p>Client Portal</p><h2>{field('client.name', matter.client?.name)}</h2>{field('title', matter.title)}</div><span className="portal-badge">Shared with you</span></header>
     <section className="client-status"><h3>Where things stand</h3>{field('clientFacing.status', matter.clientFacing?.status)}</section>
     <div className="portal-columns"><section className="workspace-section"><h3>Your next steps</h3><ol className="next-steps">{matter.clientFacing?.nextSteps?.map((step, i) => step && <li key={i}>{field(`clientFacing.nextSteps.${i}`, step)}</li>)}</ol></section>
-    <section className="workspace-section"><h3>Upcoming dates</h3>{matter.deadlines?.map((deadline, i) => {
+    <section className="workspace-section"><h3>Upcoming dates</h3>{matter.deadlines?.map(deadline => {
       if (!deadline) return null;
       const result = deadlineResult(matter, deadline.id);
       if (result.status === 'computed' && daysFromToday(result.dueDate) < 0) return null;
-      return <button className="portal-date" key={deadline.id} onClick={() => onVerify({ matterId: matter.id, deadlineId: deadline.id, label: deadline.label, result })}><SourceField path={`deadlines.${i}.label`} provenance={matter.provenance ?? {}}>{deadline.label}</SourceField><span>{result.status === 'computed' ? dateLabel(result.dueDate) : 'Date being confirmed'}</span>{result.status === 'computed' && <span className="source-label">Code computed</span>}</button>;
+      return <button className="portal-date" key={deadline.id} onClick={() => onVerify({ matterId: matter.id, deadlineId: deadline.id, label: deadline.label, result })}><span>{deadline.label}</span><span>{result.status === 'computed' ? dateLabel(result.dueDate) : 'Date being confirmed'}</span></button>;
     })}</section></div>
     <section className="workspace-section"><h3>Shared documents</h3>{matter.documents?.map((document, i) => document && <details className="document" key={document.id}><summary>{field(`documents.${i}.title`, document.title)}</summary>{field(`documents.${i}.body`, document.body)}</details>)}</section>
     <FeatureSlot slot="portal.section" matters={safeMatters} activeMatter={matter} />

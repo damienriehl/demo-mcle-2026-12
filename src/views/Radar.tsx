@@ -14,7 +14,7 @@ export function Radar({ matters, activeMatter, onVerify, arrivals }: ViewProps &
         const days = daysFromToday(result.dueDate);
         return (days < 0 ? 0 : days <= 7 ? 1 : days <= 30 ? 2 : 3) === bandIndex;
       });
-      return <section key={band} aria-label={band} data-band={band} className="radar-band"><header><h3>{band} <span className="band-count">{items.length}</span></h3><p>{descriptions[bandIndex]}</p></header>{items.map(({ matter, deadline, index }) => <DeadlineCard key={`${matter.id}-${deadline.id}`} matter={matter} index={index} onVerify={onVerify} arrived={arrivals.has(matter.id)} showMatter />)}{!items.length && <p className="empty-band">Nothing here.</p>}</section>;
+      return <section key={band} aria-label={band} data-band={band} className={`radar-band${items.length ? '' : ' radar-band-empty'}`}><header><h3>{band} <span className="band-count">{items.length}</span></h3><p>{descriptions[bandIndex]}</p></header>{items.map(({ matter, deadline, index }) => <DeadlineCard key={`${matter.id}-${deadline.id}`} matter={matter} index={index} onVerify={onVerify} arrived={arrivals.has(matter.id)} showMatter />)}{!items.length && <p className="empty-band">Nothing due.</p>}</section>;
     })}</div><FeatureSlot slot="radar.overlay" matters={matters} activeMatter={activeMatter} />
   </div>;
 }

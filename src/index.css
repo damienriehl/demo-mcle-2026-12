@@ -25,11 +25,13 @@
   --radius-md: var(--mc-radius);
 }
 
-html,
+html { font-size: 16px; }
+
 body {
   background: var(--mc-bg);
   color: var(--mc-ink);
   font-family: var(--mc-font-body);
   font-size: var(--mc-text-body);
   line-height: 1.5;
+  margin: 0;
 }
