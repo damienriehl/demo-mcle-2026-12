@@ -1,0 +1,538 @@
+{
+  "id": "scheduling-demo",
+  "title": "Quillfeather v. Copperleaf",
+  "practiceArea": "litigation",
+  "forum": "U.S. District Court, District of Minnesota",
+  "synthetic": true,
+  "client": {
+    "name": "Quillfeather Studio",
+    "contact": "studio@example.invalid"
+  },
+  "parties": [],
+  "timeline": [
+    {
+      "id": "order-demo-date-1-event",
+      "event": "Trial ready date",
+      "date": "2027-06-14"
+    },
+    {
+      "id": "order-demo-date-2-event",
+      "event": "Order-set expert disclosures",
+      "date": "2027-02-01"
+    }
+  ],
+  "documents": [
+    {
+      "id": "order-demo",
+      "title": "Synthetic scheduling order",
+      "kind": "order",
+      "body": "Trial ready date: June 14, 2027.\nExpert disclosures: February 1, 2027.",
+      "shared": false
+    }
+  ],
+  "deadlines": [
+    {
+      "id": "order-demo-date-1",
+      "label": "Trial ready date",
+      "deadlineRuleId": "court-order-date",
+      "trigger": {
+        "event": "Scheduling order, p. 2",
+        "date": "2027-06-14"
+      },
+      "inputs": {
+        "date": "2027-06-14",
+        "page": 2,
+        "quote": "Trial ready date: June 14, 2027."
+      },
+      "assumptions": {}
+    },
+    {
+      "id": "order-demo-date-2",
+      "label": "Order-set expert disclosures",
+      "deadlineRuleId": "court-order-date",
+      "trigger": {
+        "event": "Scheduling order, p. 1",
+        "date": "2027-02-01"
+      },
+      "inputs": {
+        "date": "2027-02-01",
+        "page": 1,
+        "quote": "Expert disclosures: February 1, 2027."
+      },
+      "assumptions": {}
+    },
+    {
+      "id": "order-demo-date-1-expert",
+      "label": "Federal expert disclosures",
+      "deadlineRuleId": "frcp-26a2d-expert-disclosure",
+      "trigger": {
+        "event": "Trial ready date",
+        "fromDeadline": "order-demo-date-1"
+      },
+      "assumptions": {},
+      "supersededBy": "order-demo-date-2"
+    },
+    {
+      "id": "order-demo-date-1-pretrial",
+      "label": "Federal pretrial disclosures",
+      "deadlineRuleId": "frcp-26a3-pretrial-disclosure",
+      "trigger": {
+        "event": "Trial ready date",
+        "fromDeadline": "order-demo-date-1"
+      },
+      "assumptions": {}
+    },
+    {
+      "id": "order-demo-date-1-objections",
+      "label": "Federal objections to pretrial disclosures",
+      "deadlineRuleId": "frcp-26a3-objections",
+      "trigger": {
+        "event": "Federal pretrial disclosures",
+        "fromDeadline": "order-demo-date-1-pretrial"
+      },
+      "assumptions": {}
+    }
+  ],
+  "clientFacing": {
+    "status": "Scheduling order received.",
+    "nextSteps": []
+  },
+  "internalOnly": [
+    "reasoning",
+    "provenance.*.evidence"
+  ],
+  "provenance": {
+    "internalOnly.0": {
+      "source": "inferred",
+      "evidence": "Internal field path retained after scheduling order replacement."
+    },
+    "internalOnly.1": {
+      "source": "inferred",
+      "evidence": "Internal field path retained after scheduling order replacement."
+    },
+    "documents.0.id": {
+      "source": "stated",
+      "evidence": "Synthetic scheduling order"
+    },
+    "documents.0.title": {
+      "source": "stated",
+      "evidence": "Synthetic scheduling order"
+    },
+    "documents.0.kind": {
+      "source": "stated",
+      "evidence": "Synthetic scheduling order"
+    },
+    "documents.0.body": {
+      "source": "stated",
+      "evidence": "Synthetic scheduling order"
+    },
+    "documents.0.shared": {
+      "source": "stated",
+      "evidence": "Synthetic scheduling order"
+    },
+    "deadlines.0.id": {
+      "source": "stated",
+      "evidence": "Trial ready date: June 14, 2027."
+    },
+    "deadlines.0.label": {
+      "source": "stated",
+      "evidence": "Trial ready date: June 14, 2027."
+    },
+    "deadlines.0.deadlineRuleId": {
+      "source": "stated",
+      "evidence": "Trial ready date: June 14, 2027."
+    },
+    "deadlines.0.trigger.event": {
+      "source": "stated",
+      "evidence": "Trial ready date: June 14, 2027."
+    },
+    "deadlines.0.trigger.date": {
+      "source": "stated",
+      "evidence": "Trial ready date: June 14, 2027."
+    },
+    "deadlines.0.inputs.date": {
+      "source": "stated",
+      "evidence": "Trial ready date: June 14, 2027."
+    },
+    "deadlines.0.inputs.page": {
+      "source": "stated",
+      "evidence": "Trial ready date: June 14, 2027."
+    },
+    "deadlines.0.inputs.quote": {
+      "source": "stated",
+      "evidence": "Trial ready date: June 14, 2027."
+    },
+    "deadlines.0.assumptions": {
+      "source": "stated",
+      "evidence": "Trial ready date: June 14, 2027."
+    },
+    "timeline.0.id": {
+      "source": "stated",
+      "evidence": "Trial ready date: June 14, 2027."
+    },
+    "timeline.0.event": {
+      "source": "stated",
+      "evidence": "Trial ready date: June 14, 2027."
+    },
+    "timeline.0.date": {
+      "source": "stated",
+      "evidence": "Trial ready date: June 14, 2027."
+    },
+    "deadlines.1.id": {
+      "source": "stated",
+      "evidence": "Expert disclosures: February 1, 2027."
+    },
+    "deadlines.1.label": {
+      "source": "stated",
+      "evidence": "Expert disclosures: February 1, 2027."
+    },
+    "deadlines.1.deadlineRuleId": {
+      "source": "stated",
+      "evidence": "Expert disclosures: February 1, 2027."
+    },
+    "deadlines.1.trigger.event": {
+      "source": "stated",
+      "evidence": "Expert disclosures: February 1, 2027."
+    },
+    "deadlines.1.trigger.date": {
+      "source": "stated",
+      "evidence": "Expert disclosures: February 1, 2027."
+    },
+    "deadlines.1.inputs.date": {
+      "source": "stated",
+      "evidence": "Expert disclosures: February 1, 2027."
+    },
+    "deadlines.1.inputs.page": {
+      "source": "stated",
+      "evidence": "Expert disclosures: February 1, 2027."
+    },
+    "deadlines.1.inputs.quote": {
+      "source": "stated",
+      "evidence": "Expert disclosures: February 1, 2027."
+    },
+    "deadlines.1.assumptions": {
+      "source": "stated",
+      "evidence": "Expert disclosures: February 1, 2027."
+    },
+    "timeline.1.id": {
+      "source": "stated",
+      "evidence": "Expert disclosures: February 1, 2027."
+    },
+    "timeline.1.event": {
+      "source": "stated",
+      "evidence": "Expert disclosures: February 1, 2027."
+    },
+    "timeline.1.date": {
+      "source": "stated",
+      "evidence": "Expert disclosures: February 1, 2027."
+    },
+    "deadlines.2.id": {
+      "source": "inferred",
+      "evidence": "Counts from Trial ready date; court date: Trial ready date (2027-06-14, scheduling order p. 2); Federal expert disclosures (frcp-26a2d-expert-disclosure)."
+    },
+    "deadlines.2.label": {
+      "source": "inferred",
+      "evidence": "Counts from Trial ready date; court date: Trial ready date (2027-06-14, scheduling order p. 2); Federal expert disclosures (frcp-26a2d-expert-disclosure)."
+    },
+    "deadlines.2.deadlineRuleId": {
+      "source": "inferred",
+      "evidence": "Counts from Trial ready date; court date: Trial ready date (2027-06-14, scheduling order p. 2); Federal expert disclosures (frcp-26a2d-expert-disclosure)."
+    },
+    "deadlines.2.trigger.event": {
+      "source": "inferred",
+      "evidence": "Counts from Trial ready date; court date: Trial ready date (2027-06-14, scheduling order p. 2); Federal expert disclosures (frcp-26a2d-expert-disclosure)."
+    },
+    "deadlines.2.trigger.fromDeadline": {
+      "source": "inferred",
+      "evidence": "Counts from Trial ready date; court date: Trial ready date (2027-06-14, scheduling order p. 2); Federal expert disclosures (frcp-26a2d-expert-disclosure)."
+    },
+    "deadlines.2.assumptions": {
+      "source": "inferred",
+      "evidence": "Counts from Trial ready date; court date: Trial ready date (2027-06-14, scheduling order p. 2); Federal expert disclosures (frcp-26a2d-expert-disclosure)."
+    },
+    "deadlines.2.supersededBy": {
+      "source": "inferred",
+      "evidence": "Counts from Trial ready date; court date: Trial ready date (2027-06-14, scheduling order p. 2); Federal expert disclosures (frcp-26a2d-expert-disclosure)."
+    },
+    "deadlines.3.id": {
+      "source": "inferred",
+      "evidence": "Counts from Trial ready date; court date: Trial ready date (2027-06-14, scheduling order p. 2); Federal pretrial disclosures (frcp-26a3-pretrial-disclosure)."
+    },
+    "deadlines.3.label": {
+      "source": "inferred",
+      "evidence": "Counts from Trial ready date; court date: Trial ready date (2027-06-14, scheduling order p. 2); Federal pretrial disclosures (frcp-26a3-pretrial-disclosure)."
+    },
+    "deadlines.3.deadlineRuleId": {
+      "source": "inferred",
+      "evidence": "Counts from Trial ready date; court date: Trial ready date (2027-06-14, scheduling order p. 2); Federal pretrial disclosures (frcp-26a3-pretrial-disclosure)."
+    },
+    "deadlines.3.trigger.event": {
+      "source": "inferred",
+      "evidence": "Counts from Trial ready date; court date: Trial ready date (2027-06-14, scheduling order p. 2); Federal pretrial disclosures (frcp-26a3-pretrial-disclosure)."
+    },
+    "deadlines.3.trigger.fromDeadline": {
+      "source": "inferred",
+      "evidence": "Counts from Trial ready date; court date: Trial ready date (2027-06-14, scheduling order p. 2); Federal pretrial disclosures (frcp-26a3-pretrial-disclosure)."
+    },
+    "deadlines.3.assumptions": {
+      "source": "inferred",
+      "evidence": "Counts from Trial ready date; court date: Trial ready date (2027-06-14, scheduling order p. 2); Federal pretrial disclosures (frcp-26a3-pretrial-disclosure)."
+    },
+    "deadlines.4.id": {
+      "source": "inferred",
+      "evidence": "Counts from Federal pretrial disclosures; court date: Trial ready date (2027-06-14, scheduling order p. 2); Federal objections to pretrial disclosures (frcp-26a3-objections)."
+    },
+    "deadlines.4.label": {
+      "source": "inferred",
+      "evidence": "Counts from Federal pretrial disclosures; court date: Trial ready date (2027-06-14, scheduling order p. 2); Federal objections to pretrial disclosures (frcp-26a3-objections)."
+    },
+    "deadlines.4.deadlineRuleId": {
+      "source": "inferred",
+      "evidence": "Counts from Federal pretrial disclosures; court date: Trial ready date (2027-06-14, scheduling order p. 2); Federal objections to pretrial disclosures (frcp-26a3-objections)."
+    },
+    "deadlines.4.trigger.event": {
+      "source": "inferred",
+      "evidence": "Counts from Federal pretrial disclosures; court date: Trial ready date (2027-06-14, scheduling order p. 2); Federal objections to pretrial disclosures (frcp-26a3-objections)."
+    },
+    "deadlines.4.trigger.fromDeadline": {
+      "source": "inferred",
+      "evidence": "Counts from Federal pretrial disclosures; court date: Trial ready date (2027-06-14, scheduling order p. 2); Federal objections to pretrial disclosures (frcp-26a3-objections)."
+    },
+    "deadlines.4.assumptions": {
+      "source": "inferred",
+      "evidence": "Counts from Federal pretrial disclosures; court date: Trial ready date (2027-06-14, scheduling order p. 2); Federal objections to pretrial disclosures (frcp-26a3-objections)."
+    }
+  },
+  "computedDeadlines": {
+    "order-demo-date-1": {
+      "status": "computed",
+      "dueDate": "2027-06-14",
+      "steps": [
+        {
+          "label": "Trigger: date stated in the court’s order. Matter event: Scheduling order, p. 2.",
+          "date": "2027-06-14",
+          "citation": {
+            "ruleId": "order",
+            "subdivision": "p. 2"
+          }
+        },
+        {
+          "label": "Use the date stated in the order, p. 2: “Trial ready date: June 14, 2027.” No calendar roll applies.",
+          "date": "2027-06-14",
+          "citation": {
+            "ruleId": "order",
+            "subdivision": "p. 2"
+          }
+        },
+        {
+          "label": "Final due date",
+          "date": "2027-06-14",
+          "citation": {
+            "ruleId": "order",
+            "subdivision": "p. 2"
+          }
+        }
+      ],
+      "inputKey": "date"
+    },
+    "order-demo-date-2": {
+      "status": "computed",
+      "dueDate": "2027-02-01",
+      "steps": [
+        {
+          "label": "Trigger: date stated in the court’s order. Matter event: Scheduling order, p. 1.",
+          "date": "2027-02-01",
+          "citation": {
+            "ruleId": "order",
+            "subdivision": "p. 1"
+          }
+        },
+        {
+          "label": "Use the date stated in the order, p. 1: “Expert disclosures: February 1, 2027.” No calendar roll applies.",
+          "date": "2027-02-01",
+          "citation": {
+            "ruleId": "order",
+            "subdivision": "p. 1"
+          }
+        },
+        {
+          "label": "Final due date",
+          "date": "2027-02-01",
+          "citation": {
+            "ruleId": "order",
+            "subdivision": "p. 1"
+          }
+        }
+      ],
+      "inputKey": "date"
+    },
+    "order-demo-date-1-expert": {
+      "status": "computed",
+      "dueDate": "2027-03-16",
+      "steps": [
+        {
+          "label": "Trigger: the date set for trial or for the case to be ready for trial. Matter event: Trial ready date.",
+          "date": "2027-06-14",
+          "citation": {
+            "ruleId": "frcp:26",
+            "subdivision": "(a)(2)(D)(i)"
+          }
+        },
+        {
+          "label": "Exclude the trigger day; count every intervening calendar day, including weekends and holidays.",
+          "citation": {
+            "ruleId": "frcp:6",
+            "subdivision": "(a)(1)"
+          }
+        },
+        {
+          "label": "Count backward from the date set for trial or for the case to be ready for trial; a weekend or holiday landing moves earlier.",
+          "citation": {
+            "ruleId": "frcp:6",
+            "subdivision": "(a)(5)"
+          }
+        },
+        {
+          "label": "Use the federal legal-holiday calendar.",
+          "citation": {
+            "ruleId": "frcp:6",
+            "subdivision": "(a)(6)"
+          }
+        },
+        {
+          "label": "Subtract 90 days; landing day is Tuesday.",
+          "date": "2027-03-16",
+          "citation": {
+            "ruleId": "frcp:26",
+            "subdivision": "(a)(2)(D)(i)"
+          }
+        },
+        {
+          "label": "The landing day is neither a weekend nor a legal holiday; no calendar roll is required.",
+          "citation": {
+            "ruleId": "frcp:6",
+            "subdivision": "(a)(1)(C)"
+          }
+        },
+        {
+          "label": "Final due date",
+          "date": "2027-03-16",
+          "citation": {
+            "ruleId": "frcp:26",
+            "subdivision": "(a)(2)(D)(i)"
+          }
+        }
+      ]
+    },
+    "order-demo-date-1-pretrial": {
+      "status": "computed",
+      "dueDate": "2027-05-14",
+      "steps": [
+        {
+          "label": "Trigger: the date set for trial. Matter event: Trial ready date.",
+          "date": "2027-06-14",
+          "citation": {
+            "ruleId": "frcp:26",
+            "subdivision": "(a)(3)(B)"
+          }
+        },
+        {
+          "label": "Exclude the trigger day; count every intervening calendar day, including weekends and holidays.",
+          "citation": {
+            "ruleId": "frcp:6",
+            "subdivision": "(a)(1)"
+          }
+        },
+        {
+          "label": "Count backward from the date set for trial; a weekend or holiday landing moves earlier.",
+          "citation": {
+            "ruleId": "frcp:6",
+            "subdivision": "(a)(5)"
+          }
+        },
+        {
+          "label": "Use the federal legal-holiday calendar.",
+          "citation": {
+            "ruleId": "frcp:6",
+            "subdivision": "(a)(6)"
+          }
+        },
+        {
+          "label": "Subtract 30 days; landing day is Saturday.",
+          "date": "2027-05-15",
+          "citation": {
+            "ruleId": "frcp:26",
+            "subdivision": "(a)(3)(B)"
+          }
+        },
+        {
+          "label": "Weekend/holiday landing on Saturday: move earlier to Friday.",
+          "date": "2027-05-14",
+          "citation": {
+            "ruleId": "frcp:6",
+            "subdivision": "(a)(1)(C)"
+          }
+        },
+        {
+          "label": "Final due date",
+          "date": "2027-05-14",
+          "citation": {
+            "ruleId": "frcp:26",
+            "subdivision": "(a)(3)(B)"
+          }
+        }
+      ]
+    },
+    "order-demo-date-1-objections": {
+      "status": "computed",
+      "dueDate": "2027-05-28",
+      "steps": [
+        {
+          "label": "Trigger: the pretrial disclosures are made. Matter event: Federal pretrial disclosures.",
+          "date": "2027-05-14",
+          "citation": {
+            "ruleId": "frcp:26",
+            "subdivision": "(a)(3)(B)"
+          }
+        },
+        {
+          "label": "Exclude the trigger day; count every intervening calendar day, including weekends and holidays.",
+          "citation": {
+            "ruleId": "frcp:6",
+            "subdivision": "(a)(1)"
+          }
+        },
+        {
+          "label": "Use the federal legal-holiday calendar.",
+          "citation": {
+            "ruleId": "frcp:6",
+            "subdivision": "(a)(6)"
+          }
+        },
+        {
+          "label": "Add 14 days; landing day is Friday.",
+          "date": "2027-05-28",
+          "citation": {
+            "ruleId": "frcp:26",
+            "subdivision": "(a)(3)(B)"
+          }
+        },
+        {
+          "label": "The landing day is neither a weekend nor a legal holiday; no calendar roll is required.",
+          "citation": {
+            "ruleId": "frcp:6",
+            "subdivision": "(a)(1)(C)"
+          }
+        },
+        {
+          "label": "Final due date",
+          "date": "2027-05-28",
+          "citation": {
+            "ruleId": "frcp:26",
+            "subdivision": "(a)(3)(B)"
+          }
+        }
+      ]
+    }
+  }
+}

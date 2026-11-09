@@ -1,0 +1,36 @@
+.scheduling-order { --order-ink-muted: color-mix(in srgb, var(--mc-ink-muted) 75%, var(--mc-ink)); display: flex; flex-wrap: wrap; align-items: flex-start; gap: var(--mc-page-space); font-size: var(--mc-text-body); line-height: 1.5; }
+.order-intake { flex: 1 1 var(--mc-rail-width); min-width: 0; display: grid; gap: var(--mc-space); }
+.order-schedule { flex: 2 1 calc(var(--mc-rail-width) * 2); min-width: 0; }
+.matter-app .order-drop { display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; padding: calc(var(--mc-space) * 3) var(--mc-space); border: var(--mc-header-rule) dashed var(--mc-ink-muted); gap: var(--mc-space); }
+.order-drop strong { font-family: var(--mc-font-heading); font-size: var(--mc-text-xl); text-align: center; }
+.order-drop span { font-size: var(--mc-text-min); }
+.order-paste summary { cursor: pointer; }
+.order-paste form { display: grid; gap: var(--mc-space); padding-top: var(--mc-space); }
+.order-paste textarea, .order-court-heading input { width: 100%; min-width: 0; background: var(--mc-surface); border: var(--mc-border-width) solid var(--mc-border); border-radius: var(--mc-radius); padding: var(--mc-space); font-size: var(--mc-text-body); }
+.order-paste textarea { resize: vertical; }
+.order-arrivals { list-style: none; padding: 0; margin: 0; display: grid; gap: var(--mc-space); }
+.order-arrival { display: grid; gap: calc(var(--mc-space) / 2); border-top: var(--mc-border-width) solid var(--mc-border); padding: var(--mc-space); background: var(--mc-surface); animation: order-arrive 450ms ease-out; }
+.order-arrival time { font-family: var(--mc-font-date); font-size: var(--mc-text-lg); }
+.order-arrival > span { font-size: var(--mc-text-min); }
+.scheduling-order blockquote { margin: var(--mc-space) 0; padding-left: var(--mc-space); border-left: var(--mc-header-rule) solid var(--mc-ink-muted); font-style: italic; overflow-wrap: anywhere; }
+.order-warning { border: var(--mc-header-rule) dashed var(--mc-warning); }
+.order-warning p { color: var(--mc-warning); }
+.order-schedule-heading, .order-court-heading { display: flex; flex-wrap: wrap; gap: var(--mc-space); align-items: flex-start; justify-content: space-between; }
+.order-schedule-heading { align-items: center; margin-bottom: var(--mc-space); }
+.order-schedule-heading h3, .order-court-heading h3 { margin-bottom: calc(var(--mc-space) / 2); }
+.order-group { border-top: var(--mc-header-rule) solid var(--mc-ink); padding: var(--mc-section-space) 0; }
+.order-court-heading time { font-family: var(--mc-font-date); font-size: var(--mc-text-xl); }
+.order-court-heading p, .order-move-note { font-size: var(--mc-text-min); }
+.order-court-heading label { display: grid; gap: calc(var(--mc-space) / 2); font-size: var(--mc-text-min); max-width: 100%; }
+.order-court-heading input { padding: calc(var(--mc-space) / 2); }
+.order-derived { display: flex; flex-wrap: wrap; gap: var(--mc-space); align-items: flex-start; }
+.order-derived > div { flex: 1 1 var(--mc-rail-width); min-width: 0; }
+.order-superseded { color: var(--order-ink-muted); border-top: var(--mc-border-width) dashed var(--mc-ink-muted); }
+.order-superseded > p { font-size: var(--mc-text-min); margin: var(--mc-space) 0; }
+.matter-app .order-superseded .deadline-card { color: var(--order-ink-muted); background: var(--mc-bg); border-style: dashed; }
+.order-change-label { font-weight: var(--mc-weight-label); border-left: var(--mc-header-rule) solid var(--mc-accent); padding-left: var(--mc-space); }
+.order-changed .deadline-card { animation: order-change 1200ms ease-out; }
+@keyframes order-arrive { from { transform: translateY(var(--mc-space)); } to { transform: translateY(0); } }
+@keyframes order-change { from { outline: var(--mc-header-rule) solid var(--mc-accent); } to { outline: var(--mc-border-width) solid var(--mc-border); } }
+@media (prefers-reduced-motion: reduce) { .order-arrival, .order-changed .deadline-card { animation: none; } }
+.scheduling-order .source-label, .scheduling-order .practice-mark { color: var(--order-ink-muted); }

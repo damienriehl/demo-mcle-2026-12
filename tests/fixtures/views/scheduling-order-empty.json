@@ -1,0 +1,16 @@
+{
+  "id": "scheduling-demo",
+  "title": "Quillfeather v. Copperleaf",
+  "practiceArea": "litigation",
+  "forum": "U.S. District Court, District of Minnesota",
+  "synthetic": true,
+  "client": { "name": "Quillfeather Studio", "contact": "studio@example.invalid" },
+  "parties": [],
+  "timeline": [],
+  "documents": [],
+  "deadlines": [],
+  "clientFacing": { "status": "Scheduling order received.", "nextSteps": [] },
+  "internalOnly": ["reasoning", "provenance.*.evidence"],
+  "provenance": {},
+  "computedDeadlines": {}
+}
