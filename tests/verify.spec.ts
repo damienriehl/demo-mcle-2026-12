@@ -134,7 +134,7 @@ test('service preview recomputes locally, links every step to verbatim rules, an
   expect(await steps.locator('li').count()).toBe(await steps.getByRole('link').count());
   await expect(steps.locator('[data-changed="true"]').first()).toBeVisible();
   const rule = federalRules.find(rule => rule.id === 'frcp:12')!;
-  await expect(panel.locator('[data-rule-excerpt]')).toHaveText(rule.subdivisions[0].text);
+  await expect(panel.locator('[data-rule-excerpt]')).toHaveText(rule.subdivisions[0].text.split('\n').find(line => line.startsWith('(ii) if it has timely waived'))!);
   await panel.getByRole('button', { name: 'Show full rule', exact: true }).click();
   expect(await panel.locator('[data-rule-text]').textContent()).toBe(rule.text);
   await expect(panel.getByRole('link', { name: 'Official source', exact: true })).toHaveAttribute('href', rule.sourceUrl);
@@ -142,7 +142,7 @@ test('service preview recomputes locally, links every step to verbatim rules, an
   await expect(panel).toContainText(rule.sourceVersion);
   await steps.getByRole('link', { name: 'Fed. R. Civ. P. 6(a)(1)(C)', exact: true }).first().click();
   await expect(panel.getByRole('heading', { name: /Fed. R. Civ. P. 6 —/ })).toBeVisible();
-  expect(await panel.locator('[data-rule-excerpt]').textContent()).toBe(federalRules.find(rule => rule.id === 'frcp:6')!.subdivisions[0].text);
+  expect(await panel.locator('[data-rule-excerpt]').textContent()).toBe(federalRules.find(rule => rule.id === 'frcp:6')!.subdivisions[0].text.split('\n').find(line => line.startsWith('(C) include the last day'))!);
   await page.keyboard.press('Escape');
   await expect(opener).toBeFocused();
   await opener.click();

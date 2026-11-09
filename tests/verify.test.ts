@@ -9,7 +9,46 @@ import { matterSchema } from '../src/data/schema';
 import fixtures from './fixtures/views/matters.json';
 import { DeadlineCard } from '../src/components/DeadlineCard';
 import { RuleText } from '../src/verify/RuleText';
+import { getRuleExcerpts } from '../src/verify/ruleExcerpts';
 import { schedulingMatter } from './fixtures/views/scheduling-order';
+
+describe('cited rule paragraphs', () => {
+  it.each([
+    ['frcp:26', '(a)(3)(B)', '(B) Time for Pretrial Disclosures; Objections.', 'at least 30 days before trial', '(4) Form of Disclosures'],
+    ['frcp:26', '(a)(2)(D)(i)', '(i) at least 90 days before', 'the date set for trial', '(ii) if the evidence'],
+    ['mn-gp:115', '115.03(a)', '(a) Service by Moving Party', '(4) Memorandum of law.', '(b) Response to Motion'],
+    ['mn-civ:26', '26.02(b)(3)', '(3) Limits Required When Cumulative', '(iii) the burden of proposed discovery', '(c) Insurance Agreements'],
+    ['frcp:6', '(a)(1)(C)', '(C) include the last day of the period', 'the next day that is not a Saturday', '(2) Period Stated in Hours'],
+  ])('opens %s %s at its deepest paragraph', (ruleId, subdivision, start, contains, excludes) => {
+    const rule = getRule(ruleId)!;
+    const [excerpt] = getRuleExcerpts(rule, subdivision);
+    const text = excerpt.text;
+    const html = renderToStaticMarkup(createElement(RuleText, { citation: { ruleId, subdivision } }));
+    expect(text.startsWith(start)).toBe(true);
+    expect(text).toContain(contains);
+    expect(text).not.toContain(excludes);
+    expect(rule.text).toContain(text);
+    expect(excerpt.label).toBe(subdivision);
+    expect(html).toContain(renderToStaticMarkup(createElement('div', { 'data-rule-excerpt': true }, text)));
+    expect(html).toContain(`Verbatim library text · ${subdivision}`);
+  });
+
+  it('keeps Minnesota 26.01 whole because the library omits the (c) heading', () => {
+    const rule = getRule('mn-civ:26')!;
+    const part = rule.subdivisions.find(part => part.label === '26.01')!;
+    expect(part.text).toContain('(2) Time for Pretrial Disclosures');
+    expect(part.text).not.toMatch(/^\(c\)/m);
+    expect(getRuleExcerpts(rule, '26.01(c)(2)')).toEqual([part]);
+  });
+
+  it.each(['(a)(99)', '(a)(3)(Z)', '(a)(3)(B)(99)'])('keeps the whole top-level subdivision when %s is missing', subdivision => {
+    const rule = getRule('frcp:26')!;
+    expect(getRuleExcerpts(rule, subdivision)).toEqual([rule.subdivisions[0]]);
+    const html = renderToStaticMarkup(createElement(RuleText, { citation: { ruleId: rule.id, subdivision } }));
+    expect(html).toContain(renderToStaticMarkup(createElement('div', { 'data-rule-excerpt': true }, rule.subdivisions[0].text)));
+    expect(html).toContain('Verbatim library text · (a)');
+  });
+});
 
 describe('verification content', () => {
   it('quotes the court-order exception verbatim from the cited rule for a superseded default', () => {
@@ -99,7 +138,7 @@ describe('verification content', () => {
     const result = computeDeadline(deadline);
     const html = renderToStaticMarkup(createElement(VerifyDrawer, { selection: { matterId: base.id, deadlineId: deadline.id, label: deadline.label, result }, matter: { ...base, deadlines: [deadline], computedDeadlines: { answer: result } }, onClose() {} }));
     for (const step of result.steps) expect(html).toContain(step.label);
-    expect(html).toContain(getRule('frcp:12')!.subdivisions[0].text.replaceAll('&', '&amp;').replaceAll('"', '&quot;').replaceAll("'", '&#x27;').replaceAll('<', '&lt;').replaceAll('>', '&gt;'));
+    expect(html).toContain('<div data-rule-excerpt="true">(i) within 21 days after being served with the summons and complaint; or</div>');
     expect(html).toContain('Nov 24, 2026');
     expect(html).toContain('Code computed');
     expect(html).not.toContain('From the matter');
