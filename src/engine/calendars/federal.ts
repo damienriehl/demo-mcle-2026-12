@@ -1,3 +1,4 @@
+import { addDays, weekday } from '../dates';
 import type { Step } from '../types';
 
 export type Holiday = { name: string; citation: Step['citation'] };
@@ -9,45 +10,49 @@ export type Holiday = { name: string; citation: Step['citation'] };
 // Saturday -> preceding Friday; Sunday -> following Monday. Includes Juneteenth.
 // Movable holidays: third Monday Jan/Feb, last Monday May, first Monday Sep,
 // second Monday Oct, fourth Thursday Nov. No ad hoc proclamations or local closures.
-// The 2028 New Year's Saturday observance is deliberately in calendar year 2027.
-export const federalHolidays: Readonly<Record<string, Holiday>> = Object.fromEntries([
-  ['2026-01-01', "New Year's Day"],
-  ['2026-01-19', 'Martin Luther King Jr. Day'],
-  ['2026-02-16', "Washington's Birthday"],
-  ['2026-05-25', 'Memorial Day'],
-  ['2026-06-19', 'Juneteenth'],
-  ['2026-07-03', 'Independence Day (observed)'],
-  ['2026-07-04', 'Independence Day'],
-  ['2026-09-07', 'Labor Day'],
-  ['2026-10-12', 'Columbus Day'],
-  ['2026-11-11', 'Veterans Day'],
-  ['2026-11-26', 'Thanksgiving Day'],
-  ['2026-12-25', 'Christmas Day'],
-  ['2027-01-01', "New Year's Day"],
-  ['2027-01-18', 'Martin Luther King Jr. Day'],
-  ['2027-02-15', "Washington's Birthday"],
-  ['2027-05-31', 'Memorial Day'],
-  ['2027-06-18', 'Juneteenth (observed)'],
-  ['2027-06-19', 'Juneteenth'],
-  ['2027-07-04', 'Independence Day'],
-  ['2027-07-05', 'Independence Day (observed)'],
-  ['2027-09-06', 'Labor Day'],
-  ['2027-10-11', 'Columbus Day'],
-  ['2027-11-11', 'Veterans Day'],
-  ['2027-11-25', 'Thanksgiving Day'],
-  ['2027-12-24', 'Christmas Day (observed)'],
-  ['2027-12-25', 'Christmas Day'],
-  ['2027-12-31', "New Year's Day 2028 (observed)"],
-  ['2028-01-01', "New Year's Day"],
-  ['2028-01-17', 'Martin Luther King Jr. Day'],
-  ['2028-02-21', "Washington's Birthday"],
-  ['2028-05-29', 'Memorial Day'],
-  ['2028-06-19', 'Juneteenth'],
-  ['2028-07-04', 'Independence Day'],
-  ['2028-09-04', 'Labor Day'],
-  ['2028-10-09', 'Columbus Day'],
-  ['2028-11-10', 'Veterans Day (observed)'],
-  ['2028-11-11', 'Veterans Day'],
-  ['2028-11-23', 'Thanksgiving Day'],
-  ['2028-12-25', 'Christmas Day'],
-].map(([date, name]) => [date, { name, citation: { ruleId: 'usc:5-6103', subdivision: '(a), (b)' } }]));
+// A Saturday New Year's observance belongs to the preceding calendar year.
+function dateInYear(year: number, month: number, day: number): string {
+  return new Date(Date.UTC(year, month - 1, day)).toISOString().slice(0, 10);
+}
+
+function nthWeekday(year: number, month: number, dayOfWeek: number, occurrence: number): string {
+  const first = dateInYear(year, month, 1);
+  return addDays(first, (dayOfWeek - weekday(first) + 7) % 7 + (occurrence - 1) * 7);
+}
+
+function generateFederalHolidays(): Record<string, Holiday> {
+  const holidays: Record<string, Holiday> = {};
+  const citation = { ruleId: 'usc:5-6103', subdivision: '(a), (b)' };
+  for (let year = 2024; year <= 2030; year++) {
+    const fixed = [
+      [1, 1, "New Year's Day"],
+      [6, 19, 'Juneteenth'],
+      [7, 4, 'Independence Day'],
+      [11, 11, 'Veterans Day'],
+      [12, 25, 'Christmas Day'],
+    ] as const;
+    for (const [month, day, name] of fixed) {
+      const date = dateInYear(year, month, day);
+      holidays[date] = { name, citation };
+      const dayOfWeek = weekday(date);
+      if (dayOfWeek === 6 || dayOfWeek === 0) {
+        const observed = addDays(date, dayOfWeek === 6 ? -1 : 1);
+        const observedName = observed.slice(0, 4) === String(year) ? name : `${name} ${year}`;
+        holidays[observed] = { name: `${observedName} (observed)`, citation };
+      }
+    }
+    const may31 = dateInYear(year, 5, 31);
+    const movable = [
+      [nthWeekday(year, 1, 1, 3), 'Martin Luther King Jr. Day'],
+      [nthWeekday(year, 2, 1, 3), "Washington's Birthday"],
+      [addDays(may31, -((weekday(may31) + 6) % 7)), 'Memorial Day'],
+      [nthWeekday(year, 9, 1, 1), 'Labor Day'],
+      [nthWeekday(year, 10, 1, 2), 'Columbus Day'],
+      [nthWeekday(year, 11, 4, 4), 'Thanksgiving Day'],
+    ];
+    for (const [date, name] of movable) holidays[date] = { name, citation };
+  }
+  return holidays;
+}
+
+export const federalHolidays: Readonly<Record<string, Holiday>> = generateFederalHolidays();

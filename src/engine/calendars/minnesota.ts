@@ -1,7 +1,9 @@
+import { addDays } from '../dates';
 import { federalHolidays, type Holiday } from './federal';
 
-// Minn. Stat. 645.44 subd. 5(a): the eleven national holiday dates and fixed-date
-// weekend observances coincide in 2026–2028. Saturday is observed on Friday.
+// Minn. Stat. 645.44 subd. 5(a): the eleven national holiday dates share the
+// same rules as the federal calendar throughout 2024–2030. Retain actual dates;
+// observe Saturday on the preceding Friday and Sunday on the following Monday.
 // https://www.revisor.mn.gov/statutes/cite/645.44#stat.645.44.5
 //
 // Friday after Thanksgiving: adopted as a Minnesota legal holiday. Although
@@ -20,7 +22,7 @@ export const minnesotaHolidays: Readonly<Record<string, Holiday>> = {
       .replace("Washington's Birthday", "Washington's and Lincoln's Birthday"),
     citation,
   }])),
-  '2026-11-27': { name: 'Friday after Thanksgiving', citation },
-  '2027-11-26': { name: 'Friday after Thanksgiving', citation },
-  '2028-11-24': { name: 'Friday after Thanksgiving', citation },
+  ...Object.fromEntries(Object.entries(federalHolidays)
+    .filter(([, holiday]) => holiday.name === 'Thanksgiving Day')
+    .map(([date]) => [addDays(date, 1), { name: 'Friday after Thanksgiving', citation }])),
 };

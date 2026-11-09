@@ -36,5 +36,5 @@ export function dayName(date: string): string {
 }
 
 export function calendarCovered(date: string): boolean {
-  return date >= '2026-01-01' && date <= '2028-12-31';
+  return date >= '2024-01-01' && date <= '2030-12-31';
 }

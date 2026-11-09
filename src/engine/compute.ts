@@ -74,7 +74,7 @@ export function computeDeadline(input: DeadlineInput): DeadlineResult {
     return finish(date, steps, citation);
   }
 
-  const outsideCalendar = () => uncomputable('The required calendar date is outside the encoded 2026–2028 holiday calendars. Verify independently.', steps);
+  const outsideCalendar = () => uncomputable('The required calendar date is outside the encoded 2024–2030 holiday calendars. Verify independently.', steps);
   if (!calendarCovered(input.trigger.date)) return outsideCalendar();
 
   if (rule.kind === 'patent') {

@@ -115,7 +115,7 @@ describe('ordered counting and service steps', () => {
   });
 });
 
-describe('forum holiday calendars, 2026–2028', () => {
+describe('forum holiday calendars, 2024–2030', () => {
   // 5 USC 6103; FRCP 6(a)(6); Minn. Stat. 645.44 subd. 5; Minn. R. Civ. P. 6.01(d).
   it('rolls federal Thanksgiving to Friday and Minnesota Thanksgiving past its Friday holiday', () => {
     expect(computed(compute('frcp-12a-answer', '2026-11-05')).dueDate).toBe('2026-11-27');
@@ -133,6 +133,18 @@ describe('forum holiday calendars, 2026–2028', () => {
     const saturday = computed(compute(id, '2027-05-29'));
     expect(saturday.dueDate).toBe('2027-06-21');
     expect(saturday.steps.some(step => step.label.includes('Juneteenth'))).toBe(true);
+  });
+
+  it.each(['frcp-12a-answer', 'mn-civ-12-answer'])('%s observes Sunday Independence Day 2027 on Monday July 5', id => {
+    const result = computed(compute(id, '2027-06-14'));
+    expect(result.dueDate).toBe('2027-07-06');
+    expect(result.steps.some(step => step.label.includes('2027-07-05: Independence Day (observed)'))).toBe(true);
+  });
+
+  it.each(['frcp-12a-answer', 'mn-civ-12-answer'])('%s computes across 2028 into 2029 and at both supported endpoints', id => {
+    expect(computed(compute(id, '2028-12-20')).dueDate).toBe('2029-01-10');
+    expect(computed(compute(id, '2024-01-01')).dueDate).toBe('2024-01-22');
+    expect(computed(compute(id, '2030-12-10')).dueDate).toBe('2030-12-31');
   });
 
   it.each(['frcp-12a-answer', 'mn-civ-12-answer'])('%s includes 2028 leap days and observed New Year across the year boundary', id => {
@@ -173,6 +185,8 @@ describe('bankruptcy, patents, employment, notice and agreement dates', () => {
   // 42 USC 2000e-5(e)(1); EEOC next-business-day interpretation:
   // https://www.eeoc.gov/time-limits-filing-charge
   it('counts the 300-day EEOC window from the act', () => {
+    expect(computed(compute('eeoc-charge', '2025-01-01')).dueDate).toBe('2025-10-28');
+    expect(computed(compute('eeoc-charge', '2025-12-01')).dueDate).toBe('2026-09-28');
     expect(computed(compute('eeoc-charge', '2026-01-01')).dueDate).toBe('2026-10-28');
     expect(computed(compute('eeoc-charge', '2026-01-03')).dueDate).toBe('2026-10-30');
   });
@@ -218,8 +232,19 @@ describe('uncomputable results carry reasons and no due date', () => {
     expect(compute(id, '2026-09-01', assumptions, inputs).status).toBe('uncomputable');
   });
 
-  it('does not manufacture a calendar date from an invalid trigger or an uncovered calendar year', () => {
+  it('does not manufacture a calendar date from an invalid trigger', () => {
     expect(compute('frcp-12a-answer', '2026-02-30').status).toBe('uncomputable');
-    expect(compute('frcp-12a-answer', '2028-12-20').status).toBe('uncomputable');
+  });
+
+  it.each([
+    ['frcp-12a-answer', '2023-12-31'],
+    ['frcp-12a-answer', '2031-01-01'],
+    ['frcp-12a-answer', '2030-12-20'],
+    ['mn-gp-115-dispositive-motion', '2024-01-15'],
+  ])('explains an unsupported trigger or due date for %s from %s', (id, date) => {
+    const result = compute(id, date);
+    expect(result.status).toBe('uncomputable');
+    expect(result).not.toHaveProperty('dueDate');
+    if (result.status === 'uncomputable') expect(result.reason).toContain('2024–2030');
   });
 });
