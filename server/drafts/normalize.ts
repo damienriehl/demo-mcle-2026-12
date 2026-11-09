@@ -77,22 +77,26 @@ async function pdfParagraphs(bytes: Uint8Array): Promise<string[]> {
     throw new DraftInputError('This PDF has no text layer; upload a text PDF or the Word file.');
   }
   const furnitureKey = (text: string) => text.trim().replace(/^(?:Page\s+)?\d+(?:\s+(?:of|\/)\s*\d+)?$/i, '<page-number>');
+  const furniture = pages.map(page => {
+    const positioned = page.filter(line => line.text.trim()).sort((a, b) => b.y - a.y);
+    return new Set([...positioned.slice(0, 2), ...positioned.slice(-2)]);
+  });
   const repeated = new Set<string>();
   if (pages.length > 1) {
-    for (const line of pages[0]) {
+    for (const line of furniture[0]) {
       const key = furnitureKey(line.text);
-      if (key && pages.every(page => page.some(other => furnitureKey(other.text) === key))) repeated.add(key);
+      if (key && furniture.every(lines => [...lines].some(other => furnitureKey(other.text) === key))) repeated.add(key);
     }
   }
   const paragraphs: string[] = [];
   let paragraph = '';
   const flush = () => { if (paragraph) paragraphs.push(paragraph); paragraph = ''; };
   const headingLike = (text: string) => /^[A-Z]/.test(text) && text.length < 100 && !/[.!?;:]$/.test(text);
-  for (const page of pages) {
+  for (const [pageIndex, page] of pages.entries()) {
     let previous: (typeof page)[number] | undefined;
     const left = Math.min(...page.filter(line => line.text.trim()).map(line => line.x));
     for (const line of page) {
-      if (repeated.has(furnitureKey(line.text))) continue;
+      if (furniture[pageIndex].has(line) && repeated.has(furnitureKey(line.text))) continue;
       const text = line.text.trim();
       if (!text) { flush(); continue; }
       const gap = previous && Math.abs(previous.y - line.y) > Math.max(previous.height, line.height) * 2;

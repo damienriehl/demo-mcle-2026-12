@@ -195,7 +195,7 @@ export function createDraftCompareRoutes(options: Options = {}): Hono {
   app.get('/:id/redline.docx', async c => {
     const record = await comparisons.get(c.req.query('matterId') ?? '', c.req.param('id'));
     if (!record) return c.json({ error: 'Unknown comparison.' }, 404);
-    return download(await buildAdviceDocx(record, await comparisons.readDocument(record.matterId, record.comparisonId, 'redline')), `${record.matterId}-redline.docx`);
+    return download(await buildAdviceDocx(record, await comparisons.readDocument(record.matterId, record.comparisonId, 'redline'), c.req.query('party')), `${record.matterId}-redline.docx`);
   });
   app.post('/:id/counter.docx', async c => {
     const body = counterBody.safeParse(await c.req.json());

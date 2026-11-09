@@ -25,7 +25,7 @@ async function advised() {
 describe('draft Word downloads', () => {
   it('downloads comments with the verdict, reason, and author while retaining every revision', async () => {
     const c = await advised();
-    const response = await c.app.request(`/${c.id}/redline.docx?matterId=${c.matterId}`);
+    const response = await c.app.request(`/${c.id}/redline.docx?matterId=${c.matterId}&party=${encodeURIComponent(buyer)}`);
     expect(response.status).toBe(200);
     expect(response.headers.get('Content-Disposition')).toContain(`${c.matterId}-redline.docx`);
     expect(response.headers.get('Content-Type')).toBe('application/vnd.openxmlformats-officedocument.wordprocessingml.document');
@@ -43,11 +43,18 @@ describe('draft Word downloads', () => {
     const later = await word(sections.map((s, i) => s + (i === 2 ? `\n\n${clause}` : '')).join('\n\n'));
     const compared = await compareDrafts(earlier, later);
     expect(compared.changes[0].kind).toBe('move');
-    const record: ComparisonRecord = { schemaVersion: 1, comparisonId: 'move', matterId: 'fictional', createdAt: new Date().toISOString(), earlier: { filename: 'earlier.txt', format: 'txt', text: earlier.text }, later: { filename: 'later.txt', format: 'txt', text: later.text }, formattingCompared: false, changes: compared.changes, tags: [], parties: [], assessments: [{ changeId: 'c1', verdict: 'neutral', reason: 'The clause moved.', quote: clause, confidence: 'high', verified: true }] };
-    const bytes = await buildAdviceDocx(record, compared.redline);
+    const record: ComparisonRecord = { schemaVersion: 1, comparisonId: 'move', party: buyer, matterId: 'fictional', createdAt: new Date().toISOString(), earlier: { filename: 'earlier.txt', format: 'txt', text: earlier.text }, later: { filename: 'later.txt', format: 'txt', text: later.text }, formattingCompared: false, changes: compared.changes, tags: [], parties: [], assessments: [{ changeId: 'c1', verdict: 'neutral', reason: 'The clause moved.', quote: clause, confidence: 'high', verified: true }] };
+    const bytes = await buildAdviceDocx(record, compared.redline, buyer);
     expect(await revisions(bytes)).toEqual(await revisions(compared.redline));
     expect((await getRevisions(bytes)).filter(r => r.type === 'move')).toHaveLength(1);
     expect(await getComments(bytes)).toHaveLength(1);
+  });
+
+  it('returns the plain redline when the saved party has no assessments', async () => {
+    const c = await advised();
+    const record = (await createComparisonStore(c.comparisonsDir).get(c.matterId, c.id))!;
+    const redline = new Uint8Array(readFileSync(join(c.comparisonsDir, c.matterId, c.id, 'redline.docx')));
+    expect(await buildAdviceDocx({ ...record, assessments: [] }, redline, buyer)).toBe(redline);
   });
 
   it('compares an applied carve-out against the later draft as one counsel-authored insertion', async () => {

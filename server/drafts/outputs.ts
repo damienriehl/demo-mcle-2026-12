@@ -5,7 +5,8 @@ import type { ComparisonRecord } from './types';
 
 const labels = { harms: 'Harms', neutral: 'Neutral', helps: 'Helps' };
 
-export async function buildAdviceDocx(record: ComparisonRecord, redline: Uint8Array): Promise<Uint8Array> {
+export async function buildAdviceDocx(record: ComparisonRecord, redline: Uint8Array, party?: string): Promise<Uint8Array> {
+  if (!party || party !== record.party || !record.assessments.length) return redline;
   await ensureEngine();
   const session = openDocxSession(redline);
   try {

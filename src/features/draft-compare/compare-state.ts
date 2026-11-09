@@ -102,7 +102,7 @@ export async function downloadDraft(id: string, counter: boolean) {
   const state = get(id);
   const base = `/api/features/draft-compare/${encodeURIComponent(state.redline!.comparisonId)}`;
   try {
-    const response = await fetch(counter ? `${base}/counter.docx` : `${base}/redline.docx?matterId=${encodeURIComponent(id)}`, counter ? {
+    const response = await fetch(counter ? `${base}/counter.docx` : `${base}/redline.docx?matterId=${encodeURIComponent(id)}&party=${encodeURIComponent(state.party)}`, counter ? {
       method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ matterId: id, changeIds: state.applied }),
     } : undefined);
     if (!response.ok) throw new Error((await response.json()).error);

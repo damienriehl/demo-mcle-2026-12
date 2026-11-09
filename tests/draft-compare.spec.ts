@@ -224,6 +224,20 @@ test('changing party clears cards, memo and applied suggestions and allows fresh
   await expect(page.getByRole('button', { name: 'Run advice', exact: true })).toBeEnabled();
 });
 
+test('redline download sends the newly selected party after clearing previous advice', async ({ page }) => {
+  await open(page);
+  await advise(page);
+  await page.getByRole('radio', { name: /Copperleaf/ }).check();
+  await expect(page.getByRole('region', { name: 'Advice memo' })).toHaveCount(0);
+  const request = page.waitForRequest(request => new URL(request.url()).pathname.endsWith('/redline.docx'));
+  const download = page.waitForEvent('download');
+  await page.getByRole('button', { name: 'Download redline', exact: true }).click();
+  const query = new URL((await request).url()).searchParams;
+  expect(query.get('matterId')).toBe(initial.id);
+  expect(query.get('party')).toBe('Copperleaf');
+  expect((await download).suggestedFilename()).toBe(`${initial.id}-redline.docx`);
+});
+
 test('unverified advice has no apply and needs-key advice keeps the redline', async ({ page }) => {
   await open(page);
   await advise(page);

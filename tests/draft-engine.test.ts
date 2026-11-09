@@ -27,16 +27,18 @@ async function word(text: string, filename = 'draft.txt') {
 }
 
 // A small real PDF with positioned lines, including blank lines and page furniture.
-function pdf(pages: string[][]): Uint8Array {
+function pdf(pages: (string | { text: string; y: number })[][]): Uint8Array {
   const objects = ['<< /Type /Catalog /Pages 2 0 R >>', '', '<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>'];
   const kids: string[] = [];
   for (const lines of pages) {
     const pageId = objects.length + 1;
     kids.push(`${pageId} 0 R`);
-    const content = lines.map((line, i) => {
+    const content = lines.map((value, i) => {
+      const line = typeof value === 'string' ? value : value.text;
+      const y = typeof value === 'string' ? 740 - i * 18 : value.y;
       const indent = line.length - line.trimStart().length;
       const escaped = line.trimStart().replace(/([\\()])/g, '\\$1');
-      return `BT /F1 12 Tf 1 0 0 1 ${40 + indent * 6} ${740 - i * 18} Tm (${escaped}) Tj ET`;
+      return `BT /F1 12 Tf 1 0 0 1 ${40 + indent * 6} ${y} Tm (${escaped}) Tj ET`;
     }).join('\n');
     objects.push(`<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R >> >> /Contents ${pageId + 1} 0 R >>`,
       `<< /Length ${content.length} >>\nstream\n${content}\nendstream`);
@@ -168,6 +170,36 @@ describe('draft engine', () => {
     expect(plain.formattingCompared).toBe(false);
     expect(plain.changes).toEqual([]);
     expect((await getRevisions(plain.redline)).filter(revision => revision.type === 'format')).toEqual([]);
+  });
+
+  it('keeps repeated mid-body payment sentences while removing positioned running furniture', async () => {
+    const payment = 'The buyer shall pay within thirty days.';
+    const pages = [1, 2].map(page => [
+      // Deliberately emit the footer first: furniture is determined by y, not stream order.
+      { text: `Page ${page}`, y: 40 },
+      { text: 'DRAFT AGREEMENT', y: 750 },
+      { text: `Section ${page}. Payment`, y: page === 1 ? 700 : 760 },
+      { text: `Delivery ${page} is due.`, y: 650 },
+      { text: payment, y: 600 },
+      { text: '42', y: 580 },
+      { text: `Receipt ${page} is required.`, y: 550 },
+      { text: `End of section ${page}.`, y: 500 },
+      ...(page === 2 ? [{ text: 'End of document.', y: 20 }] : []),
+    ]);
+    const result = await normalizeDraft({ filename: 'draft.pdf', bytes: pdf(pages) });
+    expect(result.text.split(payment)).toHaveLength(3);
+    expect(result.text.split('42')).toHaveLength(3);
+    expect(result.text).not.toContain('DRAFT AGREEMENT');
+    expect(result.text).not.toMatch(/Page [12]/);
+  });
+
+  it('keeps a repeated sentence when it is furniture on only one page', async () => {
+    const sentence = 'The buyer shall pay within thirty days.';
+    const result = await normalizeDraft({ filename: 'draft.pdf', bytes: pdf([
+      [sentence, 'First section', 'Delivery is due.', 'Receipt is required.', 'End of first section.'],
+      ['Second section', 'Delivery is complete.', sentence, 'Receipt is confirmed.', 'End of second section.'],
+    ]) });
+    expect(result.text.split(sentence)).toHaveLength(3);
   });
 
   it('rebuilds wrapped PDF paragraphs, removes repeated headers and page numbers, and compares only authored edits', async () => {

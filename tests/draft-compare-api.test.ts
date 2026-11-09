@@ -89,6 +89,23 @@ describe('draft compare HTTP flow', () => {
     expect(record.assessments).toEqual(advised.slice(0, 2).map(event => event.assessment));
   });
 
+  it.each([undefined, seller, buyer])('adds redline advice comments only for the saved party (requested: %s)', async party => {
+    const c = context();
+    const id = (await events(await upload(c)))[0].comparisonId;
+    const advised = await events(await json(c, `/${id}/advise`, { matterId: c.matterId, party: buyer }));
+    const assessments = advised.filter(event => event.type === 'assessment');
+    expect(assessments.length).toBeGreaterThan(0);
+    const query = new URLSearchParams({ matterId: c.matterId });
+    if (party !== undefined) query.set('party', party);
+    const response = await c.app.request(`/${id}/redline.docx?${query}`);
+    expect(response.status).toBe(200);
+    expect(response.headers.get('Content-Disposition')).toContain(`${c.matterId}-redline.docx`);
+    const bytes = new Uint8Array(await response.arrayBuffer());
+    expect(await getComments(bytes)).toHaveLength(party === buyer ? assessments.length : 0);
+    expect(await getRevisions(bytes)).not.toHaveLength(0);
+    if (party !== buyer) expect(Buffer.from(bytes)).toEqual(readFileSync(join(c.comparisonsDir, c.matterId, id, 'redline.docx')));
+  });
+
   it('keeps the first duplicate assessment in SSE, stored advice, comments and counter-language', async () => {
     const first = analysis().assessments[0];
     const duplicate = { ...first, verdict: 'helps', reason: 'Later duplicate', counter: { ...first.counter, replace: 'direct damages, except gross negligence' } };
@@ -100,7 +117,7 @@ describe('draft compare HTTP flow', () => {
     expect(advised[0].assessment).toMatchObject({ ...first, verified: true });
     const record = await (await c.app.request(`/${id}?matterId=${c.matterId}`)).json();
     expect(record.assessments).toEqual([advised[0].assessment]);
-    const redline = await c.app.request(`/${id}/redline.docx?matterId=${c.matterId}`);
+    const redline = await c.app.request(`/${id}/redline.docx?matterId=${c.matterId}&party=${encodeURIComponent(buyer)}`);
     expect(await getComments(new Uint8Array(await redline.arrayBuffer()))).toEqual([
       expect.objectContaining({ text: `Harms — ${first.reason}` }),
     ]);
