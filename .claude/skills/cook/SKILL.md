@@ -147,6 +147,9 @@ feature: the crowd's feature is built live, and this skill ships no primer featu
 For behavior-bearing code, first add a focused test using the repository's existing
 `tests/` discovery and observe it fail for the intended behavior; then implement.
 These focused test files are the only additions outside the feature paths above.
+Browser tests stub the `/api/events` stream with test matters instead of writing
+`data/matters.json`, which other suites share. A server route that calls the model
+uses automatic tool choice; this model rejects a forced tool choice.
 Test the promised interaction, with concrete inputs and expected output; do not
 invent extra failure paths or edge-case handling. Run `npm run typecheck`,
 `npm test`, and `npm run e2e` (use relevant test-file filters where appropriate).
