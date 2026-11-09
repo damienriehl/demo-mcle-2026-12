@@ -1,0 +1,76 @@
+{
+  "party": "Quorrelith Components LLC",
+  "assessments": [
+    {
+      "changeId": "c1",
+      "verdict": "harms",
+      "reason": "Quorrelith is Buyer; the deposit rises from $240,000 to $360,000, so more of its cash is tied up in escrow at signing. The refund right is unchanged (\"returned if a closing condition fails without Buyer's breach\"), but the larger sum is exposed if a dispute arises over breach.",
+      "quote": "Buyer shall deposit $360,000 with the jointly selected escrow holder upon execution.",
+      "confidence": "high",
+      "counter": {
+        "find": "Buyer shall deposit $360,000",
+        "replace": "Buyer shall deposit $240,000",
+        "effect": "Restores the lower deposit."
+      }
+    },
+    {
+      "changeId": "c2",
+      "verdict": "neutral",
+      "reason": "The confidentiality text is identical and only moves from Section 7 to Section 3. The mutual duties are unchanged, so there is no substantive effect on Buyer.",
+      "quote": "Each party shall keep the other party's nonpublic business information confidential and use it solely to evaluate or perform this transaction.",
+      "confidence": "high"
+    },
+    {
+      "changeId": "c3",
+      "verdict": "harms",
+      "reason": "Buyer's closing condition narrows from all required consents to only those for larger contracts. Buyer may have to close without consents on contracts of $50,000 or less in annual charges, which weakens its walk-away protection.",
+      "quote": "receipt of contract assignment consents for contracts exceeding $50,000 in annual charges",
+      "confidence": "high",
+      "counter": {
+        "find": "receipt of contract assignment consents for contracts exceeding $50,000 in annual charges",
+        "replace": "receipt of all required contract assignment consents",
+        "effect": "Restores the full consent condition."
+      }
+    },
+    {
+      "changeId": "c4",
+      "verdict": "helps",
+      "reason": "The survival period for Seller's representations extends from eighteen to twenty-four months. Buyer gets a longer window to bring claims for breaches of the title, authority and inventory representations.",
+      "quote": "The representations survive for twenty-four months after closing.",
+      "confidence": "high"
+    },
+    {
+      "changeId": "c5",
+      "verdict": "harms",
+      "reason": "Seller's indemnity cap drops from the full Purchase Price to 10% of it, about $240,000. This sharply limits Buyer's recovery for breaches and retained liabilities.",
+      "quote": "Seller's aggregate indemnity liability is capped at 10% of the Purchase Price.",
+      "confidence": "high",
+      "counter": {
+        "find": "is capped at 10% of the Purchase Price",
+        "replace": "shall not exceed the Purchase Price",
+        "effect": "Restores the original cap."
+      }
+    },
+    {
+      "changeId": "c6",
+      "verdict": "helps",
+      "reason": "Seller's free transition support doubles from forty to eighty staff hours. Buyer gets more training on the equipment at no extra charge.",
+      "quote": "up to eighty staff hours without additional charge",
+      "confidence": "high"
+    },
+    {
+      "changeId": "c7",
+      "verdict": "neutral",
+      "reason": "The change from \"after business hours\" to \"outside business hours\" is a wording clarification. It may also cover weekends, but it applies equally to both parties and the effect is minor.",
+      "quote": "A notice received outside business hours is effective the next business day.",
+      "confidence": "medium"
+    },
+    {
+      "changeId": "c8",
+      "verdict": "neutral",
+      "reason": "Changing \"treated as an original\" to \"deemed an original\" is a stylistic change with no substantive effect.",
+      "quote": "each deemed an original",
+      "confidence": "high"
+    }
+  ]
+}

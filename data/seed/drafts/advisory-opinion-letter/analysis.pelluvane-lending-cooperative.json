@@ -1,0 +1,62 @@
+{
+  "party": "Pelluvane Lending Cooperative",
+  "assessments": [
+    {
+      "changeId": "c1",
+      "verdict": "neutral",
+      "reason": "The paragraph is moved from Section 6 to Section 1 with identical wording: \"expresses no opinion on those subjects.\" The exclusion is unchanged in substance, and it now sits with the scope section, which is arguably clearer.",
+      "quote": "expresses no opinion on those subjects",
+      "confidence": "high"
+    },
+    {
+      "changeId": "c2",
+      "verdict": "harms",
+      "reason": "Counsel now relies on the officer certificate \"without making inquiry of Borrower's responsible managers\" instead of after \"reasonable inquiry\". That weakens the factual diligence behind the opinions. The knowledge qualifier still refers to \"the inquiry expressly described in this section\", and that inquiry is now none, so the qualifier has little content. The lender gets a less reliable opinion.",
+      "quote": "without making inquiry of Borrower's responsible managers",
+      "confidence": "high",
+      "counter": {
+        "find": "without making inquiry of Borrower's responsible managers",
+        "replace": "after making reasonable inquiry of Borrower's responsible managers",
+        "effect": "Restores the diligence standard behind the factual reliance."
+      }
+    },
+    {
+      "changeId": "c3",
+      "verdict": "helps",
+      "reason": "Reliance is extended to Lender's \"subsequent assignees\", which gives Pelluvane more flexibility to sell or assign the facility. Participants and affiliates are still excluded without consent.",
+      "quote": "Lender and its subsequent assignees may rely on this letter",
+      "confidence": "high"
+    },
+    {
+      "changeId": "c4",
+      "verdict": "harms",
+      "reason": "The deadline for notifying Lender of a false closing-date assumption goes from five business days to \"twenty business days\". Lender would learn of problems later and have less time to act.",
+      "quote": "shall notify Lender within twenty business days",
+      "confidence": "high",
+      "counter": {
+        "find": "within twenty business days",
+        "replace": "within five business days",
+        "effect": "Restores the prompt notice period."
+      }
+    },
+    {
+      "changeId": "c5",
+      "verdict": "harms",
+      "reason": "The earlier draft had \"no contractual monetary cap\" on counsel's liability. The later draft caps liability at the fee, so \"aggregate liability to Lender under this letter shall not exceed the fee paid\". That fee is now $5,000 on a $3,000,000 facility. The cap sharply limits Lender's recovery for an inaccurate opinion. The lower fee saves only $3,000.",
+      "quote": "Opinion Counsel's aggregate liability to Lender under this letter shall not exceed the fee paid for preparation and delivery.",
+      "confidence": "high",
+      "counter": {
+        "find": "Opinion Counsel's aggregate liability to Lender under this letter shall not exceed the fee paid for preparation and delivery.",
+        "replace": "There is no contractual monetary cap on Opinion Counsel's liability to Lender under this letter.",
+        "effect": "Removes the fee-based liability cap."
+      }
+    },
+    {
+      "changeId": "c6",
+      "verdict": "neutral",
+      "reason": "The change from \"retained\" to \"kept\" as originals is a stylistic substitution with no substantive effect.",
+      "quote": "Electronic copies may be kept as originals.",
+      "confidence": "high"
+    }
+  ]
+}

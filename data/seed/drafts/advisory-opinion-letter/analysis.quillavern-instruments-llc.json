@@ -1,0 +1,47 @@
+{
+  "party": "Quillavern Instruments LLC",
+  "assessments": [
+    {
+      "changeId": "c1",
+      "verdict": "neutral",
+      "reason": "The paragraph is moved from Section 6 to Section 1 with identical text: \"expresses no opinion on those subjects.\" Substance is unchanged for Quillavern, the Borrower.",
+      "quote": "expresses no opinion on those subjects",
+      "confidence": "high"
+    },
+    {
+      "changeId": "c2",
+      "verdict": "harms",
+      "reason": "Opinion Counsel now relies on the officer certificate \"without making inquiry of Borrower's responsible managers\". Borrower's certificate becomes the sole factual basis, which raises the stakes on Borrower's own statements. It also weakens the opinion's credibility with Lender, and the knowledge definition is tied to an inquiry that no longer exists. The change from \"principally\" to \"primarily\" is immaterial.",
+      "quote": "without making inquiry of Borrower's responsible managers",
+      "confidence": "medium"
+    },
+    {
+      "changeId": "c3",
+      "verdict": "neutral",
+      "reason": "Adding \"subsequent assignees\" as relying parties widens Lender's side of the facility. Quillavern is the Borrower and is not Opinion Counsel's client for reliance purposes. It gains little and loses little. Broader assignment could ease Lender's syndication, but it does not change Borrower's obligations.",
+      "quote": "Lender and its subsequent assignees may rely on this letter",
+      "confidence": "low"
+    },
+    {
+      "changeId": "c4",
+      "verdict": "neutral",
+      "reason": "The notice period grows from five to \"twenty business days\". This only affects the timing of Opinion Counsel's notice to Lender. Borrower is barely affected, though slower notice of a false assumption could delay a cure.",
+      "quote": "within twenty business days",
+      "confidence": "low"
+    },
+    {
+      "changeId": "c5",
+      "verdict": "helps",
+      "reason": "The fee drops to $5,000. Quillavern is Opinion Counsel's client and the facility's closing costs likely fall on it indirectly. The liability cap, \"shall not exceed the fee paid\", protects its counsel, not Borrower. The lower fee is a small net benefit.",
+      "quote": "The agreed fee for preparation and delivery is $5,000",
+      "confidence": "low"
+    },
+    {
+      "changeId": "c6",
+      "verdict": "neutral",
+      "reason": "\"retained\" becomes \"kept\", which is a wording change with no substantive effect.",
+      "quote": "Electronic copies may be kept as originals.",
+      "confidence": "high"
+    }
+  ]
+}

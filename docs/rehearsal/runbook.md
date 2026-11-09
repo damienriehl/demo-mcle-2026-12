@@ -45,6 +45,24 @@ The session runs 90 minutes. The scheduling-order segment takes 10 of them, and 
 
 If someone in the room offers an order, use it only if it is a public court record; open it as a new public-record matter, never on a fictional matter.
 
+## Draft Compare beat
+
+1. Open the **Asset purchase — Prairie Fen Studios LLC** matter and its **Compare drafts** tab.
+   Choose **Vellunspur Workshop Asset Purchase** under **Try a sample pair**, then click **Compare**.
+2. Point out the moved confidentiality clause and the FOLIO tags. Confirm
+   **Quorrelith Components LLC**, the buyer, under **Who do you represent?**, then click **Run advice**.
+3. Open the **Advice memo** and click the Harms item beginning **Seller's indemnity cap falls**.
+   The card explains that the cap drops from the full Purchase Price to 10%.
+4. Read the counter-language: replace **is capped at 10% of the Purchase Price** with
+   **shall not exceed the Purchase Price**. Click **Apply** to restore the original cap.
+5. Click **Download redline** to show tracked changes, the linked move, and Word comments.
+   Click **Download counter-draft** to show only the applied cap edit, tracked as
+   **Quorrelith Components LLC counsel**.
+
+With no key, this bundled pair replays its canned parties and advice automatically; the comparison
+and both Word downloads still run on the server. Keep the bundled drafts and their canned results
+together. Custom drafts need a key for party detection and advice.
+
 ## Sample rambles (one per practice area)
 
 - **Litigation:** "So a fabricator in Minneapolis says our client stiffed them on an exhibit build, they served the complaint in person last Tuesday, it's Hennepin County…"

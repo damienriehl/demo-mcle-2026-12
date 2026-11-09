@@ -7,6 +7,7 @@ Direct dependencies, pinned to exact versions in `package.json`. Licenses read f
 | @anthropic-ai/sdk | 1.6.0 | Apache-2.0 | runtime |
 | @hono/node-server | 2.1.6 | MIT | runtime |
 | cheerio | 1.2.0 | MIT | runtime |
+| docxodus | 15.1.0 | MIT (bundles a .NET WebAssembly runtime, MIT) | runtime |
 | hono | 4.13.17 | MIT | runtime |
 | react | 19.3.1 | MIT | runtime |
 | react-dom | 19.3.1 | MIT | runtime |
@@ -33,3 +34,10 @@ Orders by federal judges are U.S. government works in the public domain. These u
 | Pulling Guad Productions, LLC d/b/a The Arena League v. Jacob Lambert et al. | D. Minn. 0:26-cv-02305-PJS-LIB, Doc. 52, Oct. 28, 2026 | [Scheduling order (PDF)](https://storage.courtlistener.com/recap/gov.uscourts.mnd.233422/gov.uscourts.mnd.233422.52.0.pdf) |
 | Old National Bank v. Sarah Adams et al. | D. Minn. 0:25-cv-04636-PJS-LIB, Doc. 86, Mar. 30, 2026 | [Scheduling order (PDF)](https://storage.courtlistener.com/recap/gov.uscourts.mnd.229698/gov.uscourts.mnd.229698.86.0.pdf) |
 | Northwoods League, Inc. v. Kokomo Baseball, LLC et al. | D. Minn. 0:25-cv-03345-LMP-ECW, Doc. 24, Nov. 5, 2025 | [Scheduling order (PDF)](https://storage.courtlistener.com/recap/gov.uscourts.mnd.227300/gov.uscourts.mnd.227300.24.0.pdf) |
+
+## Ontology data
+
+| Source | Version | License | Use |
+| --- | --- | --- | --- |
+| FOLIO (Federated Open Legal Information Ontology), by Damien Riehl and contributors, https://github.com/damienriehl/FOLIO | commit f9c5152 (2026-10-20) | CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/) | `data/folio/folio-index.json`: adapted into an offline label and top-level ancestry index; definitions and deprecated classes omitted |
+| folio-resolve alias/homonym blocklist, copyright Damien Riehl | 0.5.0 | MIT (notice kept in `data/folio/alias-blocklist.json`) | `data/folio/alias-blocklist.json` |

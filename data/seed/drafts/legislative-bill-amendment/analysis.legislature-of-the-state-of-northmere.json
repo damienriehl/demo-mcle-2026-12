@@ -1,0 +1,54 @@
+{
+  "party": "Legislature of the State of Northmere",
+  "assessments": [
+    {
+      "changeId": "c1",
+      "verdict": "helps",
+      "reason": "Section 1 defines a ledger as \"a monthly public statement\", so the earlier \"every calendar quarter\" conflicted with it. The later \"every calendar month\" removes that inconsistency and gives the legislature the more frequent reporting the definition implies.",
+      "quote": "Each participating provider shall publish a ledger every calendar month.",
+      "confidence": "medium"
+    },
+    {
+      "changeId": "c2",
+      "verdict": "neutral",
+      "reason": "The retention paragraph is identical in both drafts. It only moves from Section 4 to Section 8, where it fits less well, but the substance is unchanged.",
+      "quote": "A participating provider shall retain the worksheets supporting each public ledger for three years after publication.",
+      "confidence": "medium"
+    },
+    {
+      "changeId": "c3",
+      "verdict": "neutral",
+      "reason": "The per-provider cap falls from $120,000 to $60,000. This lowers fiscal exposure against the $900,000 appropriation, but it may also weaken the incentive to participate. The effect on the legislature is mixed.",
+      "quote": "up to $60,000 per provider",
+      "confidence": "low"
+    },
+    {
+      "changeId": "c4",
+      "verdict": "harms",
+      "reason": "The Office's required notice doubles to twenty business days, which delays oversight. The provider's correction period shrinks to ten days, which may be unrealistic and produce more disputes. Together these make the verification scheme less workable.",
+      "quote": "upon twenty business days' written notice",
+      "confidence": "medium"
+    },
+    {
+      "changeId": "c5",
+      "verdict": "harms",
+      "reason": "The monthly assessment cap falls from $500 to $100. That weakens the enforcement deterrent, particularly alongside the shortened ten-day correction period, so noncompliance becomes cheaper.",
+      "quote": "may assess up to $100 for each month",
+      "confidence": "medium"
+    },
+    {
+      "changeId": "c6",
+      "verdict": "neutral",
+      "reason": "Changing \"aggregate\" to \"aggregated\" is a stylistic edit with no substantive effect.",
+      "quote": "The review shall use aggregated information",
+      "confidence": "high"
+    },
+    {
+      "changeId": "c7",
+      "verdict": "neutral",
+      "reason": "Changing \"stated\" to \"specified\" is a wording edit with no change in meaning.",
+      "quote": "unless business days are expressly specified",
+      "confidence": "high"
+    }
+  ]
+}

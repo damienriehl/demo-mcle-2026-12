@@ -1,0 +1,17 @@
+{
+  "party": "Fictional Birch Seller",
+  "assessments": [
+    {
+      "changeId": "c1",
+      "verdict": "helps",
+      "confidence": "high",
+      "quote": "direct damages",
+      "reason": "The limit to \"direct damages\" changes liability.",
+      "counter": {
+        "find": "direct damages",
+        "replace": "direct damages, except fraud",
+        "effect": "Preserves recovery for fraud."
+      }
+    }
+  ]
+}

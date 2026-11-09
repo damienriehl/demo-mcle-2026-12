@@ -11,7 +11,25 @@ export default defineConfig({
   testMatch: '**/*.spec.ts',
   reporter: 'list',
   use: { baseURL, trace: 'off' },
-  projects: [{ name: 'chromium', use: { ...devices['Desktop Chrome'], viewport: { width: 1920, height: 1080 } } }],
+  projects: [
+    {
+      name: 'chromium',
+      testIgnore: ['**/draft-compare.spec.ts', '**/draft-compare-e2e.spec.ts'],
+      use: { ...devices['Desktop Chrome'], viewport: { width: 1920, height: 1080 } },
+    },
+    {
+      name: 'chromium-draft-compare',
+      testMatch: '**/draft-compare.spec.ts',
+      dependencies: ['chromium'],
+      use: { ...devices['Desktop Chrome'], viewport: { width: 1920, height: 1080 } },
+    },
+    {
+      name: 'chromium-real-server',
+      testMatch: '**/draft-compare-e2e.spec.ts',
+      dependencies: ['chromium-draft-compare'],
+      use: { ...devices['Desktop Chrome'], viewport: { width: 1920, height: 1080 } },
+    },
+  ],
   webServer: {
     command: `PORT=${port} npm run dev`,
     url: `${localURL}/api/health`,

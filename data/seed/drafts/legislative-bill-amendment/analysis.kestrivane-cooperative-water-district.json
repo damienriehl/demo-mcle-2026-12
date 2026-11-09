@@ -1,0 +1,69 @@
+{
+  "party": "Kestrivane Cooperative Water District",
+  "assessments": [
+    {
+      "changeId": "c1",
+      "verdict": "harms",
+      "reason": "Changing the ledger cadence from \"every calendar quarter\" to \"every calendar month\" triples the District's publication burden as the initial provider, increasing compliance cost and exposure to deficiencies, with no added funding.",
+      "quote": "Each participating provider shall publish a ledger every calendar month.",
+      "confidence": "high",
+      "counter": {
+        "find": "every calendar month",
+        "replace": "every calendar quarter",
+        "effect": "Restores the lighter quarterly reporting burden."
+      }
+    },
+    {
+      "changeId": "c2",
+      "verdict": "neutral",
+      "reason": "The retention paragraph is identical in text and only moved from Section 4 to Section 8; obligations are unchanged: \"retain the worksheets supporting each public ledger for three years\".",
+      "quote": "shall retain the worksheets supporting each public ledger for three years after publication",
+      "confidence": "high"
+    },
+    {
+      "changeId": "c3",
+      "verdict": "harms",
+      "reason": "The reimbursement cap is halved, so the District recovers less of its implementation costs while still having to do the work, including more frequent ledgers.",
+      "quote": "up to $60,000 per provider",
+      "confidence": "high",
+      "counter": {
+        "find": "up to $60,000 per provider",
+        "replace": "up to $120,000 per provider",
+        "effect": "Restores the higher reimbursement cap."
+      }
+    },
+    {
+      "changeId": "c4",
+      "verdict": "harms",
+      "reason": "The correction window shrinks from thirty days to \"ten days\", making it harder to cure deficiencies and raising assessment exposure. The longer notice period of twenty business days gives some prep time but is a minor offset.",
+      "quote": "The provider shall have ten days to correct a substantiated reporting deficiency.",
+      "confidence": "high",
+      "counter": {
+        "find": "have ten days to correct",
+        "replace": "have thirty days to correct",
+        "effect": "Restores the original cure period."
+      }
+    },
+    {
+      "changeId": "c5",
+      "verdict": "helps",
+      "reason": "The maximum monthly assessment falls from $500 to \"up to $100\", reducing the District's financial exposure for uncorrected deficiencies.",
+      "quote": "the Office may assess up to $100 for each month",
+      "confidence": "high"
+    },
+    {
+      "changeId": "c6",
+      "verdict": "neutral",
+      "reason": "Changing \"aggregate\" to \"aggregated\" is a wording tweak with no substantive effect on the District.",
+      "quote": "The review shall use aggregated information",
+      "confidence": "high"
+    },
+    {
+      "changeId": "c7",
+      "verdict": "neutral",
+      "reason": "\"expressly stated\" becomes \"expressly specified\", a stylistic change with no practical effect on how days are counted.",
+      "quote": "unless business days are expressly specified",
+      "confidence": "high"
+    }
+  ]
+}

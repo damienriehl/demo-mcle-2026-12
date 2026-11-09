@@ -4,6 +4,8 @@ Drop a file here named `<slug>.ts` (lowercase letters, digits, dashes) that
 default-exports a Hono app. It mounts at `/api/features/<slug>` on the next
 request; no restart, no registration file.
 
+For an example with a server module, see `draft-compare.ts` and its implementation in `server/drafts/`.
+
 ```ts
 import { Hono } from 'hono';
 import { createClient, modelName, needsKeyResponse } from '../ai';

@@ -1,0 +1,71 @@
+{
+  "party": "Vellunspur Fabrication LLC",
+  "assessments": [
+    {
+      "changeId": "c1",
+      "verdict": "helps",
+      "reason": "A larger escrow deposit ($360,000 vs $240,000) gives Seller more security if Buyer fails to close; it is returned only if \"a closing condition fails without Buyer's breach\".",
+      "quote": "Buyer shall deposit $360,000 with the jointly selected escrow holder upon execution.",
+      "confidence": "medium"
+    },
+    {
+      "changeId": "c2",
+      "verdict": "neutral",
+      "reason": "The confidentiality paragraph is unchanged in text; it moved from Section 7 to Section 3. This has no substantive effect on Seller.",
+      "quote": "Each party shall keep the other party's nonpublic business information confidential",
+      "confidence": "high"
+    },
+    {
+      "changeId": "c3",
+      "verdict": "helps",
+      "reason": "Buyer's closing condition narrows from all consents to only those for contracts over $50,000. This reduces Buyer's walk-away rights and increases closing certainty for Seller.",
+      "quote": "receipt of contract assignment consents for contracts exceeding $50,000 in annual charges",
+      "confidence": "high"
+    },
+    {
+      "changeId": "c4",
+      "verdict": "harms",
+      "reason": "Longer survival of Seller's representations (eighteen to twenty-four months) extends Seller's exposure to indemnity claims.",
+      "quote": "The representations survive for twenty-four months after closing.",
+      "confidence": "high",
+      "counter": {
+        "find": "survive for twenty-four months after closing",
+        "replace": "survive for twelve months after closing",
+        "effect": "Shortens Seller's post-closing exposure period."
+      }
+    },
+    {
+      "changeId": "c5",
+      "verdict": "helps",
+      "reason": "Seller's aggregate indemnity cap falls from the full Purchase Price to 10% of it, sharply limiting Seller's maximum exposure.",
+      "quote": "Seller's aggregate indemnity liability is capped at 10% of the Purchase Price.",
+      "confidence": "high"
+    },
+    {
+      "changeId": "c6",
+      "verdict": "harms",
+      "reason": "Doubling the free instruction hours from forty to eighty increases Seller's uncompensated post-closing burden.",
+      "quote": "for up to eighty staff hours without additional charge",
+      "confidence": "high",
+      "counter": {
+        "find": "up to eighty staff hours without additional charge",
+        "replace": "up to forty staff hours without additional charge",
+        "effect": "Restores the original limit on Seller's unpaid effort."
+      }
+    },
+    {
+      "changeId": "c7",
+      "verdict": "neutral",
+      "reason": "Changing \"after business hours\" to \"outside business hours\" is a minor clarification. It slightly broadens the next-day rule but has no meaningful effect on either party.",
+      "quote": "A notice received outside business hours is effective the next business day.",
+      "confidence": "high"
+    },
+    {
+      "changeId": "c8",
+      "verdict": "neutral",
+      "reason": "Changing \"treated as an original\" to \"deemed an original\" is a stylistic change with no substantive effect.",
+      "quote": "each deemed an original",
+      "confidence": "high"
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "party": "Fictional Alder Buyer",
+  "assessments": [{
+    "changeId": "payment", "verdict": "harms", "confidence": "high",
+    "reason": "Requiring payment \"within 10 days\" reduces the buyer’s time to pay.",
+    "quote": "within 10 days",
+    "counter": { "find": "within 10 days", "replace": "within 30 days", "effect": "Restores the buyer’s payment window." }
+  }]
+}

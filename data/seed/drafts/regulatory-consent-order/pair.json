@@ -1,0 +1,73 @@
+{
+  "title": "Thistlevane Metering Consent Order",
+  "family": "regulatory",
+  "parties": [
+    {
+      "name": "Orivellan Resource Assurance Commission",
+      "role": "regulator"
+    },
+    {
+      "name": "Thistlevane Reclamation LLC",
+      "role": "regulated operator"
+    }
+  ],
+  "matterHint": "regulatory",
+  "intendedChanges": [
+    {
+      "summary": "Shorten the replacement-meter deadline from sixty to thirty days; Operator can counter by excluding documented vendor delays beyond its control.",
+      "section": "Section 2",
+      "harms": "Thistlevane Reclamation LLC",
+      "helps": "Orivellan Resource Assurance Commission",
+      "counterOpportunity": true
+    },
+    {
+      "summary": "Increase reporting frequency from quarterly to monthly.",
+      "section": "Section 3",
+      "harms": "Thistlevane Reclamation LLC",
+      "helps": "Orivellan Resource Assurance Commission",
+      "counterOpportunity": false
+    },
+    {
+      "summary": "Increase contractual inspection notice from five to ten business days while preserving independent statutory powers.",
+      "section": "Section 4",
+      "harms": "Orivellan Resource Assurance Commission",
+      "helps": "Thistlevane Reclamation LLC",
+      "counterOpportunity": false
+    },
+    {
+      "summary": "Reduce the negotiated administrative penalty from $48,000 to $24,000.",
+      "section": "Section 5",
+      "harms": "Orivellan Resource Assurance Commission",
+      "helps": "Thistlevane Reclamation LLC",
+      "counterOpportunity": false
+    },
+    {
+      "summary": "Raise the daily stipulated assessment from $250 to $1,000; Operator can counter with a total cap for a single missed deadline.",
+      "section": "Section 6",
+      "harms": "Thistlevane Reclamation LLC",
+      "helps": "Orivellan Resource Assurance Commission",
+      "counterOpportunity": true
+    },
+    {
+      "summary": "Move the unchanged confidential-information clause from Section 4 to Section 9.",
+      "section": "Section 4 \u2192 Section 9",
+      "harms": "none",
+      "helps": "none",
+      "counterOpportunity": false
+    },
+    {
+      "summary": "Replace keep with retain in the modification-record sentence without changing the duty.",
+      "section": "Section 9",
+      "harms": "none",
+      "helps": "none",
+      "counterOpportunity": false
+    },
+    {
+      "summary": "Clarify the effective-date wording without changing the triggering event.",
+      "section": "Section 10",
+      "harms": "none",
+      "helps": "none",
+      "counterOpportunity": false
+    }
+  ]
+}

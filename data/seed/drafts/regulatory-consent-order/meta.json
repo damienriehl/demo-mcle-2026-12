@@ -1,0 +1,36 @@
+{
+  "key": "07938caa0d2d721ab93e737a205d2ccc3139625579902a57a359bc5f4df8cdf6",
+  "parties": [
+    {
+      "name": "Orivellan Resource Assurance Commission",
+      "role": "Commission; regulator administering the Ledger Code",
+      "isMatterClient": false,
+      "actorIri": "https://folio.openlegalstandard.org/RBKsKSLjVdAm86mHUg8gHf2",
+      "actorLabel": "Regulator"
+    },
+    {
+      "name": "Thistlevane Reclamation LLC",
+      "role": "Operator; respondent",
+      "isMatterClient": false,
+      "actorIri": "https://folio.openlegalstandard.org/R98E2kVwPFwTnP6oxYUt9HR",
+      "actorLabel": "Limited Liability Company"
+    }
+  ],
+  "documentType": {
+    "iri": "https://folio.openlegalstandard.org/RJvItAmZFV8Dj3T9Vxxns6",
+    "label": "Consent Judgment",
+    "family": "regulatory"
+  },
+  "modelTags": [
+    {
+      "iri": "https://folio.openlegalstandard.org/R7Oi8U82iOSGoo7aV3lyutT",
+      "label": "Amended Document",
+      "branch": "Document / Artifact",
+      "draft": "later",
+      "start": 4822,
+      "end": 4948,
+      "text": "A modification requires a written instrument signed by the Commission's authorized official and Operator's authorized manager.",
+      "source": "model"
+    }
+  ]
+}

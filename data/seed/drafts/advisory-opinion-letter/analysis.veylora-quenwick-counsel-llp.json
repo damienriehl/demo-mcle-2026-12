@@ -1,0 +1,57 @@
+{
+  "party": "Veylora & Quenwick Counsel LLP",
+  "assessments": [
+    {
+      "changeId": "c1",
+      "verdict": "neutral",
+      "reason": "The exclusion paragraph is moved from Section 6 to Section 1 with identical text; it still states \"expresses no opinion on those subjects\", so the firm's protection is unchanged and arguably sits better in the scope section.",
+      "quote": "expresses no opinion on those subjects",
+      "confidence": "high"
+    },
+    {
+      "changeId": "c2",
+      "verdict": "harms",
+      "reason": "The later draft says counsel relied on the certificate \"without making inquiry\" of managers. That is an admission that no inquiry was made, which weakens the firm's diligence position. It also makes the knowledge definition, which still refers to \"the inquiry expressly described in this section\", incoherent. \"Primarily\" in place of \"principally\" is immaterial.",
+      "quote": "without making inquiry of Borrower's responsible managers",
+      "confidence": "medium",
+      "counter": {
+        "find": "without making inquiry of Borrower's responsible managers",
+        "replace": "after making reasonable inquiry of Borrower's responsible managers",
+        "effect": "Restores the diligence record and keeps the knowledge definition coherent."
+      }
+    },
+    {
+      "changeId": "c3",
+      "verdict": "harms",
+      "reason": "The later draft lets subsequent assignees rely, which widens the class of potential claimants against the firm, and the firm represents the Borrower, not the Lender. The earlier draft required written consent for assignees.",
+      "quote": "Lender and its subsequent assignees may rely on this letter",
+      "confidence": "high",
+      "counter": {
+        "find": "Lender and its subsequent assignees may rely",
+        "replace": "Only Lender may rely",
+        "effect": "Restores the single-reliance-party limit."
+      }
+    },
+    {
+      "changeId": "c4",
+      "verdict": "harms",
+      "reason": "The notification window is extended from five to twenty business days. This lengthens the period in which the firm could breach its notice duty and be exposed to liability.",
+      "quote": "within twenty business days",
+      "confidence": "medium"
+    },
+    {
+      "changeId": "c5",
+      "verdict": "helps",
+      "reason": "The later draft adds a liability cap equal to the fee, replacing the earlier statement that there is \"no contractual monetary cap\". This is a major exposure reduction for the firm. The lower fee is a minor cost by comparison.",
+      "quote": "aggregate liability to Lender under this letter shall not exceed the fee paid",
+      "confidence": "high"
+    },
+    {
+      "changeId": "c6",
+      "verdict": "neutral",
+      "reason": "Replacing \"retained\" with \"kept\" is a stylistic change with no substantive effect.",
+      "quote": "Electronic copies may be kept as originals.",
+      "confidence": "high"
+    }
+  ]
+}

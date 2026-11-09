@@ -1,0 +1,73 @@
+{
+  "title": "Lumenwhorl Delivery Settlement",
+  "family": "litigation",
+  "parties": [
+    {
+      "name": "Zelmivale Studios LLC",
+      "role": "claimant"
+    },
+    {
+      "name": "Brindlequartz Freight LLC",
+      "role": "respondent"
+    }
+  ],
+  "matterHint": "litigation",
+  "intendedChanges": [
+    {
+      "summary": "Delay payment from fifteen to forty-five days; Claimant can counter with an initial installment due within fifteen days.",
+      "section": "Section 1",
+      "harms": "Zelmivale Studios LLC",
+      "helps": "Brindlequartz Freight LLC",
+      "counterOpportunity": true
+    },
+    {
+      "summary": "Expand the release from the disputed shipment to every pre-execution shipment; Claimant can counter by restoring the disputed-shipment limitation.",
+      "section": "Section 2",
+      "harms": "Zelmivale Studios LLC",
+      "helps": "Brindlequartz Freight LLC",
+      "counterOpportunity": true
+    },
+    {
+      "summary": "Delete the express exclusion for unrelated shipments to align the exclusion sentence with the expanded release.",
+      "section": "Section 2",
+      "harms": "Zelmivale Studios LLC",
+      "helps": "Brindlequartz Freight LLC",
+      "counterOpportunity": false
+    },
+    {
+      "summary": "Accelerate the packaging-check account from thirty days to ten days.",
+      "section": "Section 6",
+      "harms": "Brindlequartz Freight LLC",
+      "helps": "Zelmivale Studios LLC",
+      "counterOpportunity": false
+    },
+    {
+      "summary": "Reduce the payment-default cure period from ten days to three days.",
+      "section": "Section 7",
+      "harms": "Brindlequartz Freight LLC",
+      "helps": "Zelmivale Studios LLC",
+      "counterOpportunity": false
+    },
+    {
+      "summary": "Move the unchanged record-preservation clause from Section 4 to Section 8.",
+      "section": "Section 4 \u2192 Section 8",
+      "harms": "none",
+      "helps": "none",
+      "counterOpportunity": false
+    },
+    {
+      "summary": "Replace contains with states in the integration sentence as a neutral clean-up.",
+      "section": "Section 9",
+      "harms": "none",
+      "helps": "none",
+      "counterOpportunity": false
+    },
+    {
+      "summary": "Replace constitute with form in the counterparts sentence without changing its effect.",
+      "section": "Section 10",
+      "harms": "none",
+      "helps": "none",
+      "counterOpportunity": false
+    }
+  ]
+}

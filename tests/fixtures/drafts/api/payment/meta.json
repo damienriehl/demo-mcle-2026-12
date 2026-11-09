@@ -1,0 +1,36 @@
+{
+  "key": "68e9f927d6bfc091b0309dba84e6c63f30a36d2f4887c6e78f6e7fc4e19180be",
+  "parties": [
+    {
+      "name": "Fictional Alder Buyer",
+      "role": "buyer",
+      "actorIri": "https://folio.openlegalstandard.org/RjM80CC0FA0G2sKxmlbaJF",
+      "actorLabel": "Buyer",
+      "isMatterClient": false
+    },
+    {
+      "name": "Fictional Birch Seller",
+      "role": "seller",
+      "actorIri": "https://folio.openlegalstandard.org/R7kkf8NvitG8hubZUnTwevG",
+      "actorLabel": "Seller",
+      "isMatterClient": false
+    }
+  ],
+  "documentType": {
+    "iri": "https://folio.openlegalstandard.org/RBNZsqQC9ryG9xpmKm812lV",
+    "label": "Purchase Agreement",
+    "family": "transactional"
+  },
+  "modelTags": [
+    {
+      "iri": "https://folio.openlegalstandard.org/RLNlm7nXyJQLJmk8qYnaPQ",
+      "label": "Indemnification",
+      "branch": "Objectives",
+      "draft": "later",
+      "start": 0,
+      "end": 0,
+      "text": "direct damages",
+      "source": "model"
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "key": "13f95d00ac0f89677051d20daac40a3bd6547766b40c474ee54d38408f97532d",
+  "parties": [
+    { "name": "Fictional Alder Buyer", "role": "buyer", "isMatterClient": true },
+    { "name": "Fictional Birch Seller", "role": "seller", "isMatterClient": false }
+  ],
+  "documentType": { "iri": "urn:fictional:purchase-agreement", "label": "Purchase agreement", "family": "transactional" },
+  "modelTags": []
+}

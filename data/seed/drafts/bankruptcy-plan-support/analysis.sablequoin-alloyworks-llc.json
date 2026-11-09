@@ -1,0 +1,59 @@
+{
+  "party": "Sablequoin Alloyworks LLC",
+  "assessments": [
+    {
+      "changeId": "c1",
+      "verdict": "helps",
+      "reason": "Sablequoin is the Debtor, so a smaller creditor payout preserves cash: the distribution falls from \"fifty-five percent of its allowed amount\" to \"forty percent of its allowed amount\".",
+      "quote": "forty percent of its allowed amount",
+      "confidence": "high"
+    },
+    {
+      "changeId": "c2",
+      "verdict": "harms",
+      "reason": "The Debtor must now obtain confirmation in \"seventy-five days\" instead of \"one hundred twenty days\". That is a tighter deadline, and missing it triggers the creditor's termination right, so the Debtor faces more risk.",
+      "quote": "shall obtain a confirmation order within seventy-five days after commencement",
+      "confidence": "high",
+      "counter": {
+        "find": "within seventy-five days after commencement",
+        "replace": "within one hundred twenty days after commencement",
+        "effect": "Restores the longer confirmation timeline for the Debtor."
+      }
+    },
+    {
+      "changeId": "c3",
+      "verdict": "helps",
+      "reason": "The Debtor gets more financing capacity, with the cap rising to \"$2,500,000\" from $1,500,000. The creditor must not oppose financing within that cap, so the Debtor has more liquidity with committed non-opposition.",
+      "quote": "principal not exceeding $2,500,000",
+      "confidence": "medium"
+    },
+    {
+      "changeId": "c4",
+      "verdict": "neutral",
+      "reason": "The confidentiality text is identical and only moved to Section 10. It has no substantive effect on the Debtor.",
+      "quote": "Each party shall keep restructuring forecasts and negotiation communications confidential",
+      "confidence": "high"
+    },
+    {
+      "changeId": "c5",
+      "verdict": "helps",
+      "reason": "The Debtor's reimbursement exposure falls from $50,000 to \"$20,000 in total\". The change from \"state\" to \"explain\" is stylistic.",
+      "quote": "up to $20,000 in total",
+      "confidence": "high"
+    },
+    {
+      "changeId": "c6",
+      "verdict": "helps",
+      "reason": "The Debtor gets a longer cure period of \"fifteen business days\" instead of five before the creditor can terminate for breach. That gives the Debtor more room to fix problems. The cure period also applies to the Debtor's own termination right, but the Debtor is more likely to be the party needing it.",
+      "quote": "fifteen business days to cure",
+      "confidence": "medium"
+    },
+    {
+      "changeId": "c7",
+      "verdict": "neutral",
+      "reason": "Changing \"constitute\" to \"form\" one agreement is only a wording change with no substantive effect.",
+      "quote": "which together form one agreement",
+      "confidence": "high"
+    }
+  ]
+}

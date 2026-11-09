@@ -1,0 +1,123 @@
+{
+  "key": "4b24807feef22d35d1864584b75422c38e70cef52f393b7408a7371e5114f4a1",
+  "parties": [
+    {
+      "name": "Pelluvane Lending Cooperative",
+      "role": "Lender",
+      "isMatterClient": false,
+      "actorIri": "https://folio.openlegalstandard.org/R9OzLGaxH8FUa0QvIz14ZLA",
+      "actorLabel": "Lender"
+    },
+    {
+      "name": "Veylora & Quenwick Counsel LLP",
+      "role": "Opinion Counsel",
+      "isMatterClient": false,
+      "actorIri": "https://folio.openlegalstandard.org/RiRZCIYSrlWbUE4T76ifCF",
+      "actorLabel": "Law Firm"
+    },
+    {
+      "name": "Quillavern Instruments LLC",
+      "role": "Borrower",
+      "isMatterClient": false,
+      "actorIri": "https://folio.openlegalstandard.org/RC27xIi05f9TBUDgpjVvuCg",
+      "actorLabel": "Borrower"
+    }
+  ],
+  "documentType": {
+    "iri": "https://folio.openlegalstandard.org/RKqMtq4VODwvUGdxe07Jf6",
+    "label": "Legal Opinion Document",
+    "family": "advisory"
+  },
+  "modelTags": [
+    {
+      "iri": "https://folio.openlegalstandard.org/RBukB9MGGdY4Kwx3b6itiwi",
+      "label": "Limitation of Liability Clause",
+      "branch": "Objectives",
+      "draft": "earlier",
+      "start": 5146,
+      "end": 5242,
+      "text": "There is no contractual monetary cap on Opinion Counsel's liability to Lender under this letter.",
+      "source": "model"
+    },
+    {
+      "iri": "https://folio.openlegalstandard.org/RBukB9MGGdY4Kwx3b6itiwi",
+      "label": "Limitation of Liability Clause",
+      "branch": "Objectives",
+      "draft": "later",
+      "start": 5139,
+      "end": 5264,
+      "text": "Opinion Counsel's aggregate liability to Lender under this letter shall not exceed the fee paid for preparation and delivery.",
+      "source": "model"
+    },
+    {
+      "iri": "https://folio.openlegalstandard.org/RDHXrFcweLJskc0Y6tsnqHE",
+      "label": "Trust (Emotion)",
+      "branch": "Legal Entity",
+      "draft": "earlier",
+      "start": 3985,
+      "end": 4060,
+      "text": "Only Lender may rely on this letter in connection with the initial advance.",
+      "source": "model"
+    },
+    {
+      "iri": "https://folio.openlegalstandard.org/RDHXrFcweLJskc0Y6tsnqHE",
+      "label": "Trust (Emotion)",
+      "branch": "Legal Entity",
+      "draft": "later",
+      "start": 3974,
+      "end": 4073,
+      "text": "Lender and its subsequent assignees may rely on this letter in connection with the initial advance.",
+      "source": "model"
+    },
+    {
+      "iri": "https://folio.openlegalstandard.org/RB3FT9lFNQIjRnFIueLgCa7",
+      "label": "Notice",
+      "branch": "Document / Artifact",
+      "draft": "earlier",
+      "start": 4587,
+      "end": 4648,
+      "text": "Opinion Counsel shall notify Lender within five business days",
+      "source": "model"
+    },
+    {
+      "iri": "https://folio.openlegalstandard.org/RB3FT9lFNQIjRnFIueLgCa7",
+      "label": "Notice",
+      "branch": "Document / Artifact",
+      "draft": "later",
+      "start": 4578,
+      "end": 4641,
+      "text": "Opinion Counsel shall notify Lender within twenty business days",
+      "source": "model"
+    },
+    {
+      "iri": "https://folio.openlegalstandard.org/RCS1yzwO4cMRBOUzP7pwgFs",
+      "label": "Fee Paid",
+      "branch": "Engagement Attributes",
+      "draft": "earlier",
+      "start": 5024,
+      "end": 5077,
+      "text": "The agreed fee for preparation and delivery is $8,000",
+      "source": "model"
+    },
+    {
+      "iri": "https://folio.openlegalstandard.org/RCS1yzwO4cMRBOUzP7pwgFs",
+      "label": "Fee Paid",
+      "branch": "Engagement Attributes",
+      "draft": "later",
+      "start": 5017,
+      "end": 5070,
+      "text": "The agreed fee for preparation and delivery is $5,000",
+      "source": "model"
+    },
+    {
+      "iri": "https://folio.openlegalstandard.org/RKqMtq4VODwvUGdxe07Jf6",
+      "label": "Legal Opinion Document",
+      "branch": "Document / Artifact",
+      "draft": "later",
+      "start": 2934,
+      "end": 3029,
+      "text": "The agreements constitute binding obligations of Borrower, enforceable according to their terms",
+      "source": "model"
+    }
+  ]
+}

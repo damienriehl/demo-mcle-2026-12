@@ -1,0 +1,598 @@
+{
+  "compare": [
+    {
+      "type": "redline",
+      "comparisonId": "demo-compare",
+      "html": "<p class=\"docx-Heading1\"><span class=\"docx-000001\">Section 1. Purchased Assets</span></p><p id=\"p1\" data-change-id=\"c1\">Fees; Termination; Seller; Payment; Notice; Indemnification; Buyer; Assignment; Assets; Asset purchase agreement. Notice within <del class=\"rev-del\">30</del><ins class=\"rev-ins\">5</ins> days.</p><p id=\"p2\" data-change-id=\"c2\">Fees; Termination; Seller; Payment; Notice; Indemnification; Buyer; Assignment; Assets; Asset purchase agreement. Fees are capped.</p><h2>Section 2. Disputes</h2><p id=\"p4\" data-change-id=\"c3\"><span class=\"rev-move-to\" data-move-id=\"m1\">Disputes go to arbitration.</span></p><p id=\"p5\" data-change-id=\"c4\">Signed by both parties.</p>",
+      "changes": [
+        {
+          "changeId": "c1",
+          "kind": "replace",
+          "earlierText": "Fees; Termination; Seller; Payment; Notice; Indemnification; Buyer; Assignment; Assets; Asset purchase agreement. Notice within 30 days.",
+          "laterText": "Fees; Termination; Seller; Payment; Notice; Indemnification; Buyer; Assignment; Assets; Asset purchase agreement. Notice within 5 days.",
+          "anchorId": "p1",
+          "revisionIds": [
+            "r1"
+          ]
+        },
+        {
+          "changeId": "c2",
+          "kind": "insert",
+          "earlierText": "",
+          "laterText": "Fees are capped.",
+          "anchorId": "p2",
+          "revisionIds": [
+            "r2"
+          ]
+        },
+        {
+          "changeId": "c3",
+          "kind": "move",
+          "earlierText": "Disputes go to arbitration.",
+          "laterText": "Disputes go to arbitration.",
+          "anchorId": "p4",
+          "moveFromAnchorId": "p3",
+          "revisionIds": [
+            "r3"
+          ]
+        },
+        {
+          "changeId": "c4",
+          "kind": "format",
+          "earlierText": "Signed by both parties.",
+          "laterText": "Signed by both parties.",
+          "anchorId": "p5",
+          "revisionIds": [
+            "r4"
+          ]
+        }
+      ],
+      "formattingCompared": true
+    },
+    {
+      "type": "tags",
+      "documentType": {
+        "iri": "https://folio.example/asset-purchase-agreement",
+        "label": "Asset purchase agreement",
+        "family": "transactional"
+      },
+      "tags": [
+        {
+          "iri": "https://folio.example/fees",
+          "label": "Fees",
+          "branch": "Objectives",
+          "draft": "later",
+          "start": 28,
+          "end": 32,
+          "text": "Fees",
+          "source": "index"
+        },
+        {
+          "iri": "https://folio.example/termination",
+          "label": "Termination",
+          "branch": "Clauses",
+          "draft": "later",
+          "start": 34,
+          "end": 45,
+          "text": "Termination",
+          "source": "index"
+        },
+        {
+          "iri": "https://folio.example/seller",
+          "label": "Seller",
+          "branch": "Actor / Player",
+          "draft": "later",
+          "start": 47,
+          "end": 53,
+          "text": "Seller",
+          "source": "index"
+        },
+        {
+          "iri": "https://folio.example/payment",
+          "label": "Payment",
+          "branch": "Clauses",
+          "draft": "later",
+          "start": 55,
+          "end": 62,
+          "text": "Payment",
+          "source": "index"
+        },
+        {
+          "iri": "https://folio.example/notice",
+          "label": "Notice",
+          "branch": "Clauses",
+          "draft": "later",
+          "start": 64,
+          "end": 70,
+          "text": "Notice",
+          "source": "index"
+        },
+        {
+          "iri": "https://folio.example/indemnification",
+          "label": "Indemnification",
+          "branch": "Clauses",
+          "draft": "later",
+          "start": 72,
+          "end": 87,
+          "text": "Indemnification",
+          "source": "index"
+        },
+        {
+          "iri": "https://folio.example/buyer",
+          "label": "Buyer",
+          "branch": "Actor / Player",
+          "draft": "later",
+          "start": 89,
+          "end": 94,
+          "text": "Buyer",
+          "source": "index"
+        },
+        {
+          "iri": "https://folio.example/assignment",
+          "label": "Assignment",
+          "branch": "Clauses",
+          "draft": "later",
+          "start": 96,
+          "end": 106,
+          "text": "Assignment",
+          "source": "index"
+        },
+        {
+          "iri": "https://folio.example/assets",
+          "label": "Assets",
+          "branch": "Objectives",
+          "draft": "later",
+          "start": 108,
+          "end": 114,
+          "text": "Assets",
+          "source": "index"
+        },
+        {
+          "iri": "https://folio.example/asset-purchase-agreement",
+          "label": "Asset purchase agreement",
+          "branch": "Document types",
+          "draft": "later",
+          "start": 116,
+          "end": 140,
+          "text": "Asset purchase agreement",
+          "source": "index"
+        },
+        {
+          "iri": "https://folio.example/fees",
+          "label": "Fees",
+          "branch": "Objectives",
+          "draft": "later",
+          "start": 164,
+          "end": 168,
+          "text": "Fees",
+          "source": "index"
+        },
+        {
+          "iri": "https://folio.example/termination",
+          "label": "Termination",
+          "branch": "Clauses",
+          "draft": "later",
+          "start": 170,
+          "end": 181,
+          "text": "Termination",
+          "source": "index"
+        },
+        {
+          "iri": "https://folio.example/seller",
+          "label": "Seller",
+          "branch": "Actor / Player",
+          "draft": "later",
+          "start": 183,
+          "end": 189,
+          "text": "Seller",
+          "source": "index"
+        },
+        {
+          "iri": "https://folio.example/payment",
+          "label": "Payment",
+          "branch": "Clauses",
+          "draft": "later",
+          "start": 191,
+          "end": 198,
+          "text": "Payment",
+          "source": "index"
+        },
+        {
+          "iri": "https://folio.example/notice",
+          "label": "Notice",
+          "branch": "Clauses",
+          "draft": "later",
+          "start": 200,
+          "end": 206,
+          "text": "Notice",
+          "source": "index"
+        },
+        {
+          "iri": "https://folio.example/indemnification",
+          "label": "Indemnification",
+          "branch": "Clauses",
+          "draft": "later",
+          "start": 208,
+          "end": 223,
+          "text": "Indemnification",
+          "source": "index"
+        },
+        {
+          "iri": "https://folio.example/buyer",
+          "label": "Buyer",
+          "branch": "Actor / Player",
+          "draft": "later",
+          "start": 225,
+          "end": 230,
+          "text": "Buyer",
+          "source": "index"
+        },
+        {
+          "iri": "https://folio.example/assignment",
+          "label": "Assignment",
+          "branch": "Clauses",
+          "draft": "later",
+          "start": 232,
+          "end": 242,
+          "text": "Assignment",
+          "source": "index"
+        },
+        {
+          "iri": "https://folio.example/assets",
+          "label": "Assets",
+          "branch": "Objectives",
+          "draft": "later",
+          "start": 244,
+          "end": 250,
+          "text": "Assets",
+          "source": "index"
+        },
+        {
+          "iri": "https://folio.example/asset-purchase-agreement",
+          "label": "Asset purchase agreement",
+          "branch": "Document types",
+          "draft": "later",
+          "start": 252,
+          "end": 276,
+          "text": "Asset purchase agreement",
+          "source": "index"
+        },
+        {
+          "iri": "https://folio.example/fees",
+          "label": "Fees",
+          "branch": "Objectives",
+          "draft": "earlier",
+          "start": 28,
+          "end": 32,
+          "text": "Fees",
+          "source": "index"
+        },
+        {
+          "iri": "https://folio.example/termination",
+          "label": "Termination",
+          "branch": "Clauses",
+          "draft": "earlier",
+          "start": 34,
+          "end": 45,
+          "text": "Termination",
+          "source": "index"
+        },
+        {
+          "iri": "https://folio.example/seller",
+          "label": "Seller",
+          "branch": "Actor / Player",
+          "draft": "earlier",
+          "start": 47,
+          "end": 53,
+          "text": "Seller",
+          "source": "index"
+        },
+        {
+          "iri": "https://folio.example/payment",
+          "label": "Payment",
+          "branch": "Clauses",
+          "draft": "earlier",
+          "start": 55,
+          "end": 62,
+          "text": "Payment",
+          "source": "index"
+        },
+        {
+          "iri": "https://folio.example/notice",
+          "label": "Notice",
+          "branch": "Clauses",
+          "draft": "earlier",
+          "start": 64,
+          "end": 70,
+          "text": "Notice",
+          "source": "index"
+        },
+        {
+          "iri": "https://folio.example/indemnification",
+          "label": "Indemnification",
+          "branch": "Clauses",
+          "draft": "earlier",
+          "start": 72,
+          "end": 87,
+          "text": "Indemnification",
+          "source": "index"
+        },
+        {
+          "iri": "https://folio.example/buyer",
+          "label": "Buyer",
+          "branch": "Actor / Player",
+          "draft": "earlier",
+          "start": 89,
+          "end": 94,
+          "text": "Buyer",
+          "source": "index"
+        },
+        {
+          "iri": "https://folio.example/assignment",
+          "label": "Assignment",
+          "branch": "Clauses",
+          "draft": "earlier",
+          "start": 96,
+          "end": 106,
+          "text": "Assignment",
+          "source": "index"
+        },
+        {
+          "iri": "https://folio.example/assets",
+          "label": "Assets",
+          "branch": "Objectives",
+          "draft": "earlier",
+          "start": 108,
+          "end": 114,
+          "text": "Assets",
+          "source": "index"
+        },
+        {
+          "iri": "https://folio.example/asset-purchase-agreement",
+          "label": "Asset purchase agreement",
+          "branch": "Document types",
+          "draft": "earlier",
+          "start": 116,
+          "end": 140,
+          "text": "Asset purchase agreement",
+          "source": "index"
+        },
+        {
+          "iri": "https://folio.example/fees",
+          "label": "Fees",
+          "branch": "Objectives",
+          "draft": "earlier",
+          "start": 165,
+          "end": 169,
+          "text": "Fees",
+          "source": "index"
+        },
+        {
+          "iri": "https://folio.example/termination",
+          "label": "Termination",
+          "branch": "Clauses",
+          "draft": "earlier",
+          "start": 171,
+          "end": 182,
+          "text": "Termination",
+          "source": "index"
+        },
+        {
+          "iri": "https://folio.example/seller",
+          "label": "Seller",
+          "branch": "Actor / Player",
+          "draft": "earlier",
+          "start": 184,
+          "end": 190,
+          "text": "Seller",
+          "source": "index"
+        },
+        {
+          "iri": "https://folio.example/payment",
+          "label": "Payment",
+          "branch": "Clauses",
+          "draft": "earlier",
+          "start": 192,
+          "end": 199,
+          "text": "Payment",
+          "source": "index"
+        },
+        {
+          "iri": "https://folio.example/notice",
+          "label": "Notice",
+          "branch": "Clauses",
+          "draft": "earlier",
+          "start": 201,
+          "end": 207,
+          "text": "Notice",
+          "source": "index"
+        },
+        {
+          "iri": "https://folio.example/indemnification",
+          "label": "Indemnification",
+          "branch": "Clauses",
+          "draft": "earlier",
+          "start": 209,
+          "end": 224,
+          "text": "Indemnification",
+          "source": "index"
+        },
+        {
+          "iri": "https://folio.example/buyer",
+          "label": "Buyer",
+          "branch": "Actor / Player",
+          "draft": "earlier",
+          "start": 226,
+          "end": 231,
+          "text": "Buyer",
+          "source": "index"
+        },
+        {
+          "iri": "https://folio.example/assignment",
+          "label": "Assignment",
+          "branch": "Clauses",
+          "draft": "earlier",
+          "start": 233,
+          "end": 243,
+          "text": "Assignment",
+          "source": "index"
+        },
+        {
+          "iri": "https://folio.example/assets",
+          "label": "Assets",
+          "branch": "Objectives",
+          "draft": "earlier",
+          "start": 245,
+          "end": 251,
+          "text": "Assets",
+          "source": "index"
+        },
+        {
+          "iri": "https://folio.example/asset-purchase-agreement",
+          "label": "Asset purchase agreement",
+          "branch": "Document types",
+          "draft": "earlier",
+          "start": 253,
+          "end": 277,
+          "text": "Asset purchase agreement",
+          "source": "index"
+        }
+      ]
+    },
+    {
+      "type": "parties",
+      "parties": [
+        {
+          "name": "Quillfeather Studio",
+          "role": "Claimant",
+          "actorLabel": "Organization",
+          "actorIri": "https://folio.example/org",
+          "isMatterClient": true
+        },
+        {
+          "name": "Copperleaf",
+          "role": "Respondent",
+          "actorLabel": "Organization",
+          "isMatterClient": false
+        }
+      ]
+    },
+    {
+      "type": "done",
+      "comparisonId": "demo-compare"
+    }
+  ],
+  "advice": [
+    {
+      "type": "assessment",
+      "assessment": {
+        "changeId": "c2",
+        "verdict": "helps",
+        "reason": "Caps the client\u2019s exposure.",
+        "quote": "Fees are capped.",
+        "confidence": "high",
+        "verified": true,
+        "counter": {
+          "find": "Fees are capped.",
+          "replace": "Fees are capped at $5,000.",
+          "effect": "Makes the cap explicit.",
+          "span": {
+            "anchorId": "p2",
+            "start": 0,
+            "length": 16,
+            "literal": "Fees are capped."
+          }
+        }
+      }
+    },
+    {
+      "type": "assessment",
+      "assessment": {
+        "changeId": "c1",
+        "verdict": "harms",
+        "reason": "Five days leaves too little time to respond.",
+        "quote": "5 days.",
+        "confidence": "high",
+        "verified": true,
+        "counter": {
+          "find": "5",
+          "replace": "15",
+          "effect": "Preserves time to respond.",
+          "span": {
+            "anchorId": "p1",
+            "start": 14,
+            "length": 1,
+            "literal": "5"
+          }
+        }
+      }
+    },
+    {
+      "type": "assessment",
+      "assessment": {
+        "changeId": "c3",
+        "verdict": "neutral",
+        "reason": "The arbitration clause only moved.",
+        "quote": "Disputes go to arbitration.",
+        "confidence": "high",
+        "verified": true
+      }
+    },
+    {
+      "type": "assessment",
+      "assessment": {
+        "changeId": "c4",
+        "verdict": "neutral",
+        "reason": "The cited text could not be verified.",
+        "quote": "Unmatched quote",
+        "confidence": "high",
+        "verified": false,
+        "counter": {
+          "find": "Signed",
+          "replace": "Approved",
+          "effect": "Proposed unverified language.",
+          "span": {
+            "anchorId": "p5",
+            "start": 0,
+            "length": 6,
+            "literal": "Signed"
+          }
+        }
+      }
+    },
+    {
+      "type": "done",
+      "comparisonId": "demo-compare"
+    }
+  ],
+  "samples": [
+    {
+      "id": "advisory",
+      "title": "Advice letter",
+      "family": "advisory",
+      "earlierName": "earlier.md",
+      "laterName": "later.md"
+    },
+    {
+      "id": "litigation",
+      "title": "Settlement agreement",
+      "family": "litigation",
+      "earlierName": "earlier.docx",
+      "laterName": "later.docx"
+    },
+    {
+      "id": "transactional",
+      "title": "Supply agreement",
+      "family": "transactional",
+      "earlierName": "earlier.txt",
+      "laterName": "later.txt"
+    },
+    {
+      "id": "legislative",
+      "title": "Model ordinance",
+      "family": "legislative",
+      "earlierName": "earlier.md",
+      "laterName": "later.md"
+    }
+  ]
+}
