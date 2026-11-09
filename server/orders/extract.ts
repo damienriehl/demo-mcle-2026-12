@@ -32,8 +32,8 @@ function bundledOrders(directory: string, optional = false): Promise<Map<string,
       const names = await readdir(directory);
       for (const name of names.filter(name => name.endsWith('.pdf') && names.includes(name.replace(/\.pdf$/, '.extraction.json'))).sort()) {
         const pages = await pageTexts(new Uint8Array(await readFile(resolve(directory, name))));
-        const { dates, court, caption, courtName, caseNumber } = JSON.parse(await readFile(resolve(directory, name.replace(/\.pdf$/, '.extraction.json')), 'utf8'));
-        orders.set(textHash(pages), extractionSchema.parse({ dates, court, caption, courtName, caseNumber }));
+        const { dates, court, caption, shortCaption, courtName, caseNumber } = JSON.parse(await readFile(resolve(directory, name.replace(/\.pdf$/, '.extraction.json')), 'utf8'));
+        orders.set(textHash(pages), extractionSchema.parse({ dates, court, caption, shortCaption, courtName, caseNumber }));
       }
       return orders;
     })().catch(error => {

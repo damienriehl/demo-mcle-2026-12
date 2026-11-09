@@ -19,9 +19,10 @@ const extraction = {
   court: 'federal' as const,
   courtName: 'United States District Court, District of Minnesota',
   caseNumber: '28-cv-1234 (ABC/DEF)',
-  caption: 'Fictional Acorn v. Fictional Birch',
+  caption: 'Fictional Acorn Industries, Inc. and Fictional Alder LLC v. Jordan Birch and Casey Cedar',
   dates: [{ kind: 'trial' as const, event: 'Trial ready', date: '2028-03-15', page: 1, quote }],
 };
+const shortCaption = 'Fictional Acorn Industries, Inc. et al. v. Birch et al.';
 const scratch: string[] = [];
 const stores: MatterStore[] = [];
 function directory() {
@@ -72,13 +73,17 @@ afterEach(() => {
 });
 
 describe('public court order matters', () => {
-  it('creates a public-record matter from a verified new-matter upload and computes its deadlines', async () => {
-    const { app, store } = setup(fake());
+  it.each([
+    { shortCaption, title: shortCaption },
+    { shortCaption: undefined, title: extraction.caption },
+  ])('creates a public-record matter titled "$title" from a verified upload and computes its deadlines', async ({ shortCaption, title }) => {
+    const value = { ...extraction, ...(shortCaption === undefined ? {} : { shortCaption }) };
+    const { app, store } = setup(fake(value));
     const result = await events(await paste(app));
     const done = result.at(-1);
     expect(done).toMatchObject({ type: 'done', created: true, added: { courtDates: 1, derived: 3 }, matter: {
       synthetic: false, publicRecord: { court: extraction.courtName, caseNumber: extraction.caseNumber },
-      title: extraction.caption, forum: extraction.courtName, practiceArea: 'litigation',
+      title, forum: extraction.courtName, practiceArea: 'litigation',
       client: { name: 'Public court record (no client)', contact: 'public-record@example.invalid' }, parties: [],
       clientFacing: { status: 'Public court record uploaded for demonstration.', nextSteps: [] },
     } });
@@ -131,19 +136,22 @@ describe('public court order matters', () => {
     expect(orderTool.input_schema.properties).toHaveProperty('caseNumber');
   });
 
-  it('replays a new-matter PDF by text hash from comma-separated external directories', async () => {
+  it.each([
+    { shortCaption, title: shortCaption },
+    { shortCaption: undefined, title: extraction.caption },
+  ])('replays a new-matter PDF titled "$title" by text hash from comma-separated external directories', async ({ shortCaption, title }) => {
     const empty = directory();
     const extra = directory();
     const bytes = pdf(page);
     writeFileSync(join(extra, 'fictional.pdf'), bytes);
-    writeFileSync(join(extra, 'fictional.extraction.json'), JSON.stringify({ order: 'fictional', ...extraction }));
+    writeFileSync(join(extra, 'fictional.extraction.json'), JSON.stringify({ order: 'fictional', ...extraction, shortCaption }));
     vi.stubEnv('MATTER_COCKPIT_EXTRA_ORDERS_DIR', `${empty}, ${extra}`);
     const { app, store } = setup(null);
     const form = new FormData();
     form.set('matterId', 'new');
     form.set('file', new File([new Uint8Array(bytes)], 'renamed.pdf', { type: 'application/pdf' }));
     const done = (await events(await app.request('/extract', { method: 'POST', headers: { 'X-Matter-Cockpit-Upload': '1' }, body: form }))).at(-1);
-    expect(done).toMatchObject({ type: 'done', created: true, matter: { publicRecord: { court: extraction.courtName, caseNumber: extraction.caseNumber } } });
+    expect(done).toMatchObject({ type: 'done', created: true, matter: { title, publicRecord: { court: extraction.courtName, caseNumber: extraction.caseNumber } } });
     expect(store.get(done.matter.id)?.deadlines).toHaveLength(4);
   });
 

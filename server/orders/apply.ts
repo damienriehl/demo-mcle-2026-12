@@ -28,7 +28,7 @@ type InternalPath = { path: string; provenance: Matter['provenance'][string] | u
 export function createPublicRecordMatter(extraction: Extraction): Matter {
   const court = extraction.courtName ?? (extraction.court === 'federal' ? 'United States District Court' : 'Minnesota District Court');
   const matter = matterSchema.parse({
-    id: randomUUID(), title: extraction.caption, forum: court, practiceArea: 'litigation',
+    id: randomUUID(), title: extraction.shortCaption ?? extraction.caption, forum: court, practiceArea: 'litigation',
     synthetic: false, publicRecord: { court, caseNumber: extraction.caseNumber ?? 'Not stated' },
     client: { name: 'Public court record (no client)', contact: 'public-record@example.invalid' },
     parties: [], timeline: [], documents: [], deadlines: [],
