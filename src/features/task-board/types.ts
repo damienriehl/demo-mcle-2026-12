@@ -39,7 +39,14 @@ export type Proposal = {
   task?: { owner: TaskOwner; title: string; detail: string };
   createdAt: string;
 };
-export type TaskBoard = { tasks: Task[]; proposals: Proposal[] };
+export type NotifyChannel = 'email' | 'text';
+export type NotifyPrefs = { email: boolean; text: boolean; textConsent: boolean; phone?: string };
+export const DEFAULT_PREFS: NotifyPrefs = { email: true, text: false, textConsent: false };
+export type OutboxEntry = {
+  id: string; taskId: string; channel: NotifyChannel; to: string; subject?: string; body: string; at: string;
+  result: 'previewed' | 'sent' | 'failed'; reason?: string;
+};
+export type TaskBoard = { tasks: Task[]; proposals: Proposal[]; outbox?: OutboxEntry[]; prefs?: NotifyPrefs };
 export type ClientTask = Pick<Task, 'id' | 'owner' | 'title' | 'status' | 'sharedWithClient' | 'dueDate' | 'needsUpload' | 'uploadedDocumentId' | 'waitingOn'> & { detail?: string; source?: TaskSource };
 
 export const STATUS_LABEL: Record<TaskStatus, string> = { todo: 'To do', doing: 'Doing', waiting: 'Waiting on', done: 'Done' };

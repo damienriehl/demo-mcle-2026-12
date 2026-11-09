@@ -2,8 +2,8 @@ import { Hono } from 'hono';
 import { createClient, modelName, NEEDS_KEY_MESSAGE, needsKeyResponse } from '../ai';
 import { getMatterStore } from '../store';
 import type { TaskBoard } from '../../src/features/task-board/types';
-import { analyzeUpload, applyAnalysis, clientView, deadlineTasks, draftWithModel, makeTask, mergeTasks, nextStepTasks, patchTask, type TaskPatch } from '../tasks/logic';
-import { approveProposal, ingestUpload, UploadError } from '../tasks/service';
+import { analyzeUpload, applyAnalysis, clientView, deadlineTasks, draftWithModel, makeTask, mergeTasks, nextStepTasks, type TaskPatch } from '../tasks/logic';
+import { approveProposal, ingestUpload, parsePrefs, patchAndNotify, UploadError } from '../tasks/service';
 import { getTaskStore } from '../tasks/store';
 
 type View = 'client' | 'lawyer';
@@ -79,12 +79,24 @@ export default new Hono()
     const matter = matterOr404(body.matterId);
     if (!matter) return c.json(notFound, 404);
     const view = viewOf(body.view);
-    const task = getTaskStore().read(matter.id).tasks.find(item => item.id === c.req.param('id'));
-    if (!task) return c.json({ error: 'not_found', message: 'That task is no longer on the board.' }, 404);
-    const result = patchTask(task, body, view);
+    const result = await patchAndNotify({ matter, taskId: c.req.param('id'), patch: body, view, tasks: getTaskStore() });
     if (!result.ok) return c.json({ error: result.error, message: result.message }, result.code);
-    const board = getTaskStore().update(matter.id, current => ({ ...current, tasks: current.tasks.map(item => (item.id === task.id ? result.task : item)) }));
-    return c.json(project(matter.id, board, view));
+    return c.json(project(matter.id, result.board, view));
+  })
+  // The client's own choice of email, text, both, or neither (R3).
+  .put('/prefs', async (c) => {
+    const body = await c.req.json().catch(() => ({})) as { matterId?: string };
+    if (!matterOr404(body.matterId)) return c.json(notFound, 404);
+    const prefs = parsePrefs(body);
+    if (!prefs) return c.json({ error: 'invalid', message: 'Choose email or text, and enter a phone number such as 555-0100.' }, 400);
+    getTaskStore().update(body.matterId!, current => ({ ...current, prefs }));
+    return c.json({ prefs });
+  })
+  .delete('/outbox', (c) => {
+    const matterId = c.req.query('matterId');
+    if (!matterOr404(matterId)) return c.json(notFound, 404);
+    getTaskStore().update(matterId!, current => ({ ...current, outbox: [] }));
+    return c.body(null, 204);
   })
   .delete('/tasks/:id', (c) => {
     const matterId = c.req.query('matterId');

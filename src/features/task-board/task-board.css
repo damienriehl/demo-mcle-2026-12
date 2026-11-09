@@ -45,3 +45,16 @@
 .task-waiting { font-weight: var(--mc-weight-label); font-size: var(--mc-text-min); border-left: var(--mc-header-rule) solid var(--mc-ink); padding-left: calc(var(--mc-space) / 2); }
 .task-feature button.task-secondary { border-style: dashed; padding: calc(var(--mc-space) / 8) calc(var(--mc-space) / 3); }
 .task-column-title { overflow-wrap: anywhere; }
+.task-notified { font-weight: var(--mc-weight-label); font-size: var(--mc-text-min); border-left: var(--mc-header-rule) dashed var(--mc-ink); padding-left: calc(var(--mc-space) / 2); }
+.task-outbox { border-top: var(--mc-header-rule) solid var(--mc-header-rule-color); padding-top: calc(var(--mc-space) / 2); }
+.task-outbox ol { list-style: none; margin: calc(var(--mc-space) / 2) 0 0; padding: 0; display: grid; gap: calc(var(--mc-space) / 2); }
+.task-outbox li { background: var(--mc-surface); color: var(--mc-ink); border: var(--mc-border-width) solid var(--mc-border); padding: calc(var(--mc-space) / 2); display: grid; gap: calc(var(--mc-space) / 4); overflow-wrap: anywhere; }
+.task-outbox li p { margin: 0; }
+.task-outbox-body { white-space: pre-wrap; font-size: var(--mc-text-body); }
+.task-outbox-result { font-weight: var(--mc-weight-label); font-size: var(--mc-text-min); text-transform: var(--mc-label-case); letter-spacing: var(--mc-label-tracking); }
+.task-reach { border: var(--mc-border-width) solid var(--mc-border); padding: calc(var(--mc-space) / 2) var(--mc-space); display: grid; gap: calc(var(--mc-space) / 4); font-size: var(--mc-text-min); }
+.task-reach legend { font-family: var(--mc-font-heading); font-weight: var(--mc-weight-heading); font-size: var(--mc-text-body); }
+.task-reach label { display: flex; gap: calc(var(--mc-space) / 2); align-items: center; overflow-wrap: anywhere; }
+.task-reach input[type="checkbox"] { width: 1.25rem; height: 1.25rem; flex: none; }
+.task-reach-phone { flex-wrap: wrap; }
+.task-reach input[type="tel"] { font-size: var(--mc-text-min); font-family: var(--mc-font-ui); color: var(--mc-ink); background: var(--mc-surface); border: var(--mc-border-width) solid var(--mc-ink); padding: calc(var(--mc-space) / 4); max-width: 100%; }

@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
-import type { ClientTask, Proposal, Task, TaskOwner, TaskStatus } from './types';
+import type { ClientTask, NotifyPrefs, OutboxEntry, Proposal, Task, TaskOwner, TaskStatus } from './types';
 
 const BASE = '/api/features/task-board';
 export type View = 'client' | 'lawyer';
-export type BoardState<V extends View> = V extends 'lawyer' ? { tasks: Task[]; proposals: Proposal[] } : { tasks: ClientTask[] };
+export type BoardState<V extends View> = V extends 'lawyer' ? { tasks: Task[]; proposals: Proposal[]; outbox?: OutboxEntry[] } : { tasks: ClientTask[]; prefs?: NotifyPrefs };
 
 /** Live board for one matter: full snapshot on connect and after every change (R11). */
 export function useTaskBoard<V extends View>(matterId: string | undefined, view: V): BoardState<V> | undefined {
@@ -38,3 +38,5 @@ export function uploadFile(matterId: string, taskId: string, file: File) {
   form.set('matterId', matterId); form.set('taskId', taskId); form.set('file', file);
   return call('/upload', { method: 'POST', body: form });
 }
+export const savePrefs = (matterId: string, prefs: NotifyPrefs) =>
+  call('/prefs', { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ matterId, ...prefs }) });
