@@ -64,7 +64,7 @@ const trieNode = (): Trie => ({ children: new Map() });
 const compareIri = (a: Match, b: Match) => Number(b.preferred) - Number(a.preferred)
   || (a.concept.iri < b.concept.iri ? -1 : a.concept.iri > b.concept.iri ? 1 : 0);
 
-let singleton: {
+interface FolioIndex {
   byIri: Map<string, Concept>;
   byBranch: Map<string, Concept[]>;
   bySingularLabel: Map<string, Concept[]>;
@@ -73,10 +73,17 @@ let singleton: {
   wordsByConcept: Map<Concept, Set<string>>;
   blocked: Map<string, Set<string>>;
   trie: Trie;
-} | undefined;
+}
+
+const INDEX_KEY = Symbol.for('matter-cockpit.folio-index');
+const globals = globalThis as typeof globalThis & {
+  [INDEX_KEY]?: { singleton?: FolioIndex; branchLabels: Map<string, readonly string[]> };
+};
+// Keep the parsed index and branch-label cache across Vite server reloads.
+const holder = globals[INDEX_KEY] ??= { branchLabels: new Map<string, readonly string[]>() };
 
 function getIndex() {
-  if (singleton) return singleton;
+  if (holder.singleton) return holder.singleton;
   const { concepts } = JSON.parse(readFileSync(new URL('../../data/folio/folio-index.json', import.meta.url), 'utf8')) as { concepts: Concept[] };
   const { blocked_aliases } = JSON.parse(readFileSync(new URL('../../data/folio/alias-blocklist.json', import.meta.url), 'utf8')) as {
     blocked_aliases: { surface_term: string; blocked_iri: string }[];
@@ -127,8 +134,8 @@ function getIndex() {
     wordsByConcept.set(concept, words);
     for (const word of words) add(byWord, word);
   }
-  singleton = { byIri, byBranch, bySingularLabel, bySingularAlt, byWord, wordsByConcept, blocked, trie };
-  return singleton;
+  holder.singleton = { byIri, byBranch, bySingularLabel, bySingularAlt, byWord, wordsByConcept, blocked, trie };
+  return holder.singleton;
 }
 
 export function warmFolioIndex(): void {
@@ -139,7 +146,7 @@ export function lookup(iri: string): Concept | undefined {
   return getIndex().byIri.get(iri);
 }
 
-const branchLabels = new Map<string, readonly string[]>();
+const { branchLabels } = holder;
 
 export function labelsInBranches(branches: readonly string[]): readonly string[] {
   const selected = new Set(branches);
