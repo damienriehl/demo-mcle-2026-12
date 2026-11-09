@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
 import { DeadlineCard } from '../../components/DeadlineCard';
-import type { Matter, MatterWithDeadlines } from '../../data/schema';
+import { toStoredMatter, type Matter, type MatterWithDeadlines } from '../../data/schema';
+import { isCourtOrderDate } from '../../engine';
+import { readSse } from '../../intake/stream';
 import { VerifyDrawer } from '../../verify/VerifyDrawer';
 import { dateLabel, type Selection } from '../../views/shared';
 import { registerFeature, type FeatureProps } from '../registry';
@@ -18,34 +20,21 @@ async function extract(body: FormData | string, onEvent: (event: OrderEvent) => 
     method: 'POST', headers: { 'X-Matter-Cockpit-Upload': '1', ...(typeof body === 'string' ? { 'Content-Type': 'application/json' } : {}) }, body,
   });
   if (!response.ok || !response.body) throw new Error('Scheduling order extraction could not finish.');
-  const reader = response.body.getReader();
-  const decoder = new TextDecoder();
-  let pending = '';
-  const readLine = (line: string) => { if (line.startsWith('data:')) onEvent(JSON.parse(line.slice(5).trim()) as OrderEvent); };
-  try {
-    while (true) {
-      const chunk = await reader.read();
-      pending += decoder.decode(chunk.value, { stream: !chunk.done });
-      const lines = pending.split('\n');
-      pending = lines.pop()!;
-      lines.forEach(readLine);
-      if (chunk.done) { if (pending) readLine(pending); break; }
-    }
-  } finally { reader.releaseLock(); }
+  await readSse(response, onEvent);
 }
 
 function courtRoot(deadline: CourtDate, byId: Map<string, CourtDate>): string | undefined {
   const seen = new Set<string>();
   let current: CourtDate | undefined = deadline;
   while (current && !seen.has(current.id)) {
-    if (current.deadlineRuleId === 'court-order-date') return current.id;
+    if (isCourtOrderDate(current)) return current.id;
     seen.add(current.id);
     current = 'fromDeadline' in current.trigger ? byId.get(current.trigger.fromDeadline) : undefined;
   }
 }
 
-function storedSnapshot(matter: Matter): string {
-  const { computedDeadlines: _computed, ...stored } = matter as MatterWithDeadlines;
+function storedSnapshot(matter: Matter | MatterWithDeadlines): string {
+  const stored = 'computedDeadlines' in matter ? toStoredMatter(matter) : matter;
   return JSON.stringify(stored, (_key, value: unknown) => value && typeof value === 'object' && !Array.isArray(value)
     ? Object.fromEntries(Object.entries(value).sort(([a], [b]) => a.localeCompare(b))) : value);
 }
@@ -114,7 +103,7 @@ function SchedulingOrder({ matter }: { matter: MatterWithDeadlines }) {
   async function move(deadline: CourtDate, date: string) {
     const old = String(deadline.inputs?.date);
     if (!date || date === old || busy || moving) return;
-    const { computedDeadlines: _computed, ...stored } = matter;
+    const stored = toStoredMatter(matter);
     const index = matter.deadlines.indexOf(deadline);
     const next = {
       ...stored,
@@ -150,7 +139,7 @@ function SchedulingOrder({ matter }: { matter: MatterWithDeadlines }) {
     group.push({ deadline, index });
     grouped.set(root, group);
   });
-  const courtDates = matter.deadlines.filter(deadline => deadline.deadlineRuleId === 'court-order-date')
+  const courtDates = matter.deadlines.filter(isCourtOrderDate)
     .sort((a, b) => String(a.inputs?.date).localeCompare(String(b.inputs?.date)));
 
   return <div className="scheduling-order">

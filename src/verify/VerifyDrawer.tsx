@@ -1,8 +1,7 @@
 import { useState } from 'react';
 import { Overlay } from '../components/Overlay';
 import type { MatterWithDeadlines } from '../data/schema';
-import { computeDeadline, type DeadlineInput, type Step } from '../engine';
-import { rules } from '../engine/rules';
+import { computeDeadline, deadlineCatalog, isCourtOrderDate, type DeadlineInput, type Step } from '../engine';
 import { SourceLabel, sourceFor } from '../intake/SourceLabel';
 import { dateLabel, type Selection } from '../views/shared';
 import { AssumptionToggles, assumptionLabel } from './AssumptionToggles';
@@ -18,12 +17,12 @@ export type VerifySelection = Selection & { context?: FactContext };
 function DeadlineVerification({ selection, matter }: { selection: VerifySelection; matter?: MatterWithDeadlines }) {
   const index = matter?.deadlines.findIndex(deadline => deadline.id === selection.deadlineId) ?? -1;
   const deadline = matter?.deadlines[index];
-  const orderDate = deadline?.deadlineRuleId === 'court-order-date';
+  const orderDate = deadline && isCourtOrderDate(deadline);
   const upstreamId = deadline && 'fromDeadline' in deadline.trigger ? deadline.trigger.fromDeadline : undefined;
   const upstream = matter?.deadlines.find(candidate => candidate.id === upstreamId);
   const superseding = matter?.deadlines.find(candidate => candidate.id === deadline?.supersededBy);
   const governingResult = superseding ? matter?.computedDeadlines[superseding.id] : undefined;
-  const catalog = rules.find(rule => rule.id === deadline?.deadlineRuleId);
+  const catalog = deadlineCatalog().find(rule => rule.id === deadline?.deadlineRuleId);
   const [assumptions, setAssumptions] = useState<DeadlineInput['assumptions']>(deadline?.assumptions ?? {});
   const [previousSteps, setPreviousSteps] = useState<Step[]>();
   const [chosenCitation, setChosenCitation] = useState<Step['citation']>();
@@ -60,7 +59,7 @@ function DeadlineVerification({ selection, matter }: { selection: VerifySelectio
     <section data-verify-section="reasoning" className="verify-reasoning"><h3>Reasoning chain</h3><ol>
       {catalog && <li><span>{catalog.description}</span><SourceLabel source={ruleContext?.provenance?.source} /></li>}
       {upstream ? <li><span>Counts from {upstream.label} · {triggerDate ? dateLabel(triggerDate) : 'No computed date'}</span>
-        <span className="source-label">{upstream.deadlineRuleId === 'court-order-date' ? `From the order, p. ${upstream.inputs?.page}` : 'Code computed'}</span></li>
+        <span className="source-label">{isCourtOrderDate(upstream) ? `From the order, p. ${upstream.inputs?.page}` : 'Code computed'}</span></li>
         : deadline && <li><span>Trigger: {deadline.trigger.event} · {triggerDate ? dateLabel(triggerDate) : 'No computed date'}.</span><SourceLabel source={triggerContext?.provenance?.source} /></li>}
       {superseding && <li><span>The order sets this date: {superseding.label}, {governingResult?.status === 'computed' ? dateLabel(governingResult.dueDate) : 'No computed date'} (p. {superseding.inputs?.page})</span>
         {exceptionSentence && <blockquote>{exceptionSentence}</blockquote>}</li>}

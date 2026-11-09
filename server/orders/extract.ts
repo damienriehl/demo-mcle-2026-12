@@ -5,21 +5,22 @@ import Anthropic from '@anthropic-ai/sdk';
 import { Hono } from 'hono';
 import { streamSSE } from 'hono/streaming';
 import { z } from 'zod';
+import { toStoredMatter } from '../../src/data/schema';
 import { modelName, NEEDS_KEY_MESSAGE } from '../ai';
 import { consumeTool, modelStream, type ModelStream } from '../intake/client';
 import { todayLine } from '../intake/prompts';
 import { getMatterStore, type MatterStore } from '../store';
 import { applySchedulingOrder } from './apply';
+import { orderIds } from './ids';
 import { pageTexts, textPages } from './pdf-text';
 import { extractionSchema, orderDateSchema, orderSystemPrompt, orderTool, type Extraction, type VerifiedDate } from './prompt';
-import { verifyQuote } from './verify-quote';
+import { normalize, verifyQuote } from './verify-quote';
 
 const pastedSchema = z.strictObject({ matterId: z.string().min(1), text: z.string().min(1), name: z.string().optional() });
 const bundles = new Map<string, Promise<Map<string, Extraction>>>();
 
 function textHash(pages: string[]): string {
-  const normalized = pages.map(page => page.replace(/[‘’]/g, "'").replace(/[“”]/g, '"')
-    .replace(/[–—]/g, '-').replace(/\s+/g, ' ').trim().toLowerCase());
+  const normalized = pages.map(normalize);
   return createHash('sha256').update(JSON.stringify(normalized)).digest('hex');
 }
 
@@ -34,7 +35,10 @@ function bundledOrders(directory: string): Promise<Map<string, Extraction>> {
         orders.set(textHash(pages), extractionSchema.parse({ dates, court, caption }));
       }
       return orders;
-    })();
+    })().catch(error => {
+      bundles.delete(directory);
+      throw error;
+    });
     bundles.set(directory, cached);
   }
   return cached;
@@ -130,14 +134,12 @@ export function createSchedulingOrderRoutes(options: Options = {}): Hono {
         await send({ type: 'error', message: 'Unknown matter.' });
         return;
       }
-      const { computedDeadlines: _computed, ...stored } = current;
-      const matter = applySchedulingOrder(stored, { ...extraction, dates: accepted }, orderSlug);
+      const matter = applySchedulingOrder(toStoredMatter(current), { ...extraction, dates: accepted }, orderSlug);
       store.upsert(matter);
       const courtDates = accepted.filter(date => date.verified).length;
-      const derived = matter.deadlines.filter(deadline => deadline.id.startsWith(`order-${orderSlug}-`)).length - courtDates;
+      const derived = matter.deadlines.filter(deadline => deadline.id.startsWith(orderIds(orderSlug).prefix)).length - courtDates;
       await send({ type: 'done', matter, added: { courtDates, derived }, unverified: accepted.filter(date => !date.verified) });
     } catch (error) {
-      // Provider errors may contain request data. Log only class, status and type.
       if (error instanceof Anthropic.APIError) console.error(`scheduling order failed: ${error.constructor.name} ${error.status ?? 'no-status'} ${error.type ?? 'unknown_type'}`);
       else if (!(error instanceof z.ZodError)) console.error(`scheduling order failed: ${error instanceof Error ? error.constructor.name : typeof error}`);
       await send({ type: 'error', message: 'Scheduling order extraction could not finish.' });

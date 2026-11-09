@@ -1,5 +1,6 @@
 import { getRule } from '../../../data/rules';
 import type { MatterWithDeadlines } from '../../data/schema';
+import { isCourtOrderDate } from '../../engine';
 
 function escapeText(value: string): string {
   return value.replace(/\\/g, '\\\\').replace(/;/g, '\\;').replace(/,/g, '\\,').replace(/\r\n|\r|\n/g, '\\n');
@@ -31,7 +32,7 @@ export function buildCalendar(matter: MatterWithDeadlines, now = new Date()): st
       const suffix = rule && subdivision.startsWith(rule.number) ? subdivision.slice(rule.number.length) : subdivision;
       return `${rule?.citation ?? citation.ruleId}${suffix}`;
     }))];
-    const description = deadline.deadlineRuleId === 'court-order-date'
+    const description = isCourtOrderDate(deadline)
       ? `From the order, p. ${deadline.inputs?.page}: ${deadline.inputs?.quote}`
       : `Code computed under ${citations.join('; ')}`;
     lines.push('BEGIN:VEVENT',

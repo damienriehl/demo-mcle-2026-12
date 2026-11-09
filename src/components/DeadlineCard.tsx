@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react';
 import type { MatterWithDeadlines } from '../data/schema';
+import { isCourtOrderDate } from '../engine';
 import { SourceField, SourceLabel, sourceFor } from '../intake/SourceLabel';
 import { countdown, dateLabel, daysFromToday, deadlineResult, type Selection } from '../views/shared';
 
@@ -19,7 +20,7 @@ export function DeadlineCard({ matter, index, onVerify, focused = false, showMat
     {superseding ? <>
       {governingResult?.status === 'computed' && <span className="due-date">{dateLabel(governingResult.dueDate)}</span>}
       <span className="source-label">Superseded — the order sets this date (p. {superseding.inputs?.page})</span>
-    </> : result.status === 'computed' ? <><span className="due-date">{dateLabel(result.dueDate)}</span><span className="countdown">{countdown(daysFromToday(result.dueDate))}{deadline.deadlineRuleId === 'court-order-date'
+    </> : result.status === 'computed' ? <><span className="due-date">{dateLabel(result.dueDate)}</span><span className="countdown">{countdown(daysFromToday(result.dueDate))}{isCourtOrderDate(deadline)
       ? <span className="source-label">From the order, p. {deadline.inputs?.page}</span> : result.inputKey
       ? <><span>From the matter</span><SourceLabel source={sourceFor(matter.provenance, `deadlines.${index}.inputs.${result.inputKey}`)} /></>
       : <span className="source-label">Code computed</span>}</span></>

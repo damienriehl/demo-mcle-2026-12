@@ -68,3 +68,8 @@ export const mattersSchema = z.array(matterSchema).superRefine((matters, ctx) =>
 
 export type Matter = z.output<typeof matterSchema>;
 export type MatterWithDeadlines = Matter & { computedDeadlines: Record<string, DeadlineResult> };
+
+export function toStoredMatter(matter: MatterWithDeadlines): Matter {
+  const { computedDeadlines: _computed, ...stored } = matter;
+  return stored;
+}

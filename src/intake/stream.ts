@@ -36,11 +36,15 @@ export async function intakeStream(endpoint: string, body: unknown, onEvent: (ev
   if (!response.ok || !response.body || !response.headers.get('content-type')?.includes('text/event-stream')) {
     throw new Error('Could not reach intake. Your facts are kept; use Embellish when intake is available. Surprise Me can use the canned matter pool without a key.');
   }
-  const reader = response.body.getReader();
+  await readSse(response, onEvent);
+}
+
+export async function readSse<Event>(response: Response, onEvent: (event: Event) => void) {
+  const reader = response.body!.getReader();
   const decoder = new TextDecoder();
   let pending = '';
   function line(value: string) {
-    if (value.startsWith('data:')) onEvent(JSON.parse(value.slice(5).trim()) as IntakeEvent);
+    if (value.startsWith('data:')) onEvent(JSON.parse(value.slice(5).trim()) as Event);
   }
   try {
     while (true) {

@@ -3,7 +3,7 @@ const months = [
   'july', 'august', 'september', 'october', 'november', 'december',
 ];
 
-function normalize(text: string): string {
+export function normalize(text: string): string {
   return text.replace(/[‘’]/g, "'").replace(/[“”]/g, '"')
     .replace(/[–—]/g, '-').replace(/\s+/g, ' ').trim().toLowerCase();
 }

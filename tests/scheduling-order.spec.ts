@@ -17,7 +17,6 @@ async function open(page: Page, snapshot: unknown = initial) {
   await page.getByRole('tab', { name: 'Scheduling order', exact: true }).click();
 }
 async function publish(page: Page, snapshot: unknown) {
-  // Deliver the next full snapshot through the same EventSource boundary as /api/events.
   await page.evaluate(data => window.dispatchEvent(new CustomEvent('schedule-snapshot', { detail: data })), [snapshot]);
 }
 test.beforeEach(async ({ page }) => {
