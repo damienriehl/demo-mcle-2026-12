@@ -1,4 +1,4 @@
-import { expect, test, type Page } from '@playwright/test';
+import { expect, test, type Locator, type Page } from '@playwright/test';
 import fixtures from './fixtures/views/matters.json' with { type: 'json' };
 import { computeDeadline } from '../src/engine';
 import federalRules from '../data/rules/frcp.json' with { type: 'json' };
@@ -13,6 +13,24 @@ function matters() {
   answer.reasoning = 'A federal complaint calls for an answer under Rule 12; service determines the response period.';
   unknown.reasoning = 'The agency notice must be reviewed to establish the comment deadline.';
   return [answer, unknown].map(matter => ({ ...matter, computedDeadlines: Object.fromEntries(matter.deadlines.map(deadline => [deadline.id, computeDeadline(deadline)])) }));
+}
+
+const themes = ['law-review', 'mission-control', 'boutique-firm'] as const;
+
+function visibleFontSizes(panel: Locator) {
+  return panel.locator('*').evaluateAll(elements => elements.filter(element => element.getClientRects().length).map(element => parseFloat(getComputedStyle(element).fontSize)));
+}
+
+/** Resolves a theme token to its computed CSS value inside the given element. */
+function tokenValue(scope: Locator, property: string, value: string) {
+  return scope.evaluate((element, [property, value]) => {
+    const probe = document.createElement('span');
+    probe.style.setProperty(property, value);
+    element.append(probe);
+    const resolved = getComputedStyle(probe).getPropertyValue(property);
+    probe.remove();
+    return resolved;
+  }, [property, value] as const);
 }
 
 async function open(page: Page) {
@@ -74,8 +92,7 @@ test('long rule scrolls independently below the date, toggles, math, and reasoni
   await expect(panel.getByRole('link', { name: 'Official source', exact: true })).toBeInViewport({ ratio: 1 });
   expect(await panel.evaluate(element => element.scrollHeight - element.clientHeight)).toBeLessThanOrEqual(1);
   expect(await panel.locator('[data-rule-scroll]').evaluate(element => element.scrollHeight > element.clientHeight)).toBe(true);
-  const sizes = await panel.locator('*').evaluateAll(elements => elements.filter(element => element.getClientRects().length).map(element => parseFloat(getComputedStyle(element).fontSize)));
-  expect(Math.min(...sizes)).toBeGreaterThanOrEqual(18);
+  expect(Math.min(...await visibleFontSizes(panel))).toBeGreaterThanOrEqual(18);
   await page.screenshot({ path: 'test-results/verify-computed.png', animations: 'disabled' });
   await page.setViewportSize({ width: 390, height: 844 });
   expect(await panel.evaluate(element => element.scrollWidth <= element.clientWidth)).toBe(true);
@@ -83,17 +100,35 @@ test('long rule scrolls independently below the date, toggles, math, and reasoni
   await page.screenshot({ path: 'test-results/verify-mobile.png', animations: 'disabled' });
 });
 
-test('uncomputable deadline shows the amber warning and reasoning with no due date', async ({ page }) => {
-  await open(page);
-  await page.getByRole('button', { name: /Clearwater comment letter/ }).click();
-  await page.locator('[data-deadline-id="due"]').click();
-  const panel = page.getByRole('dialog', { name: 'Trust but Verify' });
-  await expect(panel.getByText('No source on file. Verify independently.', { exact: true })).toBeVisible();
-  await expect(panel.locator('[data-due-date]')).toHaveCount(0);
-  await expect(panel).toContainText('The agency notice must be reviewed to establish the comment deadline.');
-  await expect(panel.locator('[data-no-source]')).toHaveCSS('color', 'rgb(112, 75, 0)');
-  await page.screenshot({ path: 'test-results/verify-uncomputable.png', animations: 'disabled' });
-});
+for (const theme of themes) {
+  test(`uncomputable deadline shows the amber warning and reasoning with no due date (${theme})`, async ({ page }) => {
+    await page.addInitScript(value => localStorage.setItem('matter-cockpit-theme', value), theme);
+    await open(page);
+    await page.getByRole('button', { name: /Clearwater comment letter/ }).click();
+    await page.locator('[data-deadline-id="due"]').click();
+    const panel = page.getByRole('dialog', { name: 'Trust but Verify' });
+    await expect(panel.getByText('No source on file. Verify independently.', { exact: true })).toBeVisible();
+    await expect(panel.locator('[data-due-date]')).toHaveCount(0);
+    await expect(panel).toContainText('The agency notice must be reviewed to establish the comment deadline.');
+    const warning = panel.locator('[data-no-source]');
+    const tokenColor = await tokenValue(panel, 'color', 'var(--mc-warning)');
+    expect(tokenColor).not.toBe(await tokenValue(panel, 'color', 'var(--mc-accent)'));
+    await expect(warning).toHaveCSS('color', tokenColor);
+    expect(Math.min(...await visibleFontSizes(panel))).toBeGreaterThanOrEqual(18);
+    await page.screenshot({ path: `test-results/verify-uncomputable-${theme}.png`, animations: 'disabled' });
+  });
+
+  test(`computed deadline drawer keeps the projector type floor (${theme})`, async ({ page }) => {
+    await page.addInitScript(value => localStorage.setItem('matter-cockpit-theme', value), theme);
+    await open(page);
+    await page.locator('[data-deadline-id="answer"]').click();
+    const panel = page.getByRole('dialog', { name: 'Trust but Verify' });
+    await panel.getByRole('button', { name: 'Show full rule', exact: true }).click();
+    await expect(panel.locator('[data-due-date]')).toBeInViewport({ ratio: 1 });
+    expect(await panel.evaluate(element => element.scrollHeight - element.clientHeight)).toBeLessThanOrEqual(1);
+    expect(Math.min(...await visibleFontSizes(panel))).toBeGreaterThanOrEqual(18);
+  });
+}
 
 test('invented and inferred facts show their provenance and evidence without deadline sections', async ({ page }) => {
   await open(page);
@@ -130,7 +165,10 @@ test('Portal fact verification keeps the source label and omits internal evidenc
   await expect(panel).not.toContainText('SECRET EVIDENCE');
   await expect(panel).not.toContainText('A federal complaint calls for an answer');
   await page.keyboard.press('Escape');
-  await page.getByRole('button', { name: 'Send us the signed copy. AI inferred', exact: true }).click();
+  const portal = page.locator('.portal-view');
+  await expect(portal.locator('.source-label, .verification-marker')).toHaveCount(0);
+  await expect(portal).not.toContainText(/AI (inferred|invented)|You said/);
+  await portal.getByRole('button', { name: 'Send us the signed copy.', exact: true }).click();
   await expect(panel).toContainText('AI inferred');
   await expect(panel).toContainText('No evidence quote on file.');
   await expect(panel).not.toContainText('SECRET EVIDENCE');

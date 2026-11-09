@@ -21,6 +21,8 @@ describe.each(['law-review', 'mission-control', 'boutique-firm'])('%s projector 
       expect(contrast(tokens['--mc-ink'], tokens[background]), `body on ${background}`).toBeGreaterThanOrEqual(7);
       for (const foreground of ['--mc-ink-muted', '--mc-accent', '--mc-warning']) expect(contrast(tokens[foreground], tokens[background]), `${foreground} on ${background}`).toBeGreaterThanOrEqual(4.5);
     }
+    for (const background of ['--mc-bg', '--mc-surface']) expect(contrast(tokens['--mc-warning'], tokens[background]), `warning on ${background}`).toBeGreaterThanOrEqual(7);
+    expect(tokens['--mc-warning'].toLowerCase(), 'warning stays distinct from the accent').not.toBe(tokens['--mc-accent'].toLowerCase());
     expect(contrast(tokens['--mc-accent-ink'], tokens['--mc-accent'])).toBeGreaterThanOrEqual(7);
     expect(contrast(tokens['--mc-chip-ink'], tokens['--mc-chip'])).toBeGreaterThanOrEqual(7);
   });
