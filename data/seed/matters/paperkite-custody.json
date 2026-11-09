@@ -46,7 +46,7 @@
     {
       "id": "event-5",
       "event": "Scheduled temporary-custody motion hearing",
-      "date": "+35"
+      "date": "+27"
     }
   ],
   "documents": [
@@ -54,7 +54,7 @@
       "id": "doc-1",
       "title": "Temporary-custody hearing notice",
       "kind": "notice",
-      "body": "SYNTHETIC DEMO DOCUMENT. The Hennepin County hearing is thirty-five days after reset. Aster seeks an ordinary temporary-custody schedule, not emergency or post-trial relief. No special scheduling order changes ordinary Rule 303 motion deadlines. Opposing submissions are tracked for planning as well as the client’s own motion.",
+      "body": "SYNTHETIC DEMO DOCUMENT. The Hennepin County hearing is twenty-seven days after reset. Aster seeks an ordinary temporary-custody schedule, not emergency or post-trial relief. No special scheduling order changes ordinary Rule 303 motion deadlines. Opposing submissions are tracked for planning as well as the client’s own motion.",
       "shared": true
     },
     {
@@ -79,7 +79,7 @@
       "deadlineRuleId": "mn-gp-303-family-motion",
       "trigger": {
         "event": "Scheduled ordinary family motion hearing",
-        "date": "+35"
+        "date": "+27"
       },
       "assumptions": {}
     },
@@ -89,7 +89,7 @@
       "deadlineRuleId": "mn-gp-303-family-new-issues",
       "trigger": {
         "event": "Scheduled ordinary family motion hearing",
-        "date": "+35"
+        "date": "+27"
       },
       "assumptions": {}
     },
@@ -99,7 +99,7 @@
       "deadlineRuleId": "mn-gp-303-family-response",
       "trigger": {
         "event": "Scheduled ordinary family motion hearing",
-        "date": "+35"
+        "date": "+27"
       },
       "assumptions": {}
     },

@@ -9,7 +9,7 @@ import { modelName, needsKeyResponse } from '../ai';
 import { getMatterStore, type MatterStore } from '../store';
 import { cannedMatter } from './canned';
 import { consumeTool, IncompleteToolError, modelStream, type ModelStream } from './client';
-import { systemPrompt } from './prompts';
+import { systemPrompt, todayLine } from './prompts';
 import { applyField, intakeTool, leaves, outputSchema, readDraft, validateMatter, type Draft } from './schema';
 
 export type { ModelStream } from './client';
@@ -82,7 +82,7 @@ export function createIntakeRoutes(options: Options = {}): Hono {
               tools: [intakeTool], tool_choice: { type: 'auto', disable_parallel_tool_use: true },
               output_config: { effort: 'low' },
               betas: ['server-side-fallback-2026-07-01'], fallbacks: 'default',
-              messages: [{ role: 'user', content: JSON.stringify({ mode, ...body, draft, ...(correction ? { correction } : {}) }) }],
+              messages: [{ role: 'user', content: `${todayLine()}\n${JSON.stringify({ mode, ...body, draft, ...(correction ? { correction } : {}) })}` }],
             }, abort.signal), async (field) => { errors.push(...await accept(field)); });
           } catch (error) {
             if (error instanceof SyntaxError) errors.push('Tool input was not complete valid JSON.');

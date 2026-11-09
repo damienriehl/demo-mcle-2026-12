@@ -293,6 +293,19 @@ describe('no-key intake', () => {
     expect(saved.list()[0].timeline[0].date).toBe('2026-11-06');
   });
 
+  it("opens each model request with today's local date, outside the system prompt", async () => {
+    vi.useFakeTimers({ toFake: ['Date'] });
+    vi.setSystemTime(new Date(2027, 2, 9, 12));
+    const fake = replay('ramble');
+    await post(createIntakeRoutes({ store: store(), stream: fake.stream }), 'ramble', {
+      text: 'My fictional client Mira Example was fired around October 3rd.',
+    });
+    const content = fake.requests[0].messages[0].content as string;
+    expect(content.split('\n')[0]).toBe('Today is 2027-03-09.');
+    expect(fake.requests[0].system).not.toContain('2027-03-09');
+    expect(fake.requests[0].system).toContain('most recent such date on or before today');
+  });
+
   it('mounts the intake routes on the main server', async () => {
     vi.stubEnv('MATTER_COCKPIT_API_KEY', '');
     vi.stubEnv('MATTER_COCKPIT_API_KEY_FILE', join(tmpdir(), 'missing-mc-intake-key'));

@@ -124,4 +124,18 @@ describe('synthetic matter collections', () => {
       }
     }
   }, 60_000);
+
+  it('fills the radar this-week band with deadlines from at least two matters on every reset date', () => {
+    // The engine's holiday calendars end on 2028-12-31, so a court deadline that rolls into 2029
+    // becomes uncomputable; stop a few days short of that edge.
+    for (let day = Date.UTC(2026, 0, 1); day <= Date.UTC(2028, 11, 26); day += 86_400_000) {
+      const today = new Date(day).toISOString().slice(0, 10);
+      const thisWeek = reset('matters', today).filter(matter => matter.deadlines.map(computeDeadline).some(result => {
+        if (result.status !== 'computed') return false;
+        const distance = (Date.parse(`${result.dueDate}T00:00:00Z`) - day) / 86_400_000;
+        return distance >= 2 && distance <= 7;
+      }));
+      expect(thisWeek.length, `this-week matters on ${today}`).toBeGreaterThanOrEqual(2);
+    }
+  }, 60_000);
 });

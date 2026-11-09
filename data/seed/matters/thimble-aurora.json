@@ -31,7 +31,7 @@
     {
       "id": "event-2",
       "event": "Voluntary Chapter 7 petition filed; order for relief entered",
-      "date": "-55"
+      "date": "-67"
     },
     {
       "id": "event-3",
@@ -54,7 +54,7 @@
       "id": "doc-1",
       "title": "Asset-case notice",
       "kind": "notice",
-      "body": "SYNTHETIC DEMO DOCUMENT. Voluntary Chapter 7 order for relief entered fifty-five days before reset. This is an asset case; ordinary unsecured trade claims are subject to the ordinary Rule 3002(c) period. No government claim, special exception, later asset-discovery notice, or different bar date applies.",
+      "body": "SYNTHETIC DEMO DOCUMENT. Voluntary Chapter 7 order for relief entered sixty-seven days before reset. This is an asset case; ordinary unsecured trade claims are subject to the ordinary Rule 3002(c) period. No government claim, special exception, later asset-discovery notice, or different bar date applies.",
       "shared": true
     },
     {
@@ -79,7 +79,7 @@
       "deadlineRuleId": "frbp-3002-proof-of-claim",
       "trigger": {
         "event": "Voluntary Chapter 7 order for relief",
-        "date": "-55"
+        "date": "-67"
       },
       "assumptions": {}
     },

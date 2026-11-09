@@ -54,7 +54,7 @@
       "id": "doc-1",
       "title": "Asset purchase agreement excerpt",
       "kind": "agreement",
-      "body": "SYNTHETIC DEMO DOCUMENT. Section 4.2 requires the buyer to deliver its inspection objection notice twelve calendar days after reset. Section 7.1 fixes closing twenty-four calendar days after reset. These are dates expressly written into the agreement, not statutory periods. Neither date moves for a weekend or holiday.",
+      "body": "SYNTHETIC DEMO DOCUMENT. Section 4.2 requires the buyer to deliver its inspection objection notice four calendar days after reset. Section 7.1 fixes closing twenty-four calendar days after reset. These are dates expressly written into the agreement, not statutory periods. Neither date moves for a weekend or holiday.",
       "shared": true
     },
     {
@@ -76,7 +76,7 @@
       },
       "assumptions": {},
       "inputs": {
-        "dueDate": "+12",
+        "dueDate": "+4",
         "section": "Asset Purchase Agreement § 4.2"
       }
     },
