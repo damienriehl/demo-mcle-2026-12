@@ -31,6 +31,8 @@ describe('draft compare HTTP flow', () => {
 
   it.each([
     ['Creditor', 'Lending party', 'Creditor', 'https://folio.openlegalstandard.org/R7PHFZzZmVmczzNQl6iZKsa'],
+    ['Secured Creditor Party', 'Debtor', 'Secured Creditor', 'https://folio.openlegalstandard.org/RZBGdq2Y9YEuAvMqpgUbGy'],
+    ['Purchase Agreement', 'Debtor', 'Debtor', 'https://folio.openlegalstandard.org/R77pHybcEdlO9OmqSuiyWi1'],
     ['Invented actor', 'Debtor', 'Debtor', 'https://folio.openlegalstandard.org/R77pHybcEdlO9OmqSuiyWi1'],
     ['Invented actor', '  DEBTORS  ', 'Debtor', 'https://folio.openlegalstandard.org/R77pHybcEdlO9OmqSuiyWi1'],
     ['Invented actor', 'Unclassified participant', undefined, undefined],
@@ -41,6 +43,24 @@ describe('draft compare HTTP flow', () => {
     expect(party).toMatchObject({ name: buyer, role });
     expect(party.actorLabel).toBe(expectedLabel);
     expect(party.actorIri).toBe(expectedIri);
+  });
+
+  it.each([
+    ['Closing Opinion Letter', 'Legal Opinion Document'],
+    ['Plan Support Agreement', 'Restructuring Support Agreement'],
+    ['Imaginary document letter', undefined],
+    ['Buyer', undefined],
+  ])('resolves document facts labeled %s within the document branch', async (label, expected) => {
+    const c = context(fake([{ ...facts(), documentType: { label, family: 'advisory' }, tags: [
+      { label: 'Closing Opinion Letter', quote: 'direct damages', draft: 'later' },
+      { label: 'Closing Opinion Letter', quote: 'absent quote', draft: 'later' },
+      { label: 'Imaginary document letter', quote: 'direct damages', draft: 'later' },
+    ] }]).stream);
+    const result = await events(await upload(c));
+    expect(result[2].documentType?.label).toBe(expected);
+    expect(result[2].tags.filter((tag: { source: string }) => tag.source === 'model')).toEqual([
+      expect.objectContaining({ label: 'Legal Opinion Document', branch: 'Document / Artifact', text: 'direct damages' }),
+    ]);
   });
 
   it.each(['malformed', 'unknown change'])('finishes advice with done after skipping a %s element between good assessments', async kind => {

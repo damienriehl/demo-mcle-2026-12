@@ -1,7 +1,7 @@
 import { existsSync, readdirSync } from 'node:fs';
 import { copyFile, mkdtemp, readFile, rm, writeFile, mkdir } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
-import { join, resolve } from 'node:path';
+import { basename, join, resolve } from 'node:path';
 import type { BetaRawMessageStreamEvent } from '@anthropic-ai/sdk/resources/beta/messages';
 import { openDocxSession } from 'docxodus/core';
 import { describe, expect, it } from 'vitest';
@@ -12,6 +12,7 @@ import { normalizeDraft } from '../server/drafts/normalize';
 import { modelAssessmentSchema, type ModelAssessment, type Party } from '../server/drafts/types';
 import { lookup } from '../server/folio/index';
 import type { ModelStream } from '../server/intake/client';
+import { fake } from './fixtures/drafts/api/helpers';
 
 const root = resolve('data/seed/drafts');
 const pairs = readdirSync(root, { withFileTypes: true }).filter(entry => entry.isDirectory()).map(entry => entry.name).sort();
@@ -66,6 +67,7 @@ describe('bundled draft samples', () => {
         const assessments = findCannedAssessments(key, party.name)!;
         expect(assessments).toBeDefined();
         expect(assessments.length).toBeGreaterThan(0);
+        expect(assessments.map(assessment => assessment.changeId).sort()).toEqual(result.changes.map(change => change.changeId).sort());
         if (namedParty) expect(assessments.some(assessment => assessment.verdict === 'harms')).toBe(true);
         for (const value of assessments) {
           const assessment = modelAssessmentSchema.parse(value);
@@ -105,7 +107,7 @@ it('loads available canned pairs while skipping a folder without metadata', asyn
   } finally { await rm(directory, { recursive: true, force: true }); }
 });
 
-it('generates replay files through an injected stream, keeping only verified advice and counters', async () => {
+it('retries incomplete advice and writes the first complete run for every detected party', async () => {
   const { generateCannedPair } = await import('../scripts/generate-canned');
   const directory = await mkdtemp(join(tmpdir(), 'draft-generator-'));
   try {
@@ -125,14 +127,16 @@ it('generates replay files through an injected stream, keeping only verified adv
     }
     const compared = await sample(directory);
     const good: ModelAssessment = { changeId: compared.changes[0].changeId, verdict: 'harms', confidence: 'high', quote: 'within 10 days', reason: 'Payment "within 10 days" is earlier.', counter: { find: 'within 10 days', replace: 'within 30 days', effect: 'Restores time to pay.' } };
+    const other: ModelAssessment = { changeId: compared.changes[1].changeId, verdict: 'neutral', confidence: 'high', quote: compared.changes[1].laterText, reason: 'The delivery period changes.' };
     const outputs = [
       { parties: detectedParties.map(party => ({ ...party, actorLabel: 'Buyer' })), documentType: { label: 'Asset Purchase Agreement', family: 'transactional' }, tags: [
         { label: 'Indemnification', quote: 'invented quote', draft: 'later' },
         { label: 'Confidentiality Clause', quote: 'confidential', draft: 'later' },
       ] },
       { assessments: [good, { ...good, changeId: compared.changes[1].changeId, quote: 'invented quote' }] },
-      { assessments: [{ ...good, verdict: 'helps', counter: { ...good.counter!, find: 'not in the draft' } }] },
-      { assessments: [{ ...good, verdict: 'neutral', counter: undefined }] },
+      { assessments: [{ ...good, reason: 'Complete payment assessment.' }, other] },
+      { assessments: [{ ...good, verdict: 'helps', counter: { ...good.counter!, find: 'not in the draft' } }, other] },
+      { assessments: [{ ...good, verdict: 'neutral', counter: undefined }, other] },
     ];
     const requests: Parameters<ModelStream>[0][] = [];
     const stream: ModelStream = async function* (request) {
@@ -145,11 +149,12 @@ it('generates replay files through an injected stream, keeping only verified adv
       yield { type: 'content_block_stop', index: 0 };
     };
     const summary = await generateCannedPair({ directory, stream });
-    expect(summary).toMatchObject({ changes: 2, verified: 3, unverified: 1, countersKept: 1 });
-    expect(requests).toHaveLength(4);
+    expect(summary).toMatchObject({ changes: 2, verified: 6, unverified: 1, countersKept: 1 });
+    expect(requests).toHaveLength(5);
     expect(requests[1].system).toContain(`You represent ${parties[0].name}`);
-    expect(requests[2].system).toContain(`You represent ${parties[1].name}`);
-    expect(requests[3].system).toContain(`You represent ${detectedParties[2].name}`);
+    expect(requests[2].system).toContain(`You represent ${parties[0].name}`);
+    expect(requests[3].system).toContain(`You represent ${parties[1].name}`);
+    expect(requests[4].system).toContain(`You represent ${detectedParties[2].name}`);
     const meta = JSON.parse(await readFile(join(directory, 'meta.json'), 'utf8'));
     expect(meta.key).toBe(cannedKey(compared.earlier.text, compared.later.text));
     expect(meta.documentType.label).toBe('Asset Purchase Agreement');
@@ -160,11 +165,41 @@ it('generates replay files through an injected stream, keeping only verified adv
       const slug = party.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
       const saved = JSON.parse(await readFile(join(directory, `analysis.${slug}.json`), 'utf8'));
       expect(saved.party).toBe(party.name);
-      expect(saved.assessments).toHaveLength(1);
+      expect(saved.assessments).toHaveLength(2);
+      expect(saved.assessments[1]).toEqual(other);
       const assessment = modelAssessmentSchema.parse(saved.assessments[0]);
       expect(assessment.quote).toBe('within 10 days');
-      if (party.role === 'buyer') expect(assessment.counter).toEqual(good.counter);
+      if (party.role === 'buyer') {
+        expect(assessment.counter).toEqual(good.counter);
+        expect(assessment.reason).toBe('Complete payment assessment.');
+      }
       else expect(assessment.counter).toBeUndefined();
     }
+  } finally { await rm(directory, { recursive: true, force: true }); }
+});
+
+it('fails a pair after three incomplete advice runs with only the party and missing change ids', async () => {
+  const { generateCannedPair } = await import('../scripts/generate-canned');
+  const directory = await mkdtemp(join(tmpdir(), 'draft-incomplete-'));
+  try {
+    const party = { name: 'Fictional Alder Buyer', role: 'buyer', actorLabel: 'Buyer' };
+    await writeFile(join(directory, 'pair.json'), JSON.stringify({ title: 'Incomplete pair', family: 'transactional', parties: [party], matterHint: 'transactional' }));
+    await writeFile(join(directory, 'earlier.md'), 'Buyer pays in 30 days.\n\nSeller delivers in 20 days.');
+    await writeFile(join(directory, 'later.md'), 'Buyer pays in 10 days.\n\nSeller delivers in 10 days.');
+    const compared = await compareDrafts(await draft(directory, 'earlier.md'), await draft(directory, 'later.md'));
+    expect(compared.changes).toHaveLength(2);
+    const good: ModelAssessment = { changeId: compared.changes[0].changeId, verdict: 'harms', confidence: 'high', quote: compared.changes[0].laterText, reason: 'Private model content must not enter the failure message.' };
+    const replay = fake([
+      { parties: [party], tags: [] },
+      ...Array.from({ length: 3 }, () => ({ assessments: [good, { ...good, changeId: compared.changes[1].changeId, confidence: 42 }] })),
+    ]);
+    await writeFile(join(directory, 'meta.json'), 'previous metadata');
+    await writeFile(join(directory, 'analysis.fictional-alder-buyer.json'), 'previous advice');
+    await expect(generateCannedPair({ directory, stream: replay.stream })).rejects.toThrow(
+      `Incomplete canned advice for pair "${basename(directory)}", party "${party.name}": missing change ids ${compared.changes[1].changeId} after 3 attempts.`,
+    );
+    expect(replay.requests).toHaveLength(4);
+    expect(await readFile(join(directory, 'meta.json'), 'utf8')).toBe('previous metadata');
+    expect(await readFile(join(directory, 'analysis.fictional-alder-buyer.json'), 'utf8')).toBe('previous advice');
   } finally { await rm(directory, { recursive: true, force: true }); }
 });

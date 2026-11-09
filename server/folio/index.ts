@@ -139,6 +139,50 @@ export function findByLabel(label: string): Concept[] {
   return (node.matches ?? []).map((match) => match.concept);
 }
 
+// Ignore grammatical filler and generic document wrappers, but retain agreement,
+// plan, opinion and other words that distinguish legal classifications.
+const labelStopwords = new Set('a an the of and or for to in on by with from as at is are legal document letter'.split(' '));
+const singularWord = (word: string) => [...preferredForms(word)].sort((a, b) => a.length - b.length)[0];
+const singularLabel = (label: string) => key(label).replace(/[a-z]+$/u, singularWord);
+const contentWords = (label: string) => new Set((key(label).match(/[\p{L}\p{M}\p{N}]+/gu) ?? [])
+  .map(singularWord).filter(word => !labelStopwords.has(word)));
+
+/** Resolve a model label within the allowed indexed branches, best exact match first. */
+export function resolveLabel(label: string, { branches }: { branches?: readonly string[] } = {}): Concept | undefined {
+  const allowed = (concept: Concept) => !branches || branches.includes(concept.branch);
+  const normalized = key(label);
+  const exact = findByLabel(label).filter(concept => allowed(concept)
+    && [concept.label, ...concept.alt].some(form => key(form) === normalized));
+  const preferred = exact.find(concept => key(concept.label) === normalized);
+  if (preferred || exact.length) return preferred ?? exact[0];
+
+  const concepts = [...getIndex().byIri.values()].filter(allowed);
+  const singular = singularLabel(label);
+  const inflected = concepts.find(concept => singularLabel(concept.label) === singular)
+    ?? concepts.find(concept => concept.alt.some(form => singularLabel(form) === singular));
+  if (inflected) return inflected;
+
+  const words = contentWords(label);
+  let best: Concept | undefined;
+  let bestScore = 0;
+  for (const concept of concepts) {
+    // Alternative labels can be broad or even whole definitions. Use preferred
+    // labels for overlap; alternatives still participate in both exact stages.
+    const target = contentWords(concept.label);
+    const shared = [...words].filter(word => target.has(word)).length;
+    if (!shared) continue;
+    const score = shared / (words.size + target.size - shared);
+    if (score < 0.5) continue;
+    if (score > bestScore || (score === bestScore && best
+      && (concept.label.length < best.label.length
+        || (concept.label.length === best.label.length && concept.iri < best.iri)))) {
+      best = concept;
+      bestScore = score;
+    }
+  }
+  return best;
+}
+
 const isWord = (char: string | undefined) => char !== undefined && /[\p{L}\p{M}\p{N}_]/u.test(char);
 
 /** Tag nonoverlapping label occurrences with offsets into the original draft text. */

@@ -11,6 +11,8 @@ import type { DocumentType, ModelAssessment, Party } from '../server/drafts/type
 import { modelTagPass } from '../server/folio/tag';
 import type { ModelStream } from '../server/intake/client';
 
+class IncompleteAdviceError extends Error {}
+
 /** Generate exactly the file selection and verified model output used by the sample routes. */
 export async function generateCannedPair({ directory, stream }: { directory: string; stream: ModelStream }) {
   const pair: { title: string; family: DocumentType['family']; parties: Pick<Party, 'name' | 'role'>[]; matterHint: Matter['practiceArea'] | 'none' } = JSON.parse(await readFile(join(directory, 'pair.json'), 'utf8'));
@@ -35,20 +37,29 @@ export async function generateCannedPair({ directory, stream }: { directory: str
   const summary = { pair: basename(directory), changes: compared.changes.length, verified: 0, unverified: 0, countersKept: 0 };
   const analyses: { filename: string; party: string; assessments: ModelAssessment[] }[] = [];
   for (const party of facts.parties) {
-    const assessments: ModelAssessment[] = [];
-    await streamAssessments({ stream, signal, changes: compared.changes, laterDocx: later.docx,
-      request: buildAdviceRequest({ party: party.name, documentType: facts.documentType, changes: compared.changes, ...texts }),
-      onAssessment: ({ verified, counter, ...assessment }) => {
-        if (!verified) { summary.unverified++; return; }
-        summary.verified++;
-        // Replay re-verifies counters against its own normalized later document.
-        if (counter?.span) {
-          summary.countersKept++;
-          const { span: _span, ...modelCounter } = counter;
-          assessments.push({ ...assessment, counter: modelCounter });
-        } else assessments.push(assessment);
-      },
-    });
+    let assessments: ModelAssessment[] = [];
+    for (let attempt = 0; attempt < 3; attempt++) {
+      const run = new Map<string, ModelAssessment>();
+      await streamAssessments({ stream, signal, changes: compared.changes, laterDocx: later.docx,
+        request: buildAdviceRequest({ party: party.name, documentType: facts.documentType, changes: compared.changes, ...texts }),
+        onAssessment: ({ verified, counter, ...assessment }) => {
+          if (!verified) { summary.unverified++; return; }
+          if (run.has(assessment.changeId)) return;
+          // Replay re-verifies counters against its own normalized later document.
+          if (counter?.span) {
+            const { span: _span, ...modelCounter } = counter;
+            run.set(assessment.changeId, { ...assessment, counter: modelCounter });
+          } else run.set(assessment.changeId, assessment);
+        },
+      });
+      const missing = compared.changes.filter(change => !run.has(change.changeId)).map(change => change.changeId);
+      if (!missing.length) { assessments = [...run.values()]; break; }
+      if (attempt === 2) throw new IncompleteAdviceError(
+        `Incomplete canned advice for pair "${summary.pair}", party "${party.name}": missing change ids ${missing.join(', ')} after 3 attempts.`,
+      );
+    }
+    summary.verified += assessments.length;
+    summary.countersKept += assessments.filter(assessment => assessment.counter).length;
     const slug = party.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
     analyses.push({ filename: `analysis.${slug}.json`, party: party.name, assessments });
   }
@@ -78,8 +89,9 @@ async function main() {
 
 if (process.argv[1] && import.meta.url === pathToFileURL(resolve(process.argv[1])).href) {
   main().catch(error => {
-    // API error bodies can contain request data; report only the error class.
-    console.error(`Canned generation failed: ${error instanceof Error ? error.constructor.name : 'unknown error'}`);
+    // Only the locally constructed completeness error is safe to print in full.
+    console.error(error instanceof IncompleteAdviceError ? error.message
+      : `Canned generation failed: ${error instanceof Error ? error.constructor.name : 'unknown error'}`);
     process.exitCode = 1;
   });
 }
