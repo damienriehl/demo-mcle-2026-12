@@ -1,15 +1,15 @@
 # Fallback branch timings
 
-Each primer idea was built once by following `/cook` with scripted answers, on 2026-11-08, starting from `feat/matter-cockpit` at `bd41b9e`. Seconds run from the skill's clock start to the final passing check. Every branch passed typecheck, the full unit suite, and the full browser suite. Tips below are after rebasing onto `main` on 2026-11-08 (unit suites pass on each). Rebase again onto final `main` and rerun the tests before the talk.
+Each primer idea was built once by following `/cook` with scripted answers, on 2026-11-08, starting from `feat/matter-cockpit` at `bd41b9e`. Seconds run from the skill's clock start to the final passing check. Every branch passed typecheck, the full unit suite, and the full browser suite. Tips below are after rebasing onto final `main` (`c9ce38e`, with Draft Compare) on 2026-11-09; each passed typecheck, the full unit suite, and the full browser suite. The rebased branches are local only: their remote copies still hold the old tips, so switch to the local branch on stage.
 
 | Branch | Idea | Ripcord | Seconds | Tip |
 |---|---|---|---|---|
-| `fallback/budget-burn-down` | Fees billed against the client's budget (Cockpit tab) | "you decide the rest" | 110 | `1ecde16` |
-| `fallback/conflict-check` | Names appearing in more than one matter (Cockpit sidebar) | late answer after the budget | 224 | `ccebf94` |
-| `fallback/risk-heat-map` | Hottest matters first (Radar overlay) | spoken phrase | 242 | `bf40a49` |
-| `fallback/client-update-email` | Drafted status email (Cockpit sidebar, model call) | spoken phrase | 314 | `09e7cbe` |
-| `fallback/what-happens-next` | Plain-English next step (Client Portal, model call) | spoken phrase | 324 | `fd6a609` |
-| `fallback/ask-the-rules` | Rule search quoting the bundled text (Cockpit tab) | spoken phrase | 405 | `52c40c1` |
+| `fallback/budget-burn-down` | Fees billed against the client's budget (Cockpit tab) | "you decide the rest" | 110 | `7ea8024` |
+| `fallback/conflict-check` | Names appearing in more than one matter (Cockpit sidebar) | late answer after the budget | 224 | `482aea6` |
+| `fallback/risk-heat-map` | Hottest matters first (Radar overlay) | spoken phrase | 242 | `26f5c3e` |
+| `fallback/client-update-email` | Drafted status email (Cockpit sidebar, model call) | spoken phrase | 314 | `16c9d93` |
+| `fallback/what-happens-next` | Plain-English next step (Client Portal, model call) | spoken phrase | 324 | `249d43b` |
+| `fallback/ask-the-rules` | Rule search quoting the bundled text (Cockpit tab) | spoken phrase | 405 | `f4bc66b` |
 
 Notes:
 
