@@ -38,8 +38,9 @@ function leaves(value: unknown, path = ''): [string, unknown][] {
 }
 
 describe('synthetic matter collections', () => {
-  it('ships exactly one seed per practice area and ten complete canned matters', () => {
-    expect(files('matters').map(matter => matter.practiceArea).sort()).toEqual(areas);
+  it('ships one seed per practice area, three additional litigation matters, and ten complete canned matters', () => {
+    expect(files('matters').map(matter => matter.practiceArea).sort())
+      .toEqual([...areas, 'litigation', 'litigation', 'litigation'].sort());
     expect(files('canned')).toHaveLength(10);
     expect([...new Set(files('canned').map(matter => matter.practiceArea))].sort()).toEqual(areas);
   });
@@ -83,7 +84,7 @@ describe('synthetic matter collections', () => {
 
   it('includes the requested forum-specific examples and a deliberately unsupported regulatory deadline', () => {
     const matters = reset('matters', '2027-06-15');
-    expect(matters).toHaveLength(7);
+    expect(matters).toHaveLength(10);
     const litigation = matters.find(matter => matter.practiceArea === 'litigation')!;
     expect(litigation.forum).toMatch(/Hennepin County/);
     expect(litigation.forum).toMatch(/District of Minnesota/);
@@ -118,7 +119,7 @@ describe('synthetic matter collections', () => {
     for (let day = Date.UTC(2026, 0, 1); day < Date.UTC(2029, 0, 1); day += 86_400_000) {
       const today = new Date(day).toISOString().slice(0, 10);
       const matters = reset('matters', today);
-      expect(matters).toHaveLength(7);
+      expect(matters).toHaveLength(10);
       for (const matter of matters) {
         const upcoming = matter.deadlines.map(computeSeedDeadline).some(result => {
           if (result.status !== 'computed') return false;

@@ -1,0 +1,250 @@
+{
+  "id": "dminn-quillfeather",
+  "title": "Quillfeather Outdoor Gear, Inc. v. Pinecone Canopy Company",
+  "practiceArea": "litigation",
+  "forum": "United States District Court, District of Minnesota",
+  "synthetic": true,
+  "client": {
+    "name": "Quillfeather Outdoor Gear, Inc.",
+    "contact": "coordinator@dminn-quillfeather.example.invalid"
+  },
+  "parties": [
+    {
+      "name": "Quillfeather Outdoor Gear, Inc.",
+      "role": "Plaintiff; client"
+    },
+    {
+      "name": "Pinecone Canopy Company",
+      "role": "Defendant"
+    }
+  ],
+  "timeline": [
+    {
+      "id": "complaint-filed",
+      "event": "Complaint filed in fictional contract dispute",
+      "date": "-60"
+    },
+    {
+      "id": "answer-served",
+      "event": "Answer served",
+      "date": "-35"
+    },
+    {
+      "id": "interrogatories-served",
+      "event": "Defendant served first interrogatories electronically",
+      "date": "-5"
+    },
+    {
+      "id": "order-entered",
+      "event": "Scheduling order entered",
+      "date": "-1"
+    }
+  ],
+  "documents": [
+    {
+      "id": "case-summary",
+      "title": "Case summary",
+      "kind": "case-note",
+      "body": "SYNTHETIC DEMO DOCUMENT. The parties dispute the design and delivery of fictional outdoor canopy equipment. The scheduling order has been entered and awaits upload; no dates from it have been loaded.",
+      "shared": true
+    },
+    {
+      "id": "interrogatories",
+      "title": "First interrogatories and service record",
+      "kind": "discovery",
+      "body": "SYNTHETIC DEMO DOCUMENT. Defendant served first interrogatories electronically on the service event date in the timeline. No extension or stipulation changes the ordinary response period. This pending response is independent of the scheduling order.",
+      "shared": false
+    }
+  ],
+  "deadlines": [
+    {
+      "id": "interrogatory-response",
+      "label": "Respond to first interrogatories",
+      "deadlineRuleId": "frcp-33-interrogatories",
+      "trigger": {
+        "event": "Defendant served first interrogatories electronically",
+        "date": "-5"
+      },
+      "assumptions": {
+        "serviceMethod": "electronic"
+      }
+    }
+  ],
+  "clientFacing": {
+    "status": "The scheduling order is ready to upload. Its dates have not been added to the matter.",
+    "nextSteps": [
+      "Upload the matching fictional scheduling order and verify each quoted date.",
+      "Gather the records needed to respond to the pending interrogatories."
+    ]
+  },
+  "provenance": {
+    "id": {
+      "source": "stated",
+      "evidence": "Expressly stated in this fictional matter record; all names, documents, and events are synthetic."
+    },
+    "title": {
+      "source": "stated",
+      "evidence": "Expressly stated in this fictional matter record; all names, documents, and events are synthetic."
+    },
+    "practiceArea": {
+      "source": "stated",
+      "evidence": "Expressly stated in this fictional matter record; all names, documents, and events are synthetic."
+    },
+    "forum": {
+      "source": "stated",
+      "evidence": "Expressly stated in this fictional matter record; all names, documents, and events are synthetic."
+    },
+    "synthetic": {
+      "source": "stated",
+      "evidence": "Expressly stated in this fictional matter record; all names, documents, and events are synthetic."
+    },
+    "client.name": {
+      "source": "stated",
+      "evidence": "Expressly stated in this fictional matter record; all names, documents, and events are synthetic."
+    },
+    "client.contact": {
+      "source": "stated",
+      "evidence": "Expressly stated in this fictional matter record; all names, documents, and events are synthetic."
+    },
+    "parties.0.name": {
+      "source": "stated",
+      "evidence": "Expressly stated in this fictional matter record; all names, documents, and events are synthetic."
+    },
+    "parties.0.role": {
+      "source": "stated",
+      "evidence": "Expressly stated in this fictional matter record; all names, documents, and events are synthetic."
+    },
+    "parties.1.name": {
+      "source": "stated",
+      "evidence": "Expressly stated in this fictional matter record; all names, documents, and events are synthetic."
+    },
+    "parties.1.role": {
+      "source": "stated",
+      "evidence": "Expressly stated in this fictional matter record; all names, documents, and events are synthetic."
+    },
+    "timeline.0.id": {
+      "source": "stated",
+      "evidence": "Expressly stated in this fictional matter record; all names, documents, and events are synthetic."
+    },
+    "timeline.0.event": {
+      "source": "stated",
+      "evidence": "Expressly stated in this fictional matter record; all names, documents, and events are synthetic."
+    },
+    "timeline.0.date": {
+      "source": "stated",
+      "evidence": "Expressly stated in this fictional matter record; all names, documents, and events are synthetic."
+    },
+    "timeline.1.id": {
+      "source": "stated",
+      "evidence": "Expressly stated in this fictional matter record; all names, documents, and events are synthetic."
+    },
+    "timeline.1.event": {
+      "source": "stated",
+      "evidence": "Expressly stated in this fictional matter record; all names, documents, and events are synthetic."
+    },
+    "timeline.1.date": {
+      "source": "stated",
+      "evidence": "Expressly stated in this fictional matter record; all names, documents, and events are synthetic."
+    },
+    "timeline.2.id": {
+      "source": "stated",
+      "evidence": "Expressly stated in this fictional matter record; all names, documents, and events are synthetic."
+    },
+    "timeline.2.event": {
+      "source": "stated",
+      "evidence": "Expressly stated in this fictional matter record; all names, documents, and events are synthetic."
+    },
+    "timeline.2.date": {
+      "source": "stated",
+      "evidence": "Expressly stated in this fictional matter record; all names, documents, and events are synthetic."
+    },
+    "timeline.3.id": {
+      "source": "stated",
+      "evidence": "Expressly stated in this fictional matter record; all names, documents, and events are synthetic."
+    },
+    "timeline.3.event": {
+      "source": "stated",
+      "evidence": "Expressly stated in this fictional matter record; all names, documents, and events are synthetic."
+    },
+    "timeline.3.date": {
+      "source": "stated",
+      "evidence": "Expressly stated in this fictional matter record; all names, documents, and events are synthetic."
+    },
+    "documents.0.id": {
+      "source": "stated",
+      "evidence": "Expressly stated in this fictional matter record; all names, documents, and events are synthetic."
+    },
+    "documents.0.title": {
+      "source": "stated",
+      "evidence": "Expressly stated in this fictional matter record; all names, documents, and events are synthetic."
+    },
+    "documents.0.kind": {
+      "source": "stated",
+      "evidence": "Expressly stated in this fictional matter record; all names, documents, and events are synthetic."
+    },
+    "documents.0.body": {
+      "source": "stated",
+      "evidence": "Expressly stated in this fictional matter record; all names, documents, and events are synthetic."
+    },
+    "documents.0.shared": {
+      "source": "stated",
+      "evidence": "Expressly stated in this fictional matter record; all names, documents, and events are synthetic."
+    },
+    "documents.1.id": {
+      "source": "stated",
+      "evidence": "Expressly stated in this fictional matter record; all names, documents, and events are synthetic."
+    },
+    "documents.1.title": {
+      "source": "stated",
+      "evidence": "Expressly stated in this fictional matter record; all names, documents, and events are synthetic."
+    },
+    "documents.1.kind": {
+      "source": "stated",
+      "evidence": "Expressly stated in this fictional matter record; all names, documents, and events are synthetic."
+    },
+    "documents.1.body": {
+      "source": "stated",
+      "evidence": "Expressly stated in this fictional matter record; all names, documents, and events are synthetic."
+    },
+    "documents.1.shared": {
+      "source": "stated",
+      "evidence": "Expressly stated in this fictional matter record; all names, documents, and events are synthetic."
+    },
+    "deadlines.0.id": {
+      "source": "stated",
+      "evidence": "Expressly stated in this fictional matter record; all names, documents, and events are synthetic."
+    },
+    "deadlines.0.label": {
+      "source": "stated",
+      "evidence": "Expressly stated in this fictional matter record; all names, documents, and events are synthetic."
+    },
+    "deadlines.0.deadlineRuleId": {
+      "source": "stated",
+      "evidence": "Expressly stated in this fictional matter record; all names, documents, and events are synthetic."
+    },
+    "deadlines.0.trigger.event": {
+      "source": "stated",
+      "evidence": "Expressly stated in this fictional matter record; all names, documents, and events are synthetic."
+    },
+    "deadlines.0.trigger.date": {
+      "source": "stated",
+      "evidence": "Expressly stated in this fictional matter record; all names, documents, and events are synthetic."
+    },
+    "deadlines.0.assumptions.serviceMethod": {
+      "source": "stated",
+      "evidence": "Expressly stated in this fictional matter record; all names, documents, and events are synthetic."
+    },
+    "clientFacing.status": {
+      "source": "stated",
+      "evidence": "Expressly stated in this fictional matter record; all names, documents, and events are synthetic."
+    },
+    "clientFacing.nextSteps.0": {
+      "source": "stated",
+      "evidence": "Expressly stated in this fictional matter record; all names, documents, and events are synthetic."
+    },
+    "clientFacing.nextSteps.1": {
+      "source": "stated",
+      "evidence": "Expressly stated in this fictional matter record; all names, documents, and events are synthetic."
+    }
+  }
+}

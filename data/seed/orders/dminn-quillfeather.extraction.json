@@ -1,0 +1,63 @@
+{
+  "order": "dminn-quillfeather",
+  "court": "federal",
+  "caption": "Quillfeather Outdoor Gear, Inc. v. Pinecone Canopy Company",
+  "dates": [
+    {
+      "kind": "other",
+      "event": "Order entered",
+      "date": "2026-11-20",
+      "page": 1,
+      "quote": "Order entered: November 20, 2026."
+    },
+    {
+      "kind": "other",
+      "event": "Complete fact discovery",
+      "date": "2027-01-15",
+      "page": 1,
+      "quote": "Fact discovery shall be completed by January 15, 2027."
+    },
+    {
+      "kind": "expert-disclosure",
+      "event": "Plaintiff’s expert disclosures",
+      "date": "2027-02-01",
+      "page": 1,
+      "quote": "Plaintiff's expert disclosures under Rule 26(a)(2) shall be made by February 1, 2027."
+    },
+    {
+      "kind": "other",
+      "event": "Defendant’s expert disclosures",
+      "date": "2027-03-01",
+      "page": 1,
+      "quote": "Defendant's expert disclosures under Rule 26(a)(2) shall be made by March 1, 2027."
+    },
+    {
+      "kind": "other",
+      "event": "Complete expert discovery",
+      "date": "2027-03-31",
+      "page": 2,
+      "quote": "Expert discovery shall be completed by March 31, 2027."
+    },
+    {
+      "kind": "dispositive-hearing",
+      "event": "Dispositive motions served, filed, and heard",
+      "date": "2027-04-30",
+      "page": 2,
+      "quote": "Dispositive motions shall be served, filed, and heard by April 30, 2027."
+    },
+    {
+      "kind": "other",
+      "event": "Final pretrial conference",
+      "date": "2027-05-24",
+      "page": 2,
+      "quote": "The final pretrial conference is set for May 24, 2027."
+    },
+    {
+      "kind": "trial",
+      "event": "Trial ready date",
+      "date": "2027-06-14",
+      "page": 2,
+      "quote": "Trial ready date: June 14, 2027"
+    }
+  ]
+}

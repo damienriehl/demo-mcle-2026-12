@@ -1,0 +1,35 @@
+{
+  "order": "ramsey-copperleaf",
+  "court": "minnesota",
+  "caption": "Copperleaf Bakery Cooperative v. Northstar Oven Works, Inc.",
+  "dates": [
+    {
+      "kind": "other",
+      "event": "Order entered",
+      "date": "2026-11-30",
+      "page": 1,
+      "quote": "Order entered: November 30, 2026."
+    },
+    {
+      "kind": "nondispositive-hearing",
+      "event": "Hearing on plaintiff’s motion to compel",
+      "date": "2027-01-25",
+      "page": 1,
+      "quote": "The hearing on plaintiff's motion to compel, a nondispositive motion, is set for January 25, 2027."
+    },
+    {
+      "kind": "other",
+      "event": "Complete discovery",
+      "date": "2027-07-01",
+      "page": 2,
+      "quote": "Discovery shall be completed by July 1, 2027."
+    },
+    {
+      "kind": "trial",
+      "event": "Trial",
+      "date": "2027-11-01",
+      "page": 2,
+      "quote": "Trial is set for November 1, 2027."
+    }
+  ]
+}
