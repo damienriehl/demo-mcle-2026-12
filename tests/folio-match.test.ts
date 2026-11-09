@@ -19,12 +19,59 @@ describe('offline FOLIO matcher', () => {
     const tags = tagText(text, 'earlier');
     expect(tags).toEqual([
       expect.objectContaining({ iri: indemnification, label: 'Indemnification', draft: 'earlier', start: 0, end: 15, text: 'indemnification', source: 'index' }),
+      expect.objectContaining({ label: 'Obligation', draft: 'earlier', start: 16, end: 27, text: 'obligations', source: 'index' }),
       expect.objectContaining({ iri: assetPurchase, label: 'Asset Purchase Agreement', draft: 'earlier', start: 39, end: 63, text: 'Asset Purchase Agreement', source: 'index' }),
     ]);
     for (const tag of tags) {
       expect(text.slice(tag.start, tag.end)).toBe(tag.text);
       expect(tag.branch).not.toBe('');
     }
+  });
+
+  it('tags Buyer without treating maintenance contracts as spousal support', () => {
+    const tags = tagText('Buyer shall pay maintenance contracts', 'later');
+    expect(tags).toContainEqual(expect.objectContaining({ label: 'Buyer', branch: 'Actor / Player', text: 'Buyer' }));
+    expect(tags.map((tag) => tag.label)).not.toContain('Long-term Spousal Support');
+  });
+
+  it.each([
+    ['a single closing', 'Unmarried'],
+    ['completed', 'Service Closed / Ended'],
+    ['funds', 'Funds Practice'],
+    ['licenses', 'Licensing Practice'],
+    ['information', 'Information Industry'],
+    ['claims', 'Litigation Claims'],
+    ['medical', 'Medical - Real Estate Asset'],
+  ])('does not tag the standalone alternative %s as %s', (text, label) => {
+    expect(tagText(text, 'later').map((tag) => tag.label)).not.toContain(label);
+  });
+
+  it('excludes sandbox and use-case concepts while still tagging Notice', () => {
+    const tags = tagText('inventory; prompt notice; Document Management Implementation Services', 'later');
+    expect(tags.map((tag) => tag.label)).not.toContain('Inventory');
+    expect(tags.map((tag) => tag.label)).not.toContain('Prompt');
+    expect(tags.every((tag) => !tag.branch.startsWith('ZZZ') && tag.branch !== 'Legal Use Cases')).toBe(true);
+    expect(tags).toContainEqual(expect.objectContaining({ label: 'Notice', text: 'notice' }));
+  });
+
+  it.each([
+    ['BUYER', 'Buyer'], ['buyers', 'Buyer'],
+    ['seller', 'Seller'], ['sellers', 'Seller'],
+    ['obligation', 'Obligation'], ['obligations', 'Obligation'],
+    ['notice', 'Notice'], ['notices', 'Notice'],
+    ['lien', 'Lien'], ['liens', 'Lien'],
+    ['agreement', 'Agreements'], ['agreements', 'Agreements'],
+    ['authorities', 'Authority'], ['statuses', 'Status'], ['expense', 'Expenses'],
+    ['cash', 'Cash'], ['assignment', 'Assignment'],
+    ['indemnification', 'Indemnification'],
+    ['Closing Event', 'Closing Event'],
+    ['Limited Liability Company', 'Limited Liability Company'],
+    ['Conditions to Closing', 'Conditions to Closing'],
+    ['Closing Conditions', 'Conditions to Closing'],
+    ['Spousal Maintenance', 'Long-term Spousal Support'],
+    ['Service Closed', 'Service Closed / Ended'],
+  ])('keeps preferred forms and multi-word labels: %s', (text, label) => {
+    expect(tagText(text, 'earlier')).toContainEqual(expect.objectContaining({ label, text, start: 0, end: text.length }));
   });
 
   it('does not map Action to the blocklisted auction IRI', () => {

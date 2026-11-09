@@ -47,6 +47,18 @@ function normalize(text: string) {
 }
 
 const key = (text: string) => canonical(text).replace(/ +/gu, ' ').trim();
+
+function preferredForms(label: string): Set<string> {
+  const forms = new Set([label]);
+  if (!/^[a-z]+$/u.test(label)) return forms;
+  if (/ies$/u.test(label)) forms.add(label.slice(0, -3) + 'y');
+  else if (/(ches|shes|sses|xes|zes)$/u.test(label)) forms.add(label.slice(0, -2));
+  else if (/s$/u.test(label) && !/(ss|us|is)$/u.test(label)) forms.add(label.slice(0, -1));
+  else forms.add(/[^aeiou]y$/u.test(label) ? label.slice(0, -1) + 'ies'
+    : /(s|x|z|ch|sh)$/u.test(label) ? label + 'es' : label + 's');
+  return forms;
+}
+
 const tokens = /[\p{L}\p{M}\p{N}_]+|[^\p{L}\p{M}\p{N}_]/gu;
 const trieNode = (): Trie => ({ children: new Map() });
 const compareIri = (a: Match, b: Match) => Number(b.preferred) - Number(a.preferred)
@@ -73,11 +85,12 @@ function getIndex() {
     blocked.get(surface)!.add(entry.blocked_iri);
   }
   for (const concept of concepts) {
+    if (concept.branch.startsWith('ZZZ') || concept.branch === 'Legal Use Cases') continue;
     byIri.set(concept.iri, concept);
-    const preferred = key(concept.label);
-    for (const label of new Set([preferred, ...concept.alt.map(key)])) {
+    const preferred = preferredForms(key(concept.label));
+    for (const label of new Set([...preferred, ...concept.alt.map(key)])) {
       if (!label) continue;
-      const match = { concept, preferred: label === preferred };
+      const match = { concept, preferred: preferred.has(label) };
       let node = trie;
       for (const token of label.match(tokens)!) {
         let next = node.children.get(token);
@@ -135,6 +148,7 @@ export function tagText(text: string, draft: FolioTag['draft']): FolioTag[] {
       if (letters.length <= 3 && letters.length > 0
         && (literal !== literal.toUpperCase() || literal === literal.toLowerCase())) continue;
       for (const match of node.matches) {
+        if (!surface.includes(' ') && !match.preferred) continue;
         if (!index.blocked.get(surface)?.has(match.concept.iri)) {
           candidates.push({ ...match, start: starts[first], end: ends[last] });
         }
