@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { DeadlineCard } from '../../components/DeadlineCard';
 import { toStoredMatter, type Matter, type MatterWithDeadlines } from '../../data/schema';
+import { useMatters } from '../../data/useMatters';
 import { isCourtOrderDate } from '../../engine';
 import { readSse } from '../../intake/stream';
 import { VerifyDrawer } from '../../verify/VerifyDrawer';
@@ -55,24 +56,26 @@ function OrderArrivals({ arrivals, label }: { arrivals: Arrival[]; label: string
 function PublicOrderUpload({ matter }: { matter: MatterWithDeadlines }) {
   const picker = useRef<HTMLInputElement>(null);
   const uploadId = 'new';
-  const { running, awaitingSnapshot, message, arrivals } = useUploadState(uploadId);
+  const { running, awaitingSnapshot, message, arrivals, createdMatterId } = useUploadState(uploadId);
+  const createdMatter = useMatters().find(item => item.id === createdMatterId);
+  const showUpload = !createdMatterId || createdMatterId === matter.id;
   const busy = running || !!awaitingSnapshot;
   useEffect(() => {
-    if (awaitingSnapshot && storedSnapshot(matter) === awaitingSnapshot) updateUpload(uploadId, { awaitingSnapshot: undefined });
-  }, [matter, awaitingSnapshot]);
+    if (awaitingSnapshot && createdMatter && storedSnapshot(createdMatter) === awaitingSnapshot) updateUpload(uploadId, { awaitingSnapshot: undefined });
+  }, [createdMatter, awaitingSnapshot]);
   async function uploadFile(file?: File) {
     if (!file || busy) return;
     const body = new FormData();
     body.set('matterId', 'new');
     body.set('file', file);
-    updateUpload(uploadId, { running: true, arrivals: [], message: 'Reading the scheduling order…' });
+    updateUpload(uploadId, { running: true, arrivals: [], message: 'Reading the scheduling order…', createdMatterId: undefined });
     try {
       await extract(body, event => {
         if (event.type === 'date') appendArrival(uploadId, event);
         else if (event.type === 'pages') updateUpload(uploadId, { message: `Reading ${event.count} pages — court dates appear as they arrive.` });
         else if (event.type === 'done') {
           if (event.created && event.matter) {
-            updateUpload(uploadId, { awaitingSnapshot: storedSnapshot(event.matter), message: `Opened ${event.matter.title} as a new public-record matter.` });
+            updateUpload(uploadId, { createdMatterId: event.matter.id, awaitingSnapshot: storedSnapshot(event.matter), message: `Opened ${event.matter.title} as a new public-record matter.` });
             window.dispatchEvent(new CustomEvent('matter-cockpit:select-matter', { detail: { id: event.matter.id } }));
           } else updateUpload(uploadId, { message: event.message ?? '' });
         } else updateUpload(uploadId, { message: event.message });
@@ -87,8 +90,8 @@ function PublicOrderUpload({ matter }: { matter: MatterWithDeadlines }) {
       <strong>Open a public order as a new matter</strong><span>PDF · drop here or choose a file</span>
     </button>
     <input ref={picker} type="file" accept="application/pdf,.pdf" hidden aria-label="Public scheduling order PDF" onChange={event => { void uploadFile(event.target.files?.[0]); event.target.value = ''; }} />
-    <p role="status">{message}</p>
-    <OrderArrivals arrivals={arrivals} label="Dates from public order extraction" />
+    <p role="status">{showUpload ? message : ''}</p>
+    <OrderArrivals arrivals={showUpload ? arrivals : []} label="Dates from public order extraction" />
   </section>;
 }
 

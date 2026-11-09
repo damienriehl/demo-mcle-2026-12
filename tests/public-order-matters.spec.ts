@@ -66,7 +66,7 @@ for (const method of ['picker', 'drop']) test(`opens a public order through ${me
   await expect(control).toBeDisabled();
   await next();
   const message = `Opened ${publicOrder.title} as a new public-record matter.`;
-  await expect(page.getByRole('status').filter({ hasText: message })).toBeVisible();
+  await expect(page.getByRole('region', { name: 'Open public scheduling order', exact: true }).getByRole('status')).toBeEmpty();
   // Completion precedes the store snapshot: keep the selection request pending.
   await expect(page.getByRole('heading', { name: initial.title, exact: true })).toBeVisible();
   await page.evaluate(matters => window.dispatchEvent(new CustomEvent('public-order-snapshot', { detail: matters })), [initial, publicOrder]);
@@ -81,6 +81,36 @@ for (const method of ['picker', 'drop']) test(`opens a public order through ${me
   await expect(page.getByRole('status').filter({ hasText: message })).toBeVisible();
   await expect(page.getByRole('button', { name: 'Drop a scheduling order' })).toBeEnabled();
   await expect(page.locator('[data-court-date]')).toHaveCount(2);
+  await expect(control).toBeEnabled();
+
+  await page.getByRole('complementary', { name: 'Matter list' }).getByRole('button', { name: initial.title }).click();
+  const publicUpload = page.getByRole('region', { name: 'Open public scheduling order', exact: true });
+  await expect(publicUpload.locator('[data-order-arrival]')).toHaveCount(0);
+  await expect(publicUpload.getByRole('status')).toBeEmpty();
+  await expect(control).toBeEnabled();
+
+  await selected.click();
+  await expect(publicUpload.locator('[data-order-arrival]')).toContainText(arrival.quote);
+  await expect(publicUpload.getByRole('status')).toHaveText(message);
+  await expect(control).toBeEnabled();
+});
+
+test('public upload unlocks when its created matter snapshot arrives while another matter is active', async ({ page }) => {
+  await page.route('**/api/events', route => route.fulfill({ contentType: 'text/event-stream', body: sse([[initial, { ...publicOrder, documents: [] }]]) }));
+  await page.route('**/api/features/scheduling-order/extract', route => route.fulfill({ contentType: 'text/event-stream', body: sse([
+    arrival, { type: 'done', created: true, matter: publicOrder, added: { courtDates: 2, derived: 3 } },
+  ]) }));
+  await page.goto('/');
+  await page.getByRole('tab', { name: 'Scheduling order', exact: true }).click();
+  await page.getByLabel('Public scheduling order PDF', { exact: true }).setInputFiles({ name: 'fictional-order.pdf', mimeType: 'application/pdf', buffer: Buffer.from('fictional PDF') });
+  await expect(page.getByRole('heading', { name: publicOrder.title, exact: true })).toBeVisible();
+  const control = page.getByRole('button', { name: 'Open a public order as a new matter' });
+  await expect(control).toBeDisabled();
+  await page.getByRole('complementary', { name: 'Matter list' }).getByRole('button', { name: initial.title }).click();
+  await expect(control).toBeDisabled();
+  await page.evaluate(matters => window.dispatchEvent(new CustomEvent('public-order-snapshot', { detail: matters })), [initial, publicOrder]);
+  await expect(control).toBeEnabled();
+  await expect(page.getByRole('heading', { name: initial.title, exact: true })).toBeVisible();
 });
 
 test('Client Portal omits a public-record matter from its list and selection', async ({ page }) => {
