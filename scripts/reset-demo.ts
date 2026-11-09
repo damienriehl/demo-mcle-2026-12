@@ -1,8 +1,9 @@
 import { mkdirSync, readdirSync, readFileSync, renameSync, rmSync, writeFileSync } from 'node:fs';
-import { dirname, join, resolve } from 'node:path';
+import { basename, dirname, join, resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { mattersSchema } from '../src/data/schema';
 import { localToday, materialize } from '../server/seed-dates';
+import { DEFAULT_COMPARISONS_DIRECTORY } from '../server/drafts/store';
 
 export function resetDemo({
   seedDirectory = resolve('data/seed/matters'),
@@ -20,7 +21,7 @@ export function resetDemo({
   mkdirSync(dirname(filePath), { recursive: true });
   writeFileSync(`${filePath}.tmp`, `${JSON.stringify(matters, null, 2)}\n`);
   renameSync(`${filePath}.tmp`, filePath);
-  rmSync(join(dirname(filePath), 'comparisons'), { recursive: true, force: true });
+  rmSync(join(dirname(filePath), basename(DEFAULT_COMPARISONS_DIRECTORY)), { recursive: true, force: true });
   return matters;
 }
 

@@ -10,8 +10,9 @@ import { modelTagPass, tagDrafts, verifyDocumentFacts } from '../folio/tag';
 import { modelStream, type ModelStream } from '../intake/client';
 import { getMatterStore, type MatterStore } from '../store';
 import { buildAdviceRequest, streamAssessments, verifyAssessment } from './advise';
-import { cannedKey, findCanned, findCannedAssessments, loadCanned } from './canned';
+import { cannedKey, findCanned, findCannedAssessments, loadCanned, sampleFileNames } from './canned';
 import { compareDrafts } from './compare';
+import { DraftInputError } from './errors';
 import { normalizeDraft } from './normalize';
 import { buildAdviceDocx, buildCounterDocx, selectedCounters } from './outputs';
 import { createComparisonStore } from './store';
@@ -19,7 +20,6 @@ import { modelAssessmentSchema, type CompareEvent, type ComparisonRecord } from 
 
 type Options = { store?: MatterStore; stream?: ModelStream | null; comparisonsDir?: string; samplesDir?: string; cannedDir?: string };
 type Send = (event: CompareEvent) => Promise<void>;
-class DraftInputError extends Error {}
 
 function logFailure(error: unknown) {
   console.error(`draft compare failed: ${error instanceof Error ? error.constructor.name : typeof error}${error instanceof Anthropic.APIError ? ` ${error.status ?? 'no-status'}` : ''}`);
@@ -51,8 +51,7 @@ async function samples(directory: string) {
     const files = await readdir(resolve(directory, folder.name));
     const { title, family } = JSON.parse(await readFile(resolve(directory, folder.name, 'pair.json'), 'utf8'));
     result.push({ id: folder.name, title: title as string, family: family as string,
-      earlierName: files.includes('earlier.docx') ? 'earlier.docx' : 'earlier.md',
-      laterName: files.includes('later.pdf') ? 'later.pdf' : files.includes('later.docx') ? 'later.docx' : 'later.md' });
+      ...sampleFileNames(files) });
   }
   return result;
 }
@@ -102,13 +101,7 @@ export function createDraftCompareRoutes(options: Options = {}): Hono {
       }
     }
     const normalized = [];
-    for (const input of inputs) {
-      try { normalized.push(await normalizeDraft(input)); }
-      catch (error) {
-        if (error instanceof Error && /^(This file type is not supported\.|This PDF has no text layer;|This server has no converter for )/.test(error.message)) throw new DraftInputError(error.message);
-        throw error;
-      }
-    }
+    for (const input of inputs) normalized.push(await normalizeDraft(input));
     const [earlier, later] = normalized;
     const compared = await compareDrafts(earlier, later);
     if (signal.aborted) return;

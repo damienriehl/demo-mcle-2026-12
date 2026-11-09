@@ -4,7 +4,7 @@ import { pathToFileURL } from 'node:url';
 import type { Matter } from '../src/data/schema';
 import { createClient, NEEDS_KEY_MESSAGE } from '../server/ai';
 import { buildAdviceRequest, streamAssessments } from '../server/drafts/advise';
-import { cannedKey } from '../server/drafts/canned';
+import { cannedKey, sampleFileNames } from '../server/drafts/canned';
 import { compareDrafts } from '../server/drafts/compare';
 import { normalizeDraft } from '../server/drafts/normalize';
 import type { DocumentType, ModelAssessment, Party } from '../server/drafts/types';
@@ -13,18 +13,15 @@ import type { ModelStream } from '../server/intake/client';
 
 class IncompleteAdviceError extends Error {}
 
-/** Generate exactly the file selection and verified model output used by the sample routes. */
 export async function generateCannedPair({ directory, stream }: { directory: string; stream: ModelStream }) {
   const pair: { title: string; family: DocumentType['family']; parties: Pick<Party, 'name' | 'role'>[]; matterHint: Matter['practiceArea'] | 'none' } = JSON.parse(await readFile(join(directory, 'pair.json'), 'utf8'));
   const files = await readdir(directory);
-  const earlierName = files.includes('earlier.docx') ? 'earlier.docx' : 'earlier.md';
-  const laterName = files.includes('later.pdf') ? 'later.pdf' : files.includes('later.docx') ? 'later.docx' : 'later.md';
+  const { earlierName, laterName } = sampleFileNames(files);
   const readDraft = async (filename: string) => normalizeDraft({ filename, bytes: new Uint8Array(await readFile(join(directory, filename))) });
   const earlier = await readDraft(earlierName);
   const later = await readDraft(laterName);
   const compared = await compareDrafts(earlier, later);
   const texts = { earlierText: earlier.text, laterText: later.text };
-  // Sample selection precedes client confirmation; no fictional side is preselected here.
   const matter: Matter = {
     id: basename(directory), title: pair.title, synthetic: true,
     practiceArea: pair.matterHint === 'none' ? 'regulatory' : pair.matterHint,
@@ -45,7 +42,6 @@ export async function generateCannedPair({ directory, stream }: { directory: str
         onAssessment: ({ verified, counter, ...assessment }) => {
           if (!verified) { summary.unverified++; return; }
           if (run.has(assessment.changeId)) return;
-          // Replay re-verifies counters against its own normalized later document.
           if (counter?.span) {
             const { span: _span, ...modelCounter } = counter;
             run.set(assessment.changeId, { ...assessment, counter: modelCounter });
@@ -63,7 +59,6 @@ export async function generateCannedPair({ directory, stream }: { directory: str
     const slug = party.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
     analyses.push({ filename: `analysis.${slug}.json`, party: party.name, assessments });
   }
-  // Finish all model calls before replacing this pair's replay files.
   for (const { filename, ...analysis } of analyses) await writeFile(join(directory, filename), `${JSON.stringify(analysis, null, 2)}\n`);
   await writeFile(join(directory, 'meta.json'), `${JSON.stringify({ key: cannedKey(earlier.text, later.text), parties: facts.parties, documentType: facts.documentType, modelTags: facts.tags }, null, 2)}\n`);
   return summary;

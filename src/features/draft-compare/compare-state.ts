@@ -12,12 +12,11 @@ type CompareState = {
   party: string;
   assessments: Assessment[];
   applied: string[];
-  events: CompareEvent[];
   stage: 'idle' | 'compare' | 'tagging' | 'parties' | 'advice';
   message: string;
   notice: string;
 };
-const idle: CompareState = { sample: '', parties: [], party: '', assessments: [], applied: [], events: [], stage: 'idle', message: '', notice: '' };
+const idle: CompareState = { sample: '', parties: [], party: '', assessments: [], applied: [], stage: 'idle', message: '', notice: '' };
 const comparisons = new Map<string, CompareState>();
 const adviceRequests = new Map<string, AbortController>();
 const listeners = new Set<() => void>();
@@ -34,7 +33,7 @@ export function useCompareState(id: string) {
 }
 function receive(id: string, event: CompareEvent) {
   const state = get(id);
-  const patch: Partial<CompareState> = { events: [...state.events, event] };
+  const patch: Partial<CompareState> = {};
   switch (event.type) {
     case 'redline': Object.assign(patch, { redline: event, stage: 'tagging' }); break;
     case 'tags': Object.assign(patch, { tags: event, stage: 'parties' }); break;

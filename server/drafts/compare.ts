@@ -1,14 +1,13 @@
 import { load } from 'cheerio';
 import { compareDocuments, convertDocxToHtml, getRevisions, openDocxSession } from 'docxodus/core';
 import type { RevisionListEntry } from 'docxodus/core';
-import { ensureEngine } from './engine';
+import { ensureEngine, paragraphsOf } from './engine';
 import { sanitizeHtml } from './html';
 import type { normalizeDraft } from './normalize';
 import type { Change } from './types';
 
 type NormalizedDraft = Awaited<ReturnType<typeof normalizeDraft>>;
 
-/** Read both projections of the redline without changing the downloadable document. */
 function projectedParagraphs(bytes: Uint8Array, accept?: boolean) {
   const session = openDocxSession(bytes);
   try {
@@ -16,9 +15,7 @@ function projectedParagraphs(bytes: Uint8Array, accept?: boolean) {
       const result = accept ? session.acceptAllRevisions() : session.rejectAllRevisions();
       if (!result.success) throw new Error(result.error?.message || 'Could not read the redline.');
     }
-    const anchors = Object.entries(session.project().anchorIndex).filter(([, anchor]) => ['p', 'h', 'li'].includes(anchor.kind));
-    const infos = session.getAnchorInfos(anchors.map(([id]) => id));
-    return anchors.map(([id, anchor]) => ({ id, scope: anchor.scope, text: infos[id]?.visibleText ?? '' }));
+    return paragraphsOf(session);
   } finally { session.close(); }
 }
 
@@ -47,13 +44,19 @@ export async function compareDrafts(earlier: NormalizedDraft, later: NormalizedD
   const afterParagraphs = projectedParagraphs(redline, true);
   const after = new Map(afterParagraphs.map(paragraph => [paragraph.id, paragraph.text]));
   const laterParagraphs = projectedParagraphs(later.docx);
+  const laterByScope = new Map<string, typeof laterParagraphs>();
+  for (const paragraph of laterParagraphs) {
+    const scope = laterByScope.get(paragraph.scope) ?? [];
+    scope.push(paragraph);
+    laterByScope.set(paragraph.scope, scope);
+  }
   // Accepting the redline yields the later draft's paragraph order. Match within each story
   // because headers, body, and notes can be projected in different part order.
   const laterAnchor = new Map<string, string>();
   const positions = new Map<string, number>();
   for (const paragraph of afterParagraphs) {
     const index = positions.get(paragraph.scope) ?? 0;
-    const target = laterParagraphs.filter(candidate => candidate.scope === paragraph.scope)[index];
+    const target = laterByScope.get(paragraph.scope)?.[index];
     if (target) laterAnchor.set(paragraph.id, target.id);
     positions.set(paragraph.scope, index + 1);
   }

@@ -1,4 +1,3 @@
-/* The registered tab extends the workspace tab row. */
 .matter-tabs { flex-wrap: wrap; }
 .draft-compare { display: grid; gap: var(--mc-space); font-size: var(--mc-text-body); line-height: 1.5; color: var(--mc-ink); }
 .draft-compare summary { cursor: pointer; font-weight: var(--mc-weight-label); }

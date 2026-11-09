@@ -66,6 +66,11 @@ const compareIri = (a: Match, b: Match) => Number(b.preferred) - Number(a.prefer
 
 let singleton: {
   byIri: Map<string, Concept>;
+  byBranch: Map<string, Concept[]>;
+  bySingularLabel: Map<string, Concept[]>;
+  bySingularAlt: Map<string, Concept[]>;
+  byWord: Map<string, Concept[]>;
+  wordsByConcept: Map<Concept, Set<string>>;
   blocked: Map<string, Set<string>>;
   trie: Trie;
 } | undefined;
@@ -77,6 +82,11 @@ function getIndex() {
     blocked_aliases: { surface_term: string; blocked_iri: string }[];
   };
   const byIri = new Map<string, Concept>();
+  const byBranch = new Map<string, Concept[]>();
+  const bySingularLabel = new Map<string, Concept[]>();
+  const bySingularAlt = new Map<string, Concept[]>();
+  const byWord = new Map<string, Concept[]>();
+  const wordsByConcept = new Map<Concept, Set<string>>();
   const blocked = new Map<string, Set<string>>();
   const trie = trieNode();
   for (const entry of blocked_aliases) {
@@ -104,31 +114,45 @@ function getIndex() {
       if (node.matches.length > 1) node.matches.sort(compareIri);
     }
   }
-  singleton = { byIri, blocked, trie };
+  for (const concept of byIri.values()) {
+    const add = (map: Map<string, Concept[]>, value: string) => {
+      const entries = map.get(value) ?? [];
+      entries.push(concept);
+      map.set(value, entries);
+    };
+    add(byBranch, concept.branch);
+    add(bySingularLabel, singularLabel(concept.label));
+    for (const label of new Set(concept.alt.map(singularLabel))) add(bySingularAlt, label);
+    const words = contentWords(concept.label);
+    wordsByConcept.set(concept, words);
+    for (const word of words) add(byWord, word);
+  }
+  singleton = { byIri, byBranch, bySingularLabel, bySingularAlt, byWord, wordsByConcept, blocked, trie };
   return singleton;
 }
 
-/** Find an indexed concept by its exact IRI. */
+export function warmFolioIndex(): void {
+  getIndex();
+}
+
 export function lookup(iri: string): Concept | undefined {
   return getIndex().byIri.get(iri);
 }
 
 const branchLabels = new Map<string, readonly string[]>();
 
-/** Return the cached, distinct preferred labels for the selected branches. */
 export function labelsInBranches(branches: readonly string[]): readonly string[] {
   const selected = new Set(branches);
   const cacheKey = JSON.stringify([...selected].sort());
   let labels = branchLabels.get(cacheKey);
   if (!labels) {
-    labels = [...new Set([...getIndex().byIri.values()]
-      .filter(concept => selected.has(concept.branch)).map(concept => concept.label))].sort();
+    const { byBranch } = getIndex();
+    labels = [...new Set([...selected].flatMap(branch => byBranch.get(branch) ?? []).map(concept => concept.label))].sort();
     branchLabels.set(cacheKey, labels);
   }
   return labels;
 }
 
-/** Return preferred-label matches first, followed by alternative-label matches. */
 export function findByLabel(label: string): Concept[] {
   let node = getIndex().trie;
   for (const token of key(label).match(tokens) ?? []) {
@@ -139,15 +163,12 @@ export function findByLabel(label: string): Concept[] {
   return (node.matches ?? []).map((match) => match.concept);
 }
 
-// Ignore grammatical filler and generic document wrappers, but retain agreement,
-// plan, opinion and other words that distinguish legal classifications.
-const labelStopwords = new Set('a an the of and or for to in on by with from as at is are legal document letter'.split(' '));
+const grammaticalFillerAndDocumentWrappers = new Set('a an the of and or for to in on by with from as at is are legal document letter'.split(' '));
 const singularWord = (word: string) => [...preferredForms(word)].sort((a, b) => a.length - b.length)[0];
 const singularLabel = (label: string) => key(label).replace(/[a-z]+$/u, singularWord);
 const contentWords = (label: string) => new Set((key(label).match(/[\p{L}\p{M}\p{N}]+/gu) ?? [])
-  .map(singularWord).filter(word => !labelStopwords.has(word)));
+  .map(singularWord).filter(word => !grammaticalFillerAndDocumentWrappers.has(word)));
 
-/** Resolve a model label within the allowed indexed branches, best exact match first. */
 export function resolveLabel(label: string, { branches }: { branches?: readonly string[] } = {}): Concept | undefined {
   const allowed = (concept: Concept) => !branches || branches.includes(concept.branch);
   const normalized = key(label);
@@ -156,21 +177,25 @@ export function resolveLabel(label: string, { branches }: { branches?: readonly 
   const preferred = exact.find(concept => key(concept.label) === normalized);
   if (preferred || exact.length) return preferred ?? exact[0];
 
-  const concepts = [...getIndex().byIri.values()].filter(allowed);
+  const index = getIndex();
   const singular = singularLabel(label);
-  const inflected = concepts.find(concept => singularLabel(concept.label) === singular)
-    ?? concepts.find(concept => concept.alt.some(form => singularLabel(form) === singular));
+  const inflected = index.bySingularLabel.get(singular)?.find(allowed)
+    ?? index.bySingularAlt.get(singular)?.find(allowed);
   if (inflected) return inflected;
 
   const words = contentWords(label);
+  const overlaps = new Map<Concept, number>();
+  for (const word of words) {
+    for (const concept of index.byWord.get(word) ?? []) {
+      if (allowed(concept)) overlaps.set(concept, (overlaps.get(concept) ?? 0) + 1);
+    }
+  }
   let best: Concept | undefined;
   let bestScore = 0;
-  for (const concept of concepts) {
+  for (const [concept, shared] of overlaps) {
     // Alternative labels can be broad or even whole definitions. Use preferred
     // labels for overlap; alternatives still participate in both exact stages.
-    const target = contentWords(concept.label);
-    const shared = [...words].filter(word => target.has(word)).length;
-    if (!shared) continue;
+    const target = index.wordsByConcept.get(concept)!;
     const score = shared / (words.size + target.size - shared);
     if (score < 0.5) continue;
     if (score > bestScore || (score === bestScore && best
@@ -185,7 +210,6 @@ export function resolveLabel(label: string, { branches }: { branches?: readonly 
 
 const isWord = (char: string | undefined) => char !== undefined && /[\p{L}\p{M}\p{N}_]/u.test(char);
 
-/** Tag nonoverlapping label occurrences with offsets into the original draft text. */
 export function tagText(text: string, draft: FolioTag['draft']): FolioTag[] {
   const index = getIndex();
   const { value, starts, ends } = normalize(text);

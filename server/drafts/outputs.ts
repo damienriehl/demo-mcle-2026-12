@@ -1,9 +1,9 @@
 import { compareDocuments, openDocxSession } from 'docxodus/core';
 import { ensureEngine } from './engine';
+import { escapeMarkdownCharacters as markdownLiteral } from './markdown';
 import type { ComparisonRecord } from './types';
 
 const labels = { harms: 'Harms', neutral: 'Neutral', helps: 'Helps' };
-const markdownLiteral = (text: string) => text.replace(/([\\`*_{}\[\]<>#!|~])/g, '\\$1');
 
 export async function buildAdviceDocx(record: ComparisonRecord, redline: Uint8Array): Promise<Uint8Array> {
   await ensureEngine();

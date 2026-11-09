@@ -2,8 +2,10 @@ import { extname } from 'node:path';
 import { inflateRawSync } from 'node:zlib';
 import { createBlankDocx, openDocxSession } from 'docxodus/core';
 import { extractTextItems, getDocumentProxy } from 'unpdf';
-import { ensureEngine } from './engine';
+import { ensureEngine, paragraphsOf } from './engine';
 import { convertDraft } from './convert';
+import { DraftInputError } from './errors';
+import { escapeMarkdownCharacters } from './markdown';
 import type { DraftFormat } from './types';
 
 const unsupported = 'This file type is not supported. Upload Word, PDF, text, Markdown, .doc, .rtf, .odt, or HTML.';
@@ -14,7 +16,6 @@ function detectFormat(filename: string, bytes: Uint8Array): DraftFormat {
   if (buffer.subarray(0, 4).equals(Buffer.from([0xd0, 0xcf, 0x11, 0xe0]))) return 'doc';
   if (buffer.subarray(0, 5).toString() === '{\\rtf') return 'rtf';
   if (buffer.subarray(0, 2).toString() === 'PK') {
-    // Read the ZIP directory, rather than searching compressed bytes or trusting a suffix.
     const end = buffer.lastIndexOf(Buffer.from([0x50, 0x4b, 0x05, 0x06]));
     if (end >= 0 && end + 22 <= buffer.length) {
       const entries = new Map<string, { offset: number; size: number; method: number }>();
@@ -35,16 +36,16 @@ function detectFormat(filename: string, bytes: Uint8Array): DraftFormat {
         if (value.toString() === 'application/vnd.oasis.opendocument.text') return 'odt';
       }
     }
-    throw new Error(unsupported);
+    throw new DraftInputError(unsupported);
   }
   const extensions: Record<string, DraftFormat> = { '.txt': 'txt', '.md': 'md', '.markdown': 'md', '.html': 'html', '.htm': 'html' };
   const format = extensions[extname(filename).toLowerCase()];
-  if (!format) throw new Error(unsupported);
+  if (!format) throw new DraftInputError(unsupported);
   return format;
 }
 
 function escapeMarkdown(text: string): string {
-  return text.replace(/([\\`*_{}\[\]<>#!|~])/g, '\\$1').replace(/^(\s*\d+)([.)])(?=\s)/gm, '$1\\$2').replace(/^(\s*)([-+])(?=\s)/gm, '$1\\$2');
+  return escapeMarkdownCharacters(text).replace(/^(\s*\d+)([.)])(?=\s)/gm, '$1\\$2').replace(/^(\s*)([-+])(?=\s)/gm, '$1\\$2');
 }
 
 async function pdfParagraphs(bytes: Uint8Array): Promise<string[]> {
@@ -63,7 +64,7 @@ async function pdfParagraphs(bytes: Uint8Array): Promise<string[]> {
     });
   } finally { await document.loadingTask.destroy(); }
   if (!pages.some(page => page.some(line => line.text.trim()))) {
-    throw new Error('This PDF has no text layer; upload a text PDF or the Word file.');
+    throw new DraftInputError('This PDF has no text layer; upload a text PDF or the Word file.');
   }
   const furnitureKey = (text: string) => text.trim().replace(/^(?:Page\s+)?\d+(?:\s+(?:of|\/)\s*\d+)?$/i, '<page-number>');
   const repeated = new Set<string>();
@@ -118,13 +119,12 @@ export async function normalizeDraft({ filename, bytes }: { filename: string; by
         }
       }
       docx = session.save();
+      return { format, docx, text: paragraphsOf(session).map(paragraph => paragraph.text).join('\n') };
     } finally { session.close(); }
   } else docx = await convertDraft(bytes, format);
   const session = openDocxSession(docx);
   try {
-    const anchors = Object.entries(session.project().anchorIndex).filter(([, anchor]) => ['p', 'h', 'li'].includes(anchor.kind));
-    const infos = session.getAnchorInfos(anchors.map(([id]) => id));
-    const text = anchors.map(([id]) => infos[id]?.visibleText ?? '').join('\n');
+    const text = paragraphsOf(session).map(paragraph => paragraph.text).join('\n');
     return { format, docx, text };
   } finally { session.close(); }
 }

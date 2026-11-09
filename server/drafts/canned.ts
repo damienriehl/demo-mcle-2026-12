@@ -23,7 +23,13 @@ export function cannedPartyKey(key: string, party: string): string {
   return JSON.stringify([key, party]);
 }
 
-/** Load the replay catalog before looking up metadata or party-specific assessments. */
+export function sampleFileNames(files: readonly string[]) {
+  return {
+    earlierName: files.includes('earlier.docx') ? 'earlier.docx' : 'earlier.md',
+    laterName: files.includes('later.pdf') ? 'later.pdf' : files.includes('later.docx') ? 'later.docx' : 'later.md',
+  };
+}
+
 export async function loadCanned(directory = 'data/seed/drafts'): Promise<void> {
   const nextMetadata = new Map<string, CannedMeta>();
   const nextAnalyses = new Map<string, ModelAssessment[]>();

@@ -5,8 +5,10 @@ import { comparisonRecordSchema, type ComparisonRecord } from './types';
 
 type DocumentName = 'earlier' | 'later' | 'redline';
 
+export const DEFAULT_COMPARISONS_DIRECTORY = 'data/comparisons';
+
 /** Each record is published after its documents; readers never see a partial JSON write. */
-export function createComparisonStore(directory = resolve('data/comparisons')) {
+export function createComparisonStore(directory = resolve(DEFAULT_COMPARISONS_DIRECTORY)) {
   function folder(matterId: string, id: string) {
     if (![matterId, id].every(value => /^[\w-]+$/.test(value))) throw new Error('Invalid comparison location.');
     return join(directory, matterId, id);
