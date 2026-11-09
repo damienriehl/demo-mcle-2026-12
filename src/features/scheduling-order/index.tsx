@@ -14,7 +14,7 @@ import './scheduling-order.css';
 
 type CourtDate = MatterWithDeadlines['deadlines'][number];
 type OrderEvent = Arrival | { type: 'pages'; count: number }
-  | { type: 'done'; matter: Matter; added: { courtDates: number; derived: number }; message?: string }
+  | { type: 'done'; matter?: Matter; created?: boolean; added: { courtDates: number; derived: number }; message?: string }
   | { type: 'needs_key' | 'error'; message: string };
 
 async function extract(body: FormData | string, onEvent: (event: OrderEvent) => void) {
@@ -39,6 +39,57 @@ function storedSnapshot(matter: Matter | MatterWithDeadlines): string {
   const stored = 'computedDeadlines' in matter ? toStoredMatter(matter) : matter;
   return JSON.stringify(stored, (_key, value: unknown) => value && typeof value === 'object' && !Array.isArray(value)
     ? Object.fromEntries(Object.entries(value).sort(([a], [b]) => a.localeCompare(b))) : value);
+}
+
+function OrderArrivals({ arrivals, label }: { arrivals: Arrival[]; label: string }) {
+  return <ol className="order-arrivals" aria-label={label} aria-live="polite" aria-relevant="additions">
+    {arrivals.map((arrival, index) => <li key={index} data-order-arrival className={`order-arrival${arrival.verified ? '' : ' order-warning'}`}>
+      <strong>{arrival.event}</strong><time dateTime={arrival.date}>{dateLabel(arrival.date)}</time>
+      <span>From the order, p. {arrival.page}</span>
+      <blockquote>{arrival.quote}</blockquote>
+      {!arrival.verified && <p><strong>⚠ Unverified quote — not added</strong><br />{arrival.reason}</p>}
+    </li>)}
+  </ol>;
+}
+
+function PublicOrderUpload({ matter }: { matter: MatterWithDeadlines }) {
+  const picker = useRef<HTMLInputElement>(null);
+  const uploadId = 'new';
+  const { running, awaitingSnapshot, message, arrivals } = useUploadState(uploadId);
+  const busy = running || !!awaitingSnapshot;
+  useEffect(() => {
+    if (awaitingSnapshot && storedSnapshot(matter) === awaitingSnapshot) updateUpload(uploadId, { awaitingSnapshot: undefined });
+  }, [matter, awaitingSnapshot]);
+  async function uploadFile(file?: File) {
+    if (!file || busy) return;
+    const body = new FormData();
+    body.set('matterId', 'new');
+    body.set('file', file);
+    updateUpload(uploadId, { running: true, arrivals: [], message: 'Reading the scheduling order…' });
+    try {
+      await extract(body, event => {
+        if (event.type === 'date') appendArrival(uploadId, event);
+        else if (event.type === 'pages') updateUpload(uploadId, { message: `Reading ${event.count} pages — court dates appear as they arrive.` });
+        else if (event.type === 'done') {
+          if (event.created && event.matter) {
+            updateUpload(uploadId, { awaitingSnapshot: storedSnapshot(event.matter), message: `Opened ${event.matter.title} as a new public-record matter.` });
+            window.dispatchEvent(new CustomEvent('matter-cockpit:select-matter', { detail: { id: event.matter.id } }));
+          } else updateUpload(uploadId, { message: event.message ?? '' });
+        } else updateUpload(uploadId, { message: event.message });
+      });
+    } catch (error) {
+      updateUpload(uploadId, { message: error instanceof Error ? error.message : 'Scheduling order extraction could not finish.' });
+    } finally { updateUpload(uploadId, { running: false }); }
+  }
+  return <section className="order-intake" aria-label="Open public scheduling order">
+    <button className="order-drop" disabled={busy} onClick={() => picker.current?.click()}
+      onDragOver={event => event.preventDefault()} onDrop={event => { event.preventDefault(); void uploadFile(event.dataTransfer.files[0]); }}>
+      <strong>Open a public order as a new matter</strong><span>PDF · drop here or choose a file</span>
+    </button>
+    <input ref={picker} type="file" accept="application/pdf,.pdf" hidden aria-label="Public scheduling order PDF" onChange={event => { void uploadFile(event.target.files?.[0]); event.target.value = ''; }} />
+    <p role="status">{message}</p>
+    <OrderArrivals arrivals={arrivals} label="Dates from public order extraction" />
+  </section>;
 }
 
 function SchedulingOrder({ matter }: { matter: MatterWithDeadlines }) {
@@ -81,7 +132,7 @@ function SchedulingOrder({ matter }: { matter: MatterWithDeadlines }) {
         if (event.type === 'date') appendArrival(matter.id, event);
         else if (event.type === 'pages') setMessage(`Reading ${event.count} pages — court dates appear as they arrive.`);
         else if (event.type === 'done') {
-          updateUpload(matter.id, { awaitingSnapshot: storedSnapshot(event.matter) });
+          if (event.matter) updateUpload(matter.id, { awaitingSnapshot: storedSnapshot(event.matter) });
           setMessage(event.message ?? `Added ${event.added.courtDates} court dates and ${event.added.derived} rule-derived deadlines.`);
         }
         else setMessage(event.message);
@@ -168,15 +219,9 @@ function SchedulingOrder({ matter }: { matter: MatterWithDeadlines }) {
         </form>
       </details>
       <p role="status">{message}</p>
-      <ol className="order-arrivals" aria-label="Dates from extraction" aria-live="polite" aria-relevant="additions">
-        {arrivals.map((arrival, index) => <li key={index} data-order-arrival className={`order-arrival${arrival.verified ? '' : ' order-warning'}`}>
-          <strong>{arrival.event}</strong><time dateTime={arrival.date}>{dateLabel(arrival.date)}</time>
-          <span>From the order, p. {arrival.page}</span>
-          <blockquote>{arrival.quote}</blockquote>
-          {!arrival.verified && <p><strong>⚠ Unverified quote — not added</strong><br />{arrival.reason}</p>}
-        </li>)}
-      </ol>
+      <OrderArrivals arrivals={arrivals} label="Dates from extraction" />
     </section>
+    <PublicOrderUpload matter={matter} />
     <section className="order-schedule" aria-label="Schedule">
       <header className="order-schedule-heading"><h3>Schedule</h3><button onClick={download} disabled={!courtDates.length}>Export to calendar</button></header>
       {!courtDates.length && <p>Upload an order to see court dates and the deadlines computed from them.</p>}

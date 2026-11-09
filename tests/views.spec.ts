@@ -236,7 +236,7 @@ test.describe('shared matter views', () => {
     await page.getByRole('combobox', { name: 'Surprise practice area' }).selectOption('patent');
     await page.getByRole('button', { name: 'Surprise Me', exact: true }).click();
     await expect(page.getByRole('dialog', { name: 'Ramble intake' }).getByRole('status')).toContainText('Matter added');
-    await expect(page.getByText(/synthetic matters only.*model provider/i)).toBeVisible();
+    await expect(page.getByText(/synthetic matters and public court records.*model provider/i)).toBeVisible();
   });
 
   test('failed answers keep the question and typed answer available', async ({ page }) => {

@@ -1,4 +1,4 @@
-import type { MatterWithDeadlines } from '../data/schema';
+import { isPublicRecord, type MatterWithDeadlines } from '../data/schema';
 import { FeatureSlot } from '../components/FeatureSlot';
 import { sourceFor } from '../intake/SourceLabel';
 import { factContext } from '../verify/context';
@@ -45,7 +45,7 @@ export function portalProjection(matter: MatterWithDeadlines): MatterWithDeadlin
   return projected;
 }
 export function Portal({ matters, activeMatter, onVerify }: ViewProps) {
-  const safeMatters = matters.map(portalProjection);
+  const safeMatters = matters.filter(matter => !isPublicRecord(matter)).map(portalProjection);
   const matter = safeMatters.find(item => item.id === activeMatter?.id);
   if (!matter) return <div className="empty-state"><h2>A clear view for your client.</h2><p>Select a matter to see its next steps and shared documents.</p></div>;
   const field = (path: string, value?: string) => {

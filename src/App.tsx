@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useMatters } from './data/useMatters';
+import { isPublicRecord } from './data/schema';
 import { Cockpit } from './views/Cockpit';
 import { Radar } from './views/Radar';
 import { Portal, portalProjection } from './views/Portal';
@@ -20,7 +21,7 @@ export default function App() {
   const [view, setView] = useState<View>('Cockpit');
   const [activeId, setActiveId] = useState<string>();
   const activeMatter = matters.find(matter => matter.id === activeId) ?? matters[0];
-  const visibleMatters = useMemo(() => view === 'Client Portal' ? matters.map(portalProjection) : matters, [view, matters]);
+  const visibleMatters = useMemo(() => view === 'Client Portal' ? matters.filter(matter => !isPublicRecord(matter)).map(portalProjection) : matters, [view, matters]);
   const visibleActive = visibleMatters.find(matter => matter.id === activeMatter?.id);
   const [selection, setSelection] = useState<VerifySelection>();
   const [focusedDeadline, setFocusedDeadline] = useState<string>();
@@ -40,7 +41,13 @@ export default function App() {
   const [health, setHealth] = useState<Health>('checking');
   const [arrivals, setArrivals] = useState<Set<string>>(new Set());
   const previousIds = useRef<Set<string> | undefined>(undefined);
+  const [pendingMatterId, setPendingMatterId] = useState<string>();
   const intake = useRamble();
+  useEffect(() => {
+    const selectMatter = (event: Event) => setPendingMatterId((event as CustomEvent<{ id: string }>).detail.id);
+    window.addEventListener('matter-cockpit:select-matter', selectMatter);
+    return () => window.removeEventListener('matter-cockpit:select-matter', selectMatter);
+  }, []);
   useEffect(() => {
     let cancelled = false;
     fetch('/api/health').then(res => res.ok ? res.json() : Promise.reject()).then((body: { ok?: boolean }) => { if (!cancelled) setHealth(body.ok ? 'connected' : 'unreachable'); }).catch(() => { if (!cancelled) setHealth('unreachable'); });
@@ -54,8 +61,14 @@ export default function App() {
       if (added.length) setArrivals(previous => new Set([...previous, ...added]));
     }
     previousIds.current = ids;
-    if (!activeId || !ids.has(activeId)) setActiveId(matters[0]?.id);
-  }, [matters, activeId]);
+    if (pendingMatterId && ids.has(pendingMatterId)) {
+      setActiveId(pendingMatterId);
+      setArrivals(previous => new Set([...previous, pendingMatterId]));
+      setFocusedDeadline(undefined);
+      setView('Cockpit');
+      setPendingMatterId(undefined);
+    } else if (!activeId || !ids.has(activeId)) setActiveId(matters[0]?.id);
+  }, [matters, activeId, pendingMatterId]);
   const verify = (item: VerifySelection) => { setFocusedDeadline(undefined); setSelection(item); };
   const changeView = (next: View) => { setView(next); setFocusedDeadline(undefined); };
   const props = { matters, activeMatter, onVerify: verify };
@@ -67,10 +80,10 @@ export default function App() {
     </header>
     <div className="utility-bar"><label className="source-toggle"><input type="checkbox" checked={statedOnly} onChange={event => setStatedOnly(event.target.checked)} />Show what I said</label><div className="surprise-controls"><select aria-label="Surprise practice area" value={practiceArea} onChange={event => setPracticeArea(event.target.value)}><option value="">Any practice area</option>{practiceAreas.map(area => <option key={area} value={area}>{area[0].toUpperCase() + area.slice(1)}</option>)}</select><button onClick={() => intake.surprise(practiceArea || undefined)} disabled={intake.busy}>Surprise Me</button></div><FeatureSlot slot="toolbar" matters={visibleMatters} activeMatter={visibleActive} /><p data-testid="health-status" role="status">Server: {health === 'checking' ? 'checking…' : health}</p></div>
     <div className={`workspace ${view === 'Deadline Radar' ? 'workspace-wide' : ''}`}>
-      <aside className="matter-rail" aria-label="Matter list"><header><h2>Matters</h2><span>{matters.length} live</span></header><div className="matter-list">{visibleMatters.map(matter => <button key={matter.id} className={arrivals.has(matter.id) ? 'matter-arrival' : ''} aria-pressed={activeMatter?.id === matter.id} onClick={() => { setActiveId(matter.id); setFocusedDeadline(undefined); setArrivals(previous => new Set([...previous].filter(id => id !== matter.id))); }}><strong>{matter.title ?? matter.client?.name ?? 'Shared matter'}</strong>{matter.practiceArea && <span className={`practice-mark area-${matter.practiceArea}`}>{matter.practiceArea}</span>}{arrivals.has(matter.id) && <span className="arrival-label">New</span>}</button>)}{!matters.length && <p>No matters yet. Start with Surprise Me.</p>}</div></aside>
+      <aside className="matter-rail" aria-label="Matter list"><header><h2>Matters</h2><span>{visibleMatters.length} live</span></header><div className="matter-list">{visibleMatters.map(matter => <button key={matter.id} className={arrivals.has(matter.id) ? 'matter-arrival' : ''} aria-pressed={activeMatter?.id === matter.id} onClick={() => { setActiveId(matter.id); setFocusedDeadline(undefined); setArrivals(previous => new Set([...previous].filter(id => id !== matter.id))); }}><strong>{matter.title ?? matter.client?.name ?? 'Shared matter'}</strong>{matter.practiceArea && <span className={`practice-mark area-${matter.practiceArea}`}>{matter.practiceArea}</span>}{isPublicRecord(matter) && <span className="public-record-label">Public record</span>}{arrivals.has(matter.id) && <span className="arrival-label">New</span>}</button>)}{!visibleMatters.length && <p>No matters yet. Start with Surprise Me.</p>}</div></aside>
       <main>{view === 'Cockpit' ? <Cockpit {...props} focusedDeadline={focusedDeadline} /> : view === 'Deadline Radar' ? <Radar {...props} arrivals={arrivals} /> : <Portal {...props} />}</main>
     </div>
-    <p className="synthetic-notice">Synthetic matters only. Intake text goes to the model provider. This workspace is a demonstration.</p>
+    <p className="synthetic-notice">Synthetic matters and public court records. Intake text goes to the model provider. This workspace is a demonstration.</p>
     <Ramble intake={intake} onVerify={item => verify({ ...item, context: intakeFactContext(intake.draft, item.label) })} />
     {selection && <VerifyDrawer selection={selection} matter={view === 'Client Portal' ? undefined : matters.find(matter => matter.id === selection.matterId)} onClose={() => setSelection(undefined)} onOpenMatter={matters.some(matter => matter.id === selection.matterId) ? () => { setActiveId(selection.matterId); setView('Cockpit'); setFocusedDeadline(selection.deadlineId); setSelection(undefined); intake.close(); } : undefined} />}
   </div>;

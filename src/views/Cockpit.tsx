@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { isPublicRecord } from '../data/schema';
 import { DeadlineCard } from '../components/DeadlineCard';
 import { FeatureSlot } from '../components/FeatureSlot';
 import { useFeatures } from '../features/registry';
@@ -12,7 +13,7 @@ export function Cockpit({ matters, activeMatter: matter, onVerify, focusedDeadli
   const field = (path: string, value: string) => <SourceField path={path} provenance={matter.provenance} onVerify={() => onVerify({ matterId: matter.id, label: path, value })}>{value}</SourceField>;
   const selected = features.find(feature => feature.id === tab);
   return <div className="cockpit-view">
-    <header className="matter-heading"><p className={`practice-mark area-${matter.practiceArea}`}>{field('practiceArea', matter.practiceArea)}</p><h2 aria-label={matter.title}>{field('title', matter.title)}</h2><div className="matter-meta">{field('client.name', matter.client.name)}{field('forum', matter.forum)}</div></header>
+    <header className="matter-heading"><p className={`practice-mark area-${matter.practiceArea}`}>{field('practiceArea', matter.practiceArea)}</p><h2 aria-label={matter.title}>{field('title', matter.title)}</h2>{isPublicRecord(matter) && <p className="public-record-label">Public record · {matter.publicRecord.caseNumber} · {matter.publicRecord.court}</p>}<div className="matter-meta">{field('client.name', matter.client.name)}{field('forum', matter.forum)}</div></header>
     <div role="tablist" aria-label="Matter sections" className="matter-tabs">
       <button role="tab" aria-selected={!selected} onClick={() => setTab('overview')}>Overview</button>
       {features.map(feature => <button role="tab" key={feature.id} aria-selected={tab === feature.id} onClick={() => setTab(feature.id)}>{feature.title}</button>)}

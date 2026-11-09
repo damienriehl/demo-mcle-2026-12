@@ -212,7 +212,7 @@ test('successful extraction waits for its live snapshot before allowing a court 
   extracted.deadlines[0].inputs!.quote = 'Updated order: Trial ready date: June 14, 2027.';
   await page.route('**/api/features/scheduling-order/extract', route => route.fulfill({ contentType: 'text/event-stream', body: sse([{ type: 'done', matter: extracted, added: { courtDates: 2, derived: 3 } }]) }));
   await open(page, schedule);
-  await page.locator('input[type=file]').setInputFiles({ name: 'updated.pdf', mimeType: 'application/pdf', buffer: Buffer.from('synthetic PDF') });
+  await page.getByLabel('Scheduling order PDF', { exact: true }).setInputFiles({ name: 'updated.pdf', mimeType: 'application/pdf', buffer: Buffer.from('synthetic PDF') });
   await expect(page.getByRole('status').filter({ hasText: 'Added 2 court dates' })).toBeVisible();
   for (const input of await page.getByLabel('Move', { exact: true }).all()) await expect(input).toBeDisabled();
   await expect(page.getByRole('button', { name: 'Drop a scheduling order' })).toBeDisabled();
@@ -329,7 +329,7 @@ for (const destination of ['tab', 'matter']) test(`in-flight extraction arrivals
     if (destination === 'tab') await page.getByRole('tab', { name: 'Scheduling order', exact: true }).click();
     else await page.getByRole('button', { name: initial.title }).click();
   }
-  await page.locator('input[type=file]').setInputFiles({ name: 'slow.pdf', mimeType: 'application/pdf', buffer: Buffer.from('synthetic') });
+  await page.getByLabel('Scheduling order PDF', { exact: true }).setInputFiles({ name: 'slow.pdf', mimeType: 'application/pdf', buffer: Buffer.from('synthetic') });
   await expect(page.getByRole('button', { name: 'Drop a scheduling order' })).toBeDisabled();
   await page.evaluate(date => window.dispatchEvent(new CustomEvent('order-chunk', { detail: date })), dates[0]);
   await expect(page.locator('[data-order-arrival]')).toHaveCount(1);
@@ -357,7 +357,7 @@ test('an unchanged done event displays the verification message and unlocks with
     }]),
   }));
   await open(page, schedule);
-  await page.locator('input[type=file]').setInputFiles({ name: 'unverified.pdf', mimeType: 'application/pdf', buffer: Buffer.from('synthetic') });
+  await page.getByLabel('Scheduling order PDF', { exact: true }).setInputFiles({ name: 'unverified.pdf', mimeType: 'application/pdf', buffer: Buffer.from('synthetic') });
   await expect(page.getByRole('status').filter({ hasText: message })).toBeVisible();
   await expect(page.getByRole('button', { name: 'Drop a scheduling order' })).toBeEnabled();
   await expect(page.locator('[data-court-date]')).toHaveCount(2);
