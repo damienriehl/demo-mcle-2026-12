@@ -47,6 +47,8 @@
 .area-regulatory { --practice-color: var(--mc-area-regulatory); }
 .workspace main { min-width: 0; padding: var(--mc-page-space); }
 .matter-heading { margin-bottom: 1rem; }
+.public-record-label { font-size: var(--mc-text-min); font-weight: var(--mc-weight-label); overflow-wrap: anywhere; }
+.matter-heading .public-record-label { margin-bottom: var(--mc-space); }
 .matter-heading h2 { margin: .5rem 0 .8rem; max-width: 38ch; }
 .matter-meta { display: flex; gap: 2rem; flex-wrap: wrap; }
 .matter-tabs { display: flex; gap: 1rem; margin: 1.2rem 0; border-bottom: 1px solid var(--mc-border); }

@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import type { BetaTool } from '@anthropic-ai/sdk/resources/beta/messages';
-import { matterSchema, provenanceSchema, type Matter } from '../../src/data/schema';
+import { syntheticMatterSchema, provenanceSchema, type Matter } from '../../src/data/schema';
 import { deadlineCatalog } from '../../src/engine';
 
 type PartialValue<T> = T extends (infer E)[] ? PartialValue<E>[]
@@ -36,7 +36,7 @@ export function leaves(value: unknown, prefix = ''): { path: string; value: unkn
 }
 
 function schemaAt(path: string): z.ZodType {
-  let schema: z.ZodType = matterSchema;
+  let schema: z.ZodType = syntheticMatterSchema;
   for (const key of path.split('.')) {
     if (['__proto__', 'constructor', 'prototype', 'provenance'].includes(key)) throw new Error(`${path}: invalid matter path`);
     while (schema instanceof z.ZodDefault || schema instanceof z.ZodOptional || schema instanceof z.ZodPipe) {
@@ -124,7 +124,7 @@ export function readDraft(raw: unknown): { draft: Draft; errors: string[] } {
 }
 
 export function validateMatter(draft: Draft): Matter {
-  const matter = matterSchema.parse(draft);
+  const matter = syntheticMatterSchema.parse(draft);
   for (const leaf of leaves(draft)) {
     if (!draft.provenance[leaf.path]) throw new Error(`${leaf.path}: missing provenance`);
   }

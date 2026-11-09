@@ -24,12 +24,11 @@ export const deadlineSchema = z.strictObject({
 // Dot paths, with * matching one object key or array index. Always hidden by the Portal.
 export const INTERNAL_ONLY_FIELDS = ['reasoning', 'provenance.*.evidence'] as const;
 
-export const matterSchema = z.strictObject({
+const matterFields = z.strictObject({
   id: text,
   title: text,
   practiceArea: z.enum(practiceAreas),
   forum: text,
-  synthetic: z.literal(true),
   client: z.strictObject({ name: text, contact: text }),
   parties: z.array(z.strictObject({ name: text, role: text })),
   timeline: z.array(z.strictObject({ id: text, event: text, date: z.iso.date() })),
@@ -58,6 +57,15 @@ export const matterSchema = z.strictObject({
   provenance: z.record(text, provenanceSchema),
 });
 
+export const syntheticMatterSchema = matterFields.extend({ synthetic: z.literal(true) });
+export const matterSchema = z.discriminatedUnion('synthetic', [
+  syntheticMatterSchema,
+  matterFields.extend({
+    synthetic: z.literal(false),
+    publicRecord: z.strictObject({ court: text, caseNumber: text, sourceUrl: text.optional() }),
+  }),
+]);
+
 export const mattersSchema = z.array(matterSchema).superRefine((matters, ctx) => {
   const seen = new Set<string>();
   matters.forEach((matter, index) => {
@@ -68,6 +76,10 @@ export const mattersSchema = z.array(matterSchema).superRefine((matters, ctx) =>
 
 export type Matter = z.output<typeof matterSchema>;
 export type MatterWithDeadlines = Matter & { computedDeadlines: Record<string, DeadlineResult> };
+
+export function isPublicRecord(matter: Matter): matter is Extract<Matter, { synthetic: false }> {
+  return matter.synthetic === false;
+}
 
 export function toStoredMatter(matter: MatterWithDeadlines): Matter {
   const { computedDeadlines: _computed, ...stored } = matter;

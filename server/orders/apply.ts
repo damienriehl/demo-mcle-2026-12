@@ -1,4 +1,5 @@
-import type { Matter } from '../../src/data/schema';
+import { randomUUID } from 'node:crypto';
+import { matterSchema, type Matter } from '../../src/data/schema';
 import { COURT_ORDER_RULE_ID, deadlineCatalog } from '../../src/engine';
 import { leaves } from '../intake/schema';
 import { orderIds } from './ids';
@@ -23,6 +24,27 @@ export const derivationRules = {
 
 type Anchor = { id: string; event: string };
 type InternalPath = { path: string; provenance: Matter['provenance'][string] | undefined };
+
+export function createPublicRecordMatter(extraction: Extraction): Matter {
+  const court = extraction.courtName ?? (extraction.court === 'federal' ? 'United States District Court' : 'Minnesota District Court');
+  const matter = matterSchema.parse({
+    id: randomUUID(), title: extraction.shortCaption ?? extraction.caption, forum: court, practiceArea: 'litigation',
+    synthetic: false, publicRecord: { court, caseNumber: extraction.caseNumber ?? 'Not stated' },
+    client: { name: 'Public court record (no client)', contact: 'public-record@example.invalid' },
+    parties: [], timeline: [], documents: [], deadlines: [],
+    clientFacing: { status: 'Public court record uploaded for demonstration.', nextSteps: [] },
+    provenance: {},
+  });
+  for (const leaf of leaves(matter)) matter.provenance[leaf.path] = { source: 'inferred', evidence: 'Public court order upload.' };
+  matter.provenance.title = { source: 'stated', evidence: extraction.caption };
+  if (extraction.courtName !== undefined) {
+    for (const path of ['forum', 'publicRecord.court']) matter.provenance[path] = { source: 'stated', evidence: extraction.courtName };
+  }
+  if (extraction.caseNumber !== undefined) matter.provenance['publicRecord.caseNumber'] = { source: 'stated', evidence: extraction.caseNumber };
+  matter.provenance.id = { source: 'invented' };
+  for (const leaf of leaves(matter.client, 'client')) matter.provenance[leaf.path] = { source: 'invented' };
+  return matter;
+}
 
 function keepIndices<T>(items: readonly T[], indices: Map<number, number>): T[] {
   return items.filter((_, index) => indices.has(index));

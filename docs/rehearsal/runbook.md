@@ -8,6 +8,7 @@ The session runs 90 minutes. The scheduling-order segment takes 10 of them, and 
 2. Rebase every `fallback/*` branch onto final `main`, run `npm test` and `npm run e2e -- --trace off` on each, and update the tips in `docs/rehearsal/fallback-timings.md`.
 3. `npm ci`, then `npm run reset` so the Radar's "This week" band holds three deadlines and the three order matters (Lanternfish, Copperleaf, Quillfeather) wait without court dates.
    Keep `data/seed/orders/` open in a file window for drag-and-drop.
+   Put the two real orders and their `.extraction.json` files in one local folder outside the repo (for example `~/Documents/matter-cockpit-real-orders/`), and start the dev server with `MATTER_COCKPIT_EXTRA_ORDERS_DIR` set to that folder so they replay without a key.
 4. Confirm the Claude key file exists (`ls ~/.config/matter-cockpit/api-key`); never print it.
 5. `npm run dev`. If the presentation browser runs on another machine, publish the app with `tailscale serve` and set `MATTER_COCKPIT_ALLOWED_HOSTS` to that host name; never bind 0.0.0.0.
 6. Open the app in the presentation browser at 1920×1080, Law Review theme, Deadline Radar showing.
@@ -38,8 +39,11 @@ The session runs 90 minutes. The scheduling-order segment takes 10 of them, and 
 5. Switch to **Lanternfish** (Hennepin County) and drop `hennepin-lanternfish.pdf`. The Minnesota rules apply: Gen. R. Prac. 115.03 motion papers count back from the hearing, and the reply skips the observed July 4 holiday.
 6. Move the trial date a week later in the tab. Every dependent deadline moves with its math; the order's own dates stay put.
 7. Press **Export to calendar** and open the `.ics` in Outlook or Google Calendar.
+8. **Now a real one.** In the tab, choose **Open a public order as a new matter** and drop the real *Pulling Guard Productions v. Lambert* order (D. Minn. No. 26-cv-2305, Oct. 28, 2026). It opens as a new matter marked "Public record" with its case number. Point out that its expert dates supersede the Rule 26(a)(2)(D) default and that pretrial disclosures fall 30 days before the March 15, 2028 trial-ready date. If time allows, open *Old National Bank v. Adams* (No. 25-cv-4636) the same way.
+   - On this order's text layer a footnote marker sits on the trial year ("20288"); the app quotes the date without it, and the checker still matches the page text.
+   - Both orders are public court records from CourtListener's free RECAP archive and name real parties, including eight individual former employees in *Old National Bank*. Public-record matters live only in the running app: they never reach the repository, the Client Portal hides them, and `npm run reset` removes them.
 
-If the room has an order handy, upload theirs only if it is public and synthetic-safe; otherwise stay with the bundled three.
+If someone in the room offers an order, use it only if it is a public court record; open it as a new public-record matter, never on a fictional matter.
 
 ## Sample rambles (one per practice area)
 

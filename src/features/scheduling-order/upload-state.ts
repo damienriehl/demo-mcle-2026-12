@@ -1,7 +1,7 @@
 import { useSyncExternalStore } from 'react';
 
 export type Arrival = { type: 'date'; kind: string; event: string; date: string; page: number; quote: string; verified: boolean; reason?: string };
-type UploadState = { running: boolean; arrivals: Arrival[]; message: string; awaitingSnapshot?: string };
+type UploadState = { running: boolean; arrivals: Arrival[]; message: string; awaitingSnapshot?: string; createdMatterId?: string };
 const idle: UploadState = { running: false, arrivals: [], message: '' };
 const uploads = new Map<string, UploadState>();
 const listeners = new Set<() => void>();
