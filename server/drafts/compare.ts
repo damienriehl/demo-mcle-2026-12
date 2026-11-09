@@ -71,7 +71,9 @@ export async function compareDrafts(earlier: NormalizedDraft, later: NormalizedD
   }
   const paragraphGroups = new Map<string, Group>();
   for (const revision of revisions.filter(revision => revision.type !== 'move')) {
-    const anchors = revision.affectedAnchors.length ? revision.affectedAnchors.map(anchor => anchor.id) : [revision.anchorId!];
+    const anchors = (revision.affectedAnchors.length ? revision.affectedAnchors.map(anchor => anchor.id) : [revision.anchorId!])
+      // Document-level formatting has no paragraph to display; retain it in the redline only.
+      .filter(anchor => revision.type !== 'format' || before.has(anchor) || after.has(anchor));
     for (const anchor of anchors) {
       // Word records a moved paragraph's boundary as separate insert/delete revisions.
       const move = moveByAnchor.get(anchor);
