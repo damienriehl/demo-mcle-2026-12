@@ -63,6 +63,7 @@ function fake(assessments: unknown[], afterItem: (index: number) => void) {
 
 describe('draft advice', () => {
   it.each([
+    ['duplicate', [{ ...model, verdict: 'helps', reason: 'Later duplicate must not replace the first assessment.' }]],
     ['malformed', [{ ...model, verdict: 'invalid' }]],
     ['unknown change', [{ ...model, changeId: 'unknown-private-change' }]],
     ['both invalid', [{ ...model, verdict: 'invalid' }, { ...model, changeId: 'unknown-private-change' }]],

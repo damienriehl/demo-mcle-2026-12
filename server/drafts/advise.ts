@@ -118,14 +118,16 @@ export async function streamAssessments({ stream, request, signal, changes, late
   onAssessment: (assessment: Assessment) => void | Promise<void>;
 }): Promise<void> {
   let skipped = 0;
+  const accepted = new Set<string>();
   try {
     await consumeTool(stream(request, signal), async value => {
       const parsed = modelAssessmentSchema.safeParse(value);
       if (!parsed.success) { skipped++; return; }
       const model = parsed.data;
       const change = changes.find(change => change.changeId === model.changeId);
-      if (!change) { skipped++; return; }
+      if (!change || accepted.has(model.changeId)) { skipped++; return; }
       await onAssessment(await verifyAssessment(model, { change, laterDocx }));
+      accepted.add(model.changeId);
     }, 'record_assessments', 'assessments');
   } finally {
     if (skipped) console.warn(`Draft advice skipped ${skipped} assessment(s).`);

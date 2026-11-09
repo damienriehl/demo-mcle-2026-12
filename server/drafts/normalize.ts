@@ -16,25 +16,35 @@ function detectFormat(filename: string, bytes: Uint8Array): DraftFormat {
   if (buffer.subarray(0, 4).equals(Buffer.from([0xd0, 0xcf, 0x11, 0xe0]))) return 'doc';
   if (buffer.subarray(0, 5).toString() === '{\\rtf') return 'rtf';
   if (buffer.subarray(0, 2).toString() === 'PK') {
-    const end = buffer.lastIndexOf(Buffer.from([0x50, 0x4b, 0x05, 0x06]));
-    if (end >= 0 && end + 22 <= buffer.length) {
+    try {
+      const end = buffer.lastIndexOf(Buffer.from([0x50, 0x4b, 0x05, 0x06]));
+      if (end < 0 || end + 22 > buffer.length) throw new DraftInputError(unsupported);
       const entries = new Map<string, { offset: number; size: number; method: number }>();
       let cursor = buffer.readUInt32LE(end + 16);
+      const directoryEnd = cursor + buffer.readUInt32LE(end + 12);
+      if (directoryEnd > end) throw new DraftInputError(unsupported);
       for (let i = 0; i < buffer.readUInt16LE(end + 10); i++) {
+        if (cursor + 46 > directoryEnd || buffer.readUInt32LE(cursor) !== 0x02014b50) throw new DraftInputError(unsupported);
         const nameLength = buffer.readUInt16LE(cursor + 28);
+        const next = cursor + 46 + nameLength + buffer.readUInt16LE(cursor + 30) + buffer.readUInt16LE(cursor + 32);
+        if (next > directoryEnd) throw new DraftInputError(unsupported);
         entries.set(buffer.subarray(cursor + 46, cursor + 46 + nameLength).toString(), {
           offset: buffer.readUInt32LE(cursor + 42), size: buffer.readUInt32LE(cursor + 20), method: buffer.readUInt16LE(cursor + 10),
         });
-        cursor += 46 + nameLength + buffer.readUInt16LE(cursor + 30) + buffer.readUInt16LE(cursor + 32);
+        cursor = next;
       }
       if (entries.has('word/document.xml')) return 'docx';
       const mime = entries.get('mimetype');
       if (entries.has('content.xml') && mime) {
+        if (mime.offset + 30 > buffer.length || buffer.readUInt32LE(mime.offset) !== 0x04034b50) throw new DraftInputError(unsupported);
         const start = mime.offset + 30 + buffer.readUInt16LE(mime.offset + 26) + buffer.readUInt16LE(mime.offset + 28);
+        if (start + mime.size > buffer.length) throw new DraftInputError(unsupported);
         const compressed = buffer.subarray(start, start + mime.size);
-        const value = mime.method === 8 ? inflateRawSync(compressed) : compressed;
+        const value = mime.method === 8 ? inflateRawSync(compressed, { maxOutputLength: 128 }) : compressed;
         if (value.toString() === 'application/vnd.oasis.opendocument.text') return 'odt';
       }
+    } catch {
+      throw new DraftInputError(unsupported);
     }
     throw new DraftInputError(unsupported);
   }
@@ -102,7 +112,8 @@ export async function normalizeDraft({ filename, bytes }: { filename: string; by
   let docx: Uint8Array;
   if (format === 'docx') docx = bytes;
   else if (format === 'txt' || format === 'md' || format === 'pdf') {
-    const paragraphs = format === 'pdf' ? await pdfParagraphs(bytes) : new TextDecoder().decode(bytes).replace(/\r\n?/g, '\n').split(/\n\s*\n/);
+    const paragraphs = format === 'pdf' ? await pdfParagraphs(bytes) : new TextDecoder().decode(bytes).replace(/\r\n?/g, '\n').split(/\n\s*\n/).filter(paragraph => paragraph.trim());
+    if (!paragraphs.length) throw new DraftInputError('This draft has no text.');
     const session = openDocxSession(createBlankDocx());
     try {
       let anchor = Object.keys(session.project().anchorIndex)[0];

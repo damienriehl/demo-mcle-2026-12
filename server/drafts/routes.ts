@@ -121,10 +121,22 @@ export function createDraftCompareRoutes(options: Options = {}): Hono {
     const stream = source();
     const texts = { earlierText: earlier.text, laterText: later.text, matter };
     let facts;
-    if (stream) facts = await modelTagPass({ stream, ...texts, signal });
-    else {
+    if (stream) {
+      try { facts = await modelTagPass({ stream, ...texts, signal }); }
+      catch (error) {
+        if (signal.aborted) return;
+        console.error(`draft party detection failed: ${error instanceof Error ? error.constructor.name : typeof error}`);
+      }
+    }
+    if (!facts) {
       const canned = (await replay(record))?.meta;
-      if (!canned) { await send({ type: 'needs_key', stage: 'parties', message: NEEDS_KEY_MESSAGE }); return; }
+      if (!canned) {
+        if (stream) {
+          await send({ type: 'error', message: 'Party detection could not finish; the redline and tags are still available.' });
+          await send({ type: 'done', comparisonId: record.comparisonId });
+        } else await send({ type: 'needs_key', stage: 'parties', message: NEEDS_KEY_MESSAGE });
+        return;
+      }
       facts = verifyDocumentFacts({ parties: canned.parties, documentType: canned.documentType,
         tags: canned.modelTags.map(tag => ({ label: tag.label, quote: tag.text, draft: tag.draft })) }, texts);
     }

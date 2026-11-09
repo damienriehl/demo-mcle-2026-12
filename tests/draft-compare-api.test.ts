@@ -1,12 +1,19 @@
 import { existsSync, mkdirSync, readFileSync, readdirSync, rmSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
-import { afterEach, describe, expect, it } from 'vitest';
+import { readFile } from 'node:fs/promises';
+import { getComments, getRevisions } from 'docxodus/core';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import { resetDemo } from '../scripts/reset-demo';
 import { NEEDS_KEY_MESSAGE } from '../server/ai';
 import { createDraftCompareRoutes } from '../server/drafts/routes';
 import { createComparisonStore } from '../server/drafts/store';
 import { comparisonRecordSchema, type Change, type ModelAssessment } from '../server/drafts/types';
 import { analysis, buyer, events, fake, json, meta, seller, setup, upload } from './fixtures/drafts/api/helpers';
+
+vi.mock('node:fs/promises', async importOriginal => {
+  const actual = await importOriginal<typeof import('node:fs/promises')>();
+  return { ...actual, readFile: vi.fn(actual.readFile) };
+});
 
 const contexts: ReturnType<typeof setup>[] = [];
 function context(stream: Parameters<typeof setup>[0] = null) { const c = setup(stream); contexts.push(c); return c; }
@@ -82,6 +89,28 @@ describe('draft compare HTTP flow', () => {
     expect(record.assessments).toEqual(advised.slice(0, 2).map(event => event.assessment));
   });
 
+  it('keeps the first duplicate assessment in SSE, stored advice, comments and counter-language', async () => {
+    const first = analysis().assessments[0];
+    const duplicate = { ...first, verdict: 'helps', reason: 'Later duplicate', counter: { ...first.counter, replace: 'direct damages, except gross negligence' } };
+    const c = context(fake([facts(), { assessments: [first, duplicate] }]).stream);
+    const compared = await events(await upload(c));
+    const id = compared[0].comparisonId;
+    const advised = await events(await json(c, `/${id}/advise`, { matterId: c.matterId, party: buyer }));
+    expect(advised.map(event => event.type)).toEqual(['assessment', 'done']);
+    expect(advised[0].assessment).toMatchObject({ ...first, verified: true });
+    const record = await (await c.app.request(`/${id}?matterId=${c.matterId}`)).json();
+    expect(record.assessments).toEqual([advised[0].assessment]);
+    const redline = await c.app.request(`/${id}/redline.docx?matterId=${c.matterId}`);
+    expect(await getComments(new Uint8Array(await redline.arrayBuffer()))).toEqual([
+      expect.objectContaining({ text: `Harms — ${first.reason}` }),
+    ]);
+    const counter = await json(c, `/${id}/counter.docx`, { matterId: c.matterId, changeIds: [first.changeId] });
+    expect(counter.status).toBe(200);
+    expect(await getRevisions(new Uint8Array(await counter.arrayBuffer()))).toEqual([
+      expect.objectContaining({ type: 'insert', text: ', except fraud' }),
+    ]);
+  });
+
   it.each([false, true])('keeps valid facts beside malformed parties and concepts (invalid document type: %s)', async invalidDocument => {
     const value = facts();
     const c = context(fake([{
@@ -133,10 +162,71 @@ describe('draft compare HTTP flow', () => {
     expect((await reopened.get(c.matterId, id))!.assessments[0]).toMatchObject({ verified: true, counter: { span: { literal: 'direct damages' } } });
   });
 
+  it.each([true, false])('preserves comparison after facts failure (canned fallback: %s)', async hasCanned => {
+    const logged = vi.spyOn(console, 'error').mockImplementation(() => {});
+    try {
+      const c = context(fake([], () => { throw new TypeError('private model failure details'); }).stream);
+      const result = await events(await upload(c, hasCanned ? { sample: true } : { later: 'Purchase Agreement\n\nSeller has no liability.' }));
+      expect(result.map(event => event.type)).toEqual(hasCanned
+        ? ['redline', 'tags', 'tags', 'parties', 'done']
+        : ['redline', 'tags', 'error', 'done']);
+      expect(logged.mock.calls).toEqual([['draft party detection failed: TypeError']]);
+      const id = result[0].comparisonId;
+      const record = await (await c.app.request(`/${id}?matterId=${c.matterId}`)).json();
+      expect(record.changes).toEqual(result[0].changes);
+      expect(record.tags).toEqual(result[hasCanned ? 2 : 1].tags);
+      expect(record.tags.length).toBeGreaterThan(0);
+      if (hasCanned) {
+        expect(record.parties).toEqual(result[3].parties);
+        expect(record.parties.map((party: { name: string }) => party.name)).toEqual(meta.parties.map((party: { name: string }) => party.name));
+      } else {
+        expect(record.parties).toEqual([]);
+        expect(result[2]).toEqual({ type: 'error', message: 'Party detection could not finish; the redline and tags are still available.' });
+      }
+      expect((await c.app.request(`/${id}/redline.docx?matterId=${c.matterId}`)).status).toBe(200);
+    } finally { logged.mockRestore(); }
+  });
+
   it('rejects an unknown matter and a missing upload header', async () => {
     const c = context();
     expect(await events(await upload(c, { matterId: 'unknown' }))).toEqual([{ type: 'error', message: 'Unknown matter.' }]);
     expect((await events(await upload(c, { header: false })))[0]).toMatchObject({ type: 'error', message: expect.stringContaining('X-Matter-Cockpit-Upload') });
+  });
+
+  it.each([
+    ['oversized upload', 'Upload two drafts no larger than 10 MB each.'],
+    ['JSON body', 'Draft uploads require multipart/form-data.'],
+    ['unknown sample', 'Choose a bundled draft pair.'],
+  ])('rejects %s before comparing drafts', async (kind, message) => {
+    const c = context();
+    const headers: Record<string, string> = { 'X-Matter-Cockpit-Upload': '1' };
+    const form = new FormData();
+    form.set('matterId', c.matterId);
+    if (kind === 'unknown sample') form.set('sample', 'nope');
+    else for (const side of ['earlier', 'later']) form.set(side, new File([new Uint8Array(11 * 1024 * 1024)], `${side}.txt`));
+    if (kind === 'JSON body') headers['Content-Type'] = 'application/json';
+    const response = await c.app.request('/compare', { method: 'POST', headers, body: kind === 'JSON body' ? JSON.stringify({ matterId: c.matterId }) : form });
+    expect(await events(response)).toEqual([{ type: 'error', message }]);
+    expect(existsSync(c.comparisonsDir)).toBe(false);
+  });
+
+  it('rejects a path-traversal matter id before reading any file', async () => {
+    const c = context();
+    vi.mocked(readFile).mockClear();
+    const response = await c.app.request('/unknown?matterId=..%2Fx');
+    expect(response.status).not.toBe(200);
+    expect(readFile).not.toHaveBeenCalled();
+  });
+
+  it.each(['record', 'advise', 'redline.docx', 'counter.docx'])('returns 404 for an unknown comparison on %s', async endpoint => {
+    const c = context();
+    const response = endpoint === 'advise'
+      ? await json(c, '/unknown/advise', { matterId: c.matterId, party: buyer })
+      : endpoint === 'counter.docx'
+        ? await json(c, '/unknown/counter.docx', { matterId: c.matterId, changeIds: [] })
+        : await c.app.request(`/unknown${endpoint === 'record' ? '' : `/${endpoint}`}?matterId=${c.matterId}`);
+    expect(response.status).toBe(404);
+    expect(await response.json()).toEqual({ error: 'Unknown comparison.' });
   });
 
   it('refuses advice before a recorded party is selected without calling the model', async () => {

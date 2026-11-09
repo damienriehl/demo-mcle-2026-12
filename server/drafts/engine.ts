@@ -5,7 +5,13 @@ const globals = globalThis as typeof globalThis & { [ENGINE_KEY]?: Promise<void>
 
 /** Keep the runtime and its in-flight initialization across Vite server reloads. */
 export function ensureEngine(): Promise<void> {
-  return globals[ENGINE_KEY] ??= initialize();
+  if (globals[ENGINE_KEY]) return globals[ENGINE_KEY];
+  const pending = initialize();
+  globals[ENGINE_KEY] = pending;
+  pending.catch(() => {
+    if (globals[ENGINE_KEY] === pending) delete globals[ENGINE_KEY];
+  });
+  return pending;
 }
 
 export function paragraphsOf(session: DocxSession) {

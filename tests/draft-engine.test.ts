@@ -3,14 +3,21 @@ import { chmodSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'nod
 import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 import { promisify } from 'node:util';
+import { deflateRawSync, inflateRawSync } from 'node:zlib';
 import { load } from 'cheerio';
 import { getRevisions, openDocxSession } from 'docxodus/core';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { ensureEngine } from '../server/drafts/engine';
+import { DraftInputError } from '../server/drafts/errors';
 import { normalizeDraft } from '../server/drafts/normalize';
 import { compareDrafts } from '../server/drafts/compare';
 import { converterAvailable } from '../server/drafts/convert';
 import { sanitizeHtml } from '../server/drafts/html';
+
+vi.mock('node:zlib', async importOriginal => {
+  const actual = await importOriginal<typeof import('node:zlib')>();
+  return { ...actual, inflateRawSync: vi.fn(actual.inflateRawSync) };
+});
 
 const scratch: string[] = [];
 const utf8 = (text: string) => new TextEncoder().encode(text);
@@ -44,26 +51,29 @@ function pdf(pages: string[][]): Uint8Array {
 }
 
 // Stored ZIP entries suffice for format sniffing; the converter owns ODT parsing.
-function odt(): Uint8Array {
-  const entries = [['mimetype', 'application/vnd.oasis.opendocument.text'], ['content.xml', '<document/>']];
+function odt(mimetype = 'application/vnd.oasis.opendocument.text', deflated = false): Uint8Array {
+  const entries = [['mimetype', mimetype], ['content.xml', '<document/>']];
   const local: Buffer[] = [];
   const central: Buffer[] = [];
   let offset = 0;
   for (const [name, content] of entries) {
+    const compressed = deflated ? deflateRawSync(content) : Buffer.from(content);
     const header = Buffer.alloc(30);
+    header.writeUInt16LE(deflated ? 8 : 0, 8);
     header.writeUInt32LE(0x04034b50);
-    header.writeUInt32LE(content.length, 18);
+    header.writeUInt32LE(compressed.length, 18);
     header.writeUInt32LE(content.length, 22);
     header.writeUInt16LE(name.length, 26);
     const directory = Buffer.alloc(46);
     directory.writeUInt32LE(0x02014b50);
-    directory.writeUInt32LE(content.length, 20);
+    directory.writeUInt16LE(deflated ? 8 : 0, 10);
+    directory.writeUInt32LE(compressed.length, 20);
     directory.writeUInt32LE(content.length, 24);
     directory.writeUInt16LE(name.length, 28);
     directory.writeUInt32LE(offset, 42);
-    local.push(header, Buffer.from(name), Buffer.from(content));
+    local.push(header, Buffer.from(name), compressed);
     central.push(directory, Buffer.from(name));
-    offset += header.length + name.length + content.length;
+    offset += header.length + name.length + compressed.length;
   }
   const end = Buffer.alloc(22);
   end.writeUInt32LE(0x06054b50);
@@ -176,6 +186,18 @@ describe('draft engine', () => {
     expect(result.changes[0].laterText).toBe('The buyer shall pay within sixty days after delivery of the goods.');
   });
 
+  it.each(['draft.txt', 'draft.md'])('ignores trailing blank paragraphs and normalizes CRLF in %s', async filename => {
+    for (const ending of ['\n', '\r\n']) {
+      const result = await draft(`First paragraph.${ending}${ending}Last paragraph.${ending}${ending}`, filename);
+      expect(result.text).toBe('First paragraph.\nLast paragraph.');
+    }
+  });
+
+  it.each(['draft.txt', 'draft.md'])('refuses a whitespace-only %s with an input error', async filename => {
+    await expect(draft(' \r\n\r\n  ', filename)).rejects.toBeInstanceOf(DraftInputError);
+    await expect(draft(' \r\n\r\n  ', filename)).rejects.toThrow('This draft has no text.');
+  });
+
   it('preserves plain text Markdown punctuation and leading numbering literally', async () => {
     const text = '______ [___] * literal\n\n1. A numbered clause.\n\n# A literal heading';
     const result = await draft(text);
@@ -205,6 +227,23 @@ describe('draft engine', () => {
 
   it('refuses PDFs with no text layer', async () => {
     await expect(normalizeDraft({ filename: 'scan.pdf', bytes: pdf([[]]) })).rejects.toThrow('This PDF has no text layer; upload a text PDF or the Word file.');
+  });
+
+  it('bounds inflation of an oversized ZIP mimetype entry', async () => {
+    vi.mocked(inflateRawSync).mockClear();
+    await expect(normalizeDraft({ filename: 'bomb.odt', bytes: odt('x'.repeat(1024 * 1024), true) })).rejects.toBeInstanceOf(DraftInputError);
+    expect(inflateRawSync).toHaveBeenCalledWith(expect.any(Buffer), { maxOutputLength: 128 });
+  });
+
+  it.each(['central header', 'local header', 'entry data'])('refuses a truncated ZIP %s as unsupported input', async kind => {
+    const bytes = Buffer.from(odt());
+    const end = bytes.length - 22;
+    const central = bytes.readUInt32LE(end + 16);
+    if (kind === 'central header') bytes.writeUInt32LE(bytes.length - 4, end + 16);
+    else if (kind === 'local header') bytes.writeUInt32LE(bytes.length - 4, central + 42);
+    else bytes.writeUInt32LE(bytes.length, central + 20);
+    await expect(normalizeDraft({ filename: 'truncated.odt', bytes })).rejects.toBeInstanceOf(DraftInputError);
+    await expect(normalizeDraft({ filename: 'truncated.odt', bytes })).rejects.toThrow('This file type is not supported.');
   });
 
   it('refuses unsupported formats', async () => {

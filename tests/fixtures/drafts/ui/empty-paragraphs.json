@@ -1,0 +1,49 @@
+{
+  "compare": [
+    {
+      "type": "redline",
+      "comparisonId": "empty-paragraphs",
+      "html": "<p>Agreement.</p><p><span>\u00a0</span></p><p></p><p class=\"rev-para-ins\">\u00a0</p><p class=\"rev-para-del\">\u00a0</p><p id=\"notice\" data-change-id=\"c1\">Notice applies.</p>",
+      "changes": [
+        {
+          "changeId": "c1",
+          "kind": "format",
+          "earlierText": "Notice applies.",
+          "laterText": "Notice applies.",
+          "anchorId": "notice",
+          "revisionIds": []
+        }
+      ],
+      "formattingCompared": true
+    },
+    {
+      "type": "tags",
+      "tags": [
+        {
+          "iri": "https://folio.example/notice",
+          "label": "Notice",
+          "branch": "Clauses",
+          "draft": "earlier",
+          "start": 14,
+          "end": 20,
+          "text": "Notice",
+          "source": "index"
+        },
+        {
+          "iri": "https://folio.example/notice",
+          "label": "Notice",
+          "branch": "Clauses",
+          "draft": "later",
+          "start": 14,
+          "end": 20,
+          "text": "Notice",
+          "source": "index"
+        }
+      ]
+    },
+    {
+      "type": "done",
+      "comparisonId": "empty-paragraphs"
+    }
+  ]
+}

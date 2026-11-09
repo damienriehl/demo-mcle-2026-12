@@ -1,6 +1,7 @@
 import { expect, test, type Page } from '@playwright/test';
 import initial from './fixtures/views/scheduling-order-empty.json' with { type: 'json' };
 import fixture from './fixtures/drafts/ui/comparison.json' with { type: 'json' };
+import emptyParagraphs from './fixtures/drafts/ui/empty-paragraphs.json' with { type: 'json' };
 import denseFixture from './fixtures/drafts/ui/dense-comparison.json' with { type: 'json' };
 
 const api = '**/api/features/draft-compare';
@@ -194,6 +195,21 @@ test('FOLIO filter hides other branches and selecting a tag outlines the precise
   await expect(page.locator('.dc-tag-current')).toHaveText('30');
 });
 
+for (const draft of ['earlier', 'later']) {
+  test(`FOLIO outlines the exact ${draft} span after empty paragraphs`, async ({ page }) => {
+    await open(page, emptyParagraphs.compare);
+    await sample(page);
+    const panel = page.getByRole('region', { name: 'FOLIO tags' });
+    await panel.getByRole('button', { name: /Notice/ }).click();
+    if (draft === 'later') await panel.getByRole('button', { name: 'Next', exact: true }).click();
+    await expect(panel.getByRole('status')).toContainText(`Notice · ${draft}`);
+    await expect(page.locator('.dc-tag-current')).toHaveText('Notice');
+    await expect(page.locator('.dc-tag-current')).toHaveCSS('outline-style', 'solid');
+    await page.locator('[data-assessment="c1"]').getByRole('button', { name: /Pending assessment/ }).click();
+    await expect(page.locator('[data-assessment="c1"] .dc-chip')).toContainText('Notice');
+  });
+}
+
 test('changing party clears cards, memo and applied suggestions and allows fresh advice', async ({ page }) => {
   await open(page);
   await advise(page);
@@ -238,6 +254,17 @@ test('switching party during streamed advice discards subsequent advice for the 
   await expect(page.getByRole('region', { name: 'Advice memo' })).toHaveCount(0);
   await expect(page.locator('[data-assessment="c1"]')).toContainText('Pending assessment');
   await expect(page.getByRole('button', { name: 'Run advice', exact: true })).toBeEnabled();
+});
+
+test('party detection failure keeps the redline and FOLIO tags after done', async ({ page }) => {
+  const message = 'Party detection could not finish; the redline and tags are still available.';
+  await open(page, [fixture.compare[0], fixture.compare[1], { type: 'error', message }, fixture.compare[3]]);
+  await sample(page);
+  await expect(page.getByRole('alert')).toHaveText(message);
+  await expect(page.getByRole('region', { name: 'Redline document' })).toContainText('Notice within');
+  await expect(page.getByRole('region', { name: 'FOLIO tags' })).toContainText('Notice');
+  await expect(page.getByRole('button', { name: 'Download redline', exact: true })).toBeEnabled();
+  await expect(page.getByRole('button', { name: 'Run advice', exact: true })).toBeDisabled();
 });
 
 test('identical drafts and refusal messages are readable on screen', async ({ page }) => {

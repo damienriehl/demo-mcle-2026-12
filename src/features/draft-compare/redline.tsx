@@ -11,20 +11,26 @@ type SourceNode = { node: Text; start: number; end: number };
 function sourceNodes(root: HTMLElement, draft: FolioTag['draft']) {
   const nodes: SourceNode[] = [];
   const excluded = draft === 'earlier' ? 'ins,.rev-ins,.rev-para-ins,.rev-move-to' : 'del,.rev-del,.rev-para-del,.rev-move-from';
+  const absentBlock = draft === 'earlier' ? '.rev-para-ins,.rev-move-to' : '.rev-para-del,.rev-move-from';
   let offset = 0;
   const blocks = [...root.querySelectorAll(textBlocks)].filter(block => !block.querySelector(textBlocks));
   for (const block of blocks.length ? blocks : [root]) {
+    if (block.closest(absentBlock) || block.querySelector(absentBlock)) continue;
     const walker = document.createTreeWalker(block, NodeFilter.SHOW_TEXT);
     let current: Node | null;
-    let count = 0;
+    const textNodes: Text[] = [];
     while ((current = walker.nextNode())) {
       if (current.parentElement?.closest(`${excluded},.dc-sr-label,.dc-tag-label`)) continue;
-      const length = current.textContent?.length ?? 0;
-      nodes.push({ node: current as Text, start: offset, end: offset + length });
-      offset += length;
-      count += length;
+      textNodes.push(current as Text);
     }
-    if (count) offset += 1; // Paragraph separator in the draft's plain text.
+    // Docxodus renders an empty paragraph with a nonbreaking-space placeholder.
+    if (textNodes.map(node => node.data).join('') !== '\u00a0') {
+      for (const node of textNodes) {
+        nodes.push({ node, start: offset, end: offset + node.length });
+        offset += node.length;
+      }
+    }
+    offset += 1; // Every paragraph present in this draft contributes a separator.
   }
   return nodes;
 }
