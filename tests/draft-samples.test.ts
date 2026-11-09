@@ -46,14 +46,14 @@ describe('bundled draft samples', () => {
 
   for (const id of pairs) {
     const folder = join(root, id);
-    it.skipIf(!existsSync(join(folder, 'meta.json')))(`${id} replays verified facts and advice for both sides`, async () => {
+    it.skipIf(!existsSync(join(folder, 'meta.json')))(`${id} replays verified facts and advice for every detected party`, async () => {
       const result = await sample(folder);
       const key = cannedKey(result.earlier.text, result.later.text);
       await loadCanned(root);
       const meta = findCanned(key)!;
       expect(meta).toBeDefined();
       const pair: { parties: Pick<Party, 'name' | 'role'>[] } = JSON.parse(await readFile(join(folder, 'pair.json'), 'utf8'));
-      expect(meta.parties.map(party => party.name).sort()).toEqual(pair.parties.map(party => party.name).sort());
+      expect(meta.parties.map(party => party.name)).toEqual(expect.arrayContaining(pair.parties.map(party => party.name)));
       expect(lookup(meta.documentType!.iri)).toBeDefined();
       for (const party of meta.parties) expect(lookup(party.actorIri!)).toBeDefined();
       for (const tag of meta.modelTags) {
@@ -61,10 +61,12 @@ describe('bundled draft samples', () => {
         expect((tag.draft === 'earlier' ? result.earlier.text : result.later.text).slice(tag.start, tag.end)).toBe(tag.text);
       }
       let counters = 0;
-      for (const party of pair.parties) {
+      for (const party of meta.parties) {
+        const namedParty = pair.parties.find(named => named.name === party.name);
         const assessments = findCannedAssessments(key, party.name)!;
         expect(assessments).toBeDefined();
-        expect(assessments.some(assessment => assessment.verdict === 'harms')).toBe(true);
+        expect(assessments.length).toBeGreaterThan(0);
+        if (namedParty) expect(assessments.some(assessment => assessment.verdict === 'harms')).toBe(true);
         for (const value of assessments) {
           const assessment = modelAssessmentSchema.parse(value);
           const change = result.changes.find(change => change.changeId === assessment.changeId);
@@ -76,11 +78,11 @@ describe('bundled draft samples', () => {
             counters++;
           }
         }
-        if (id === 'transactional-asset-purchase') {
+        if (id === 'transactional-asset-purchase' && namedParty) {
           const cap = result.changes.find(change => change.laterText.includes('10%'))!;
           const assessment = assessments.find(assessment => assessment.changeId === cap.changeId)!;
-          expect(assessment.verdict).toBe(party.role === 'buyer' ? 'harms' : 'helps');
-          if (party.role === 'buyer') expect(assessment.quote).toContain('10%');
+          expect(assessment.verdict).toBe(namedParty.role === 'buyer' ? 'harms' : 'helps');
+          if (namedParty.role === 'buyer') expect(assessment.quote).toContain('10%');
         }
       }
       expect(counters).toBeGreaterThan(0);
@@ -108,6 +110,7 @@ it('generates replay files through an injected stream, keeping only verified adv
   const directory = await mkdtemp(join(tmpdir(), 'draft-generator-'));
   try {
     const parties = [{ name: 'Fictional Alder Buyer', role: 'buyer' }, { name: 'Fictional Birch Seller', role: 'seller' }];
+    const detectedParties = [...parties, { name: 'Fictional Cedar Guarantor', role: 'guarantor' }];
     await writeFile(join(directory, 'pair.json'), JSON.stringify({ title: 'Fictional purchase', family: 'transactional', parties, matterHint: 'transactional' }));
     await writeFile(join(directory, 'earlier.md'), 'Buyer shall pay within 30 days.\n\nSeller delivers in 20 days.\n\nRecords remain confidential.');
     await writeFile(join(directory, 'later.md'), 'Buyer shall pay within 10 days.\n\nSeller delivers in 10 days.\n\nRecords remain confidential.');
@@ -123,12 +126,13 @@ it('generates replay files through an injected stream, keeping only verified adv
     const compared = await sample(directory);
     const good: ModelAssessment = { changeId: compared.changes[0].changeId, verdict: 'harms', confidence: 'high', quote: 'within 10 days', reason: 'Payment "within 10 days" is earlier.', counter: { find: 'within 10 days', replace: 'within 30 days', effect: 'Restores time to pay.' } };
     const outputs = [
-      { parties: parties.map(party => ({ ...party, actorLabel: 'Buyer' })), documentType: { label: 'Asset Purchase Agreement', family: 'transactional' }, tags: [
+      { parties: detectedParties.map(party => ({ ...party, actorLabel: 'Buyer' })), documentType: { label: 'Asset Purchase Agreement', family: 'transactional' }, tags: [
         { label: 'Indemnification', quote: 'invented quote', draft: 'later' },
         { label: 'Confidentiality Clause', quote: 'confidential', draft: 'later' },
       ] },
       { assessments: [good, { ...good, changeId: compared.changes[1].changeId, quote: 'invented quote' }] },
       { assessments: [{ ...good, verdict: 'helps', counter: { ...good.counter!, find: 'not in the draft' } }] },
+      { assessments: [{ ...good, verdict: 'neutral', counter: undefined }] },
     ];
     const requests: Parameters<ModelStream>[0][] = [];
     const stream: ModelStream = async function* (request) {
@@ -141,15 +145,18 @@ it('generates replay files through an injected stream, keeping only verified adv
       yield { type: 'content_block_stop', index: 0 };
     };
     const summary = await generateCannedPair({ directory, stream });
-    expect(summary).toMatchObject({ changes: 2, verified: 2, unverified: 1, countersKept: 1 });
-    expect(requests).toHaveLength(3);
+    expect(summary).toMatchObject({ changes: 2, verified: 3, unverified: 1, countersKept: 1 });
+    expect(requests).toHaveLength(4);
     expect(requests[1].system).toContain(`You represent ${parties[0].name}`);
     expect(requests[2].system).toContain(`You represent ${parties[1].name}`);
+    expect(requests[3].system).toContain(`You represent ${detectedParties[2].name}`);
     const meta = JSON.parse(await readFile(join(directory, 'meta.json'), 'utf8'));
     expect(meta.key).toBe(cannedKey(compared.earlier.text, compared.later.text));
     expect(meta.documentType.label).toBe('Asset Purchase Agreement');
     expect(meta.modelTags).toEqual([expect.objectContaining({ text: 'confidential', source: 'model' })]);
-    for (const party of parties) {
+    expect(meta.parties.map((party: Party) => party.name)).toEqual(detectedParties.map(party => party.name));
+    expect(readdirSync(directory).filter(filename => filename.startsWith('analysis.'))).toHaveLength(3);
+    for (const party of meta.parties as Party[]) {
       const slug = party.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
       const saved = JSON.parse(await readFile(join(directory, `analysis.${slug}.json`), 'utf8'));
       expect(saved.party).toBe(party.name);

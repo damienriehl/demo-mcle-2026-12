@@ -2,7 +2,7 @@ import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import type { BetaRawMessageStreamEvent } from '@anthropic-ai/sdk/resources/beta/messages';
 import { createBlankDocx, initialize, openDocxSession } from 'docxodus/core';
-import { beforeAll, describe, expect, it } from 'vitest';
+import { beforeAll, describe, expect, it, vi } from 'vitest';
 import { z } from 'zod';
 import { modelName } from '../server/ai';
 import { buildAdviceRequest, streamAssessments, verifyAssessment } from '../server/drafts/advise';
@@ -41,7 +41,7 @@ function docx(paragraphs: string[]): Uint8Array {
   } finally { session.close(); }
 }
 
-function fake(assessments: ModelAssessment[], afterItem: (index: number) => void) {
+function fake(assessments: unknown[], afterItem: (index: number) => void) {
   const requests: Parameters<ModelStream>[0][] = [];
   const signals: AbortSignal[] = [];
   const stream: ModelStream = async function* (request, signal) {
@@ -62,6 +62,30 @@ function fake(assessments: ModelAssessment[], afterItem: (index: number) => void
 }
 
 describe('draft advice', () => {
+  it.each([
+    ['malformed', [{ ...model, verdict: 'invalid' }]],
+    ['unknown change', [{ ...model, changeId: 'unknown-private-change' }]],
+    ['both invalid', [{ ...model, verdict: 'invalid' }, { ...model, changeId: 'unknown-private-change' }]],
+  ])('skips %s assessments, streams good neighbors, and logs only the count', async (_label, invalid) => {
+    const second = { ...model, changeId: 'second' };
+    const changes = [change, { ...change, changeId: second.changeId }];
+    const received: Assessment[] = [];
+    const replay = fake([model, ...invalid, second], index => {
+      expect(received).toHaveLength(index === invalid.length + 1 ? 2 : 1);
+    });
+    const warning = vi.spyOn(console, 'warn').mockImplementation(() => {});
+    try {
+      await streamAssessments({
+        stream: replay.stream, request: buildAdviceRequest({ party: buyer, changes, earlierText, laterText }),
+        signal: new AbortController().signal, changes, laterDocx: docx([laterText]),
+        onAssessment: assessment => { received.push(assessment); },
+      });
+      expect(received.map(assessment => assessment.changeId)).toEqual([change.changeId, second.changeId]);
+      expect(received.every(assessment => assessment.verified)).toBe(true);
+      expect(warning.mock.calls).toEqual([[`Draft advice skipped ${invalid.length} assessment(s).`]]);
+    } finally { warning.mockRestore(); }
+  });
+
   it('verifies and emits each completed assessment before reading the next streamed item', async () => {
     const changes: Change[] = [change, {
       ...change, changeId: 'delivery', earlierText: 'Seller delivers in 20 days.', laterText: 'Seller delivers in 10 days.',

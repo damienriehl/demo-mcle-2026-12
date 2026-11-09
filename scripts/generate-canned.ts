@@ -34,7 +34,7 @@ export async function generateCannedPair({ directory, stream }: { directory: str
   const facts = await modelTagPass({ stream, ...texts, matter, signal });
   const summary = { pair: basename(directory), changes: compared.changes.length, verified: 0, unverified: 0, countersKept: 0 };
   const analyses: { filename: string; party: string; assessments: ModelAssessment[] }[] = [];
-  for (const party of pair.parties) {
+  for (const party of facts.parties) {
     const assessments: ModelAssessment[] = [];
     await streamAssessments({ stream, signal, changes: compared.changes, laterDocx: later.docx,
       request: buildAdviceRequest({ party: party.name, documentType: facts.documentType, changes: compared.changes, ...texts }),

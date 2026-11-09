@@ -116,10 +116,17 @@ export async function streamAssessments({ stream, request, signal, changes, late
   laterDocx: Uint8Array;
   onAssessment: (assessment: Assessment) => void | Promise<void>;
 }): Promise<void> {
-  await consumeTool(stream(request, signal), async value => {
-    const model = modelAssessmentSchema.parse(value);
-    const change = changes.find(change => change.changeId === model.changeId);
-    if (!change) throw new Error('Assessment refers to an unknown change.');
-    await onAssessment(await verifyAssessment(model, { change, laterDocx }));
-  }, 'record_assessments', 'assessments');
+  let skipped = 0;
+  try {
+    await consumeTool(stream(request, signal), async value => {
+      const parsed = modelAssessmentSchema.safeParse(value);
+      if (!parsed.success) { skipped++; return; }
+      const model = parsed.data;
+      const change = changes.find(change => change.changeId === model.changeId);
+      if (!change) { skipped++; return; }
+      await onAssessment(await verifyAssessment(model, { change, laterDocx }));
+    }, 'record_assessments', 'assessments');
+  } finally {
+    if (skipped) console.warn(`Draft advice skipped ${skipped} assessment(s).`);
+  }
 }

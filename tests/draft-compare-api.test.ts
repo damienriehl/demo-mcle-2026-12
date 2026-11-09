@@ -5,7 +5,7 @@ import { resetDemo } from '../scripts/reset-demo';
 import { NEEDS_KEY_MESSAGE } from '../server/ai';
 import { createDraftCompareRoutes } from '../server/drafts/routes';
 import { createComparisonStore } from '../server/drafts/store';
-import { comparisonRecordSchema } from '../server/drafts/types';
+import { comparisonRecordSchema, type Change, type ModelAssessment } from '../server/drafts/types';
 import { analysis, buyer, events, fake, json, meta, seller, setup, upload } from './fixtures/drafts/api/helpers';
 
 const contexts: ReturnType<typeof setup>[] = [];
@@ -14,6 +14,45 @@ afterEach(() => { contexts.splice(0).forEach(c => { c.store.close(); rmSync(c.di
 const facts = () => ({ parties: meta.parties.map((p: { name: string; role: string; actorLabel: string }) => ({ name: p.name, role: p.role, actorLabel: p.actorLabel })), documentType: { label: 'Purchase Agreement', family: 'transactional' }, tags: [{ label: 'Indemnification', quote: 'direct damages', draft: 'later' }] });
 
 describe('draft compare HTTP flow', () => {
+  it.each(['malformed', 'unknown change'])('finishes advice with done after skipping a %s element between good assessments', async kind => {
+    const outputs: unknown[] = [facts()];
+    const c = context(fake(outputs).stream);
+    const compared = await events(await upload(c, { later: 'Purchase Agreement\n\nSeller reimburses consequential damages.\n\nBuyer pays within 10 days.' }));
+    const changes: Change[] = compared[0].changes;
+    expect(changes.length).toBeGreaterThanOrEqual(2);
+    const good: ModelAssessment[] = changes.slice(0, 2).map(change => ({
+      changeId: change.changeId, verdict: 'harms', confidence: 'high',
+      quote: change.laterText || change.earlierText, reason: `The changed clause says "${change.laterText || change.earlierText}".`,
+    }));
+    const invalid = kind === 'malformed' ? { ...good[0], confidence: 42 } : { ...good[0], changeId: 'unknown-change' };
+    outputs.push({ assessments: [good[0], invalid, good[1]] });
+    const advised = await events(await json(c, `/${compared[0].comparisonId}/advise`, { matterId: c.matterId, party: buyer }));
+    expect(advised.map(event => event.type)).toEqual(['assessment', 'assessment', 'done']);
+    expect(advised.slice(0, 2).map(event => event.assessment)).toEqual(good.map(assessment => ({ ...assessment, verified: true })));
+    const record = await (await c.app.request(`/${compared[0].comparisonId}?matterId=${c.matterId}`)).json();
+    expect(record.assessments).toEqual(advised.slice(0, 2).map(event => event.assessment));
+  });
+
+  it.each([false, true])('keeps valid facts beside malformed parties and concepts (invalid document type: %s)', async invalidDocument => {
+    const value = facts();
+    const c = context(fake([{
+      ...value,
+      parties: [{ name: 42, role: 'buyer' }, value.parties[1]],
+      tags: [{ label: 'Indemnification', quote: null, draft: 'later' }, ...value.tags],
+      documentType: invalidDocument ? { label: 'Purchase Agreement', family: 'invalid' } : value.documentType,
+    }]).stream);
+    const result = await events(await upload(c));
+    expect(result.map(event => event.type)).toEqual(['redline', 'tags', 'tags', 'parties', 'done']);
+    expect(result[2].tags.filter((tag: { source: string }) => tag.source === 'model')).toEqual([
+      expect.objectContaining({ label: 'Indemnification', text: 'direct damages' }),
+    ]);
+    expect(result[3].parties).toEqual([expect.objectContaining({ name: seller, role: value.parties[1].role, isMatterClient: true })]);
+    if (invalidDocument) expect(result[2].documentType).toBeUndefined();
+    else expect(result[2].documentType).toMatchObject(value.documentType);
+    const record = await (await c.app.request(`/${result[0].comparisonId}?matterId=${c.matterId}`)).json();
+    expect(record.parties).toEqual(result[3].parties);
+  });
+
   it('streams redline, index tags, model tags, parties, done and persists every stage', async () => {
     let c: ReturnType<typeof setup>;
     const replay = fake([facts(), { assessments: analysis().assessments }], request => {

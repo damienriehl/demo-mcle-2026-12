@@ -20,18 +20,28 @@ export function tagDrafts({ earlierText, laterText }: DraftTexts): FolioTag[] {
 export function verifyDocumentFacts(value: unknown, { earlierText, laterText, matter }: DraftTexts & { matter: Matter }): {
   parties: Party[]; documentType?: DocumentType; tags: FolioTag[];
 } {
-  const facts = factsSchema.parse(value);
+  const facts = factsSchema.extend({
+    parties: z.array(z.unknown()), documentType: z.unknown().optional(), tags: z.array(z.unknown()),
+  }).parse(value);
   const clientNames = [matter.client.name, ...matter.parties.filter(party => party.role.toLowerCase() === 'client').map(party => party.name)]
     .map(name => name.toLowerCase());
-  const parties = facts.parties.map(({ name, role, actorLabel }) => {
+  const parties = facts.parties.flatMap(value => {
+    const parsed = factsSchema.shape.parties.element.safeParse(value);
+    if (!parsed.success) return [];
+    const { name, role, actorLabel } = parsed.data;
     const actor = actorLabel ? findByLabel(actorLabel)[0] : undefined;
-    return { name, role, isMatterClient: clientNames.includes(name.toLowerCase()),
-      ...(actor ? { actorIri: actor.iri, actorLabel: actor.label } : {}) };
+    return [{ name, role, isMatterClient: clientNames.includes(name.toLowerCase()),
+      ...(actor ? { actorIri: actor.iri, actorLabel: actor.label } : {}) }];
   });
-  const document = facts.documentType && findByLabel(facts.documentType.label)[0];
-  const documentType = document && facts.documentType ? { iri: document.iri, label: document.label, family: facts.documentType.family } : undefined;
+  const parsedDocument = factsSchema.shape.documentType.safeParse(facts.documentType);
+  const documentFact = parsedDocument.success ? parsedDocument.data : undefined;
+  const document = documentFact && findByLabel(documentFact.label)[0];
+  const documentType = document && documentFact ? { iri: document.iri, label: document.label, family: documentFact.family } : undefined;
   const tags: FolioTag[] = [];
-  for (const { label, quote, draft } of facts.tags) {
+  for (const value of facts.tags) {
+    const parsed = factsSchema.shape.tags.element.safeParse(value);
+    if (!parsed.success) continue;
+    const { label, quote, draft } = parsed.data;
     const concept = findByLabel(label)[0];
     const text = draft === 'earlier' ? earlierText : laterText;
     const start = text.indexOf(quote);
