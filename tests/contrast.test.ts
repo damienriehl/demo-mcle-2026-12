@@ -15,6 +15,13 @@ function contrast(a: string, b: string) {
 describe.each(['law-review', 'mission-control', 'boutique-firm'])('%s projector contrast', theme => {
   const block = css.match(new RegExp(`\\[data-appearance=['"]${theme}['"]\\]\\s*\\{([^}]+)\\}`))?.[1] ?? '';
   const tokens = Object.fromEntries([...block.matchAll(/(--mc-[\w-]+):\s*(#[\da-f]{6})/gi)].map(match => [match[1], match[2]]));
+  test('redline text has projector contrast on the document surface', () => {
+    for (const kind of ['ins', 'del', 'move']) {
+      const token = `--mc-redline-${kind}`;
+      expect(tokens[token], token).toMatch(/^#[\da-f]{6}$/i);
+      expect(contrast(tokens[token], tokens['--mc-surface']), token).toBeGreaterThanOrEqual(7);
+    }
+  });
   test('defines a complete palette with readable body and secondary text on both surfaces', () => {
     for (const key of ['bg', 'surface', 'ink', 'ink-muted', 'accent', 'accent-ink', 'warning', 'chip', 'chip-ink']) expect(tokens[`--mc-${key}`], key).toMatch(/^#[\da-f]{6}$/i);
     for (const background of ['--mc-bg', '--mc-surface']) {
