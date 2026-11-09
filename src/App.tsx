@@ -4,9 +4,10 @@ import { Cockpit } from './views/Cockpit';
 import { Radar } from './views/Radar';
 import { Portal, portalProjection } from './views/Portal';
 import { Ramble, useRamble } from './intake/Ramble';
-import { VerifyDrawer } from './verify/VerifyDrawer';
+import { VerifyDrawer, type VerifySelection } from './verify/VerifyDrawer';
+import { intakeFactContext } from './verify/context';
 import { FeatureSlot } from './components/FeatureSlot';
-import { practiceAreas, type Selection } from './views/shared';
+import { practiceAreas } from './views/shared';
 import './features/load';
 import './views/workspace.css';
 
@@ -19,7 +20,7 @@ export default function App() {
   const activeMatter = matters.find(matter => matter.id === activeId) ?? matters[0];
   const visibleMatters = view === 'Client Portal' ? matters.map(portalProjection) : matters;
   const visibleActive = visibleMatters.find(matter => matter.id === activeMatter?.id);
-  const [selection, setSelection] = useState<Selection>();
+  const [selection, setSelection] = useState<VerifySelection>();
   const [focusedDeadline, setFocusedDeadline] = useState<string>();
   const [statedOnly, setStatedOnly] = useState(false);
   const [practiceArea, setPracticeArea] = useState('');
@@ -53,7 +54,7 @@ export default function App() {
     previousIds.current = ids;
     if (!activeId || !ids.has(activeId)) setActiveId(matters[0]?.id);
   }, [matters, activeId]);
-  const verify = (item: Selection) => { setFocusedDeadline(undefined); setSelection(item); };
+  const verify = (item: VerifySelection) => { setFocusedDeadline(undefined); setSelection(item); };
   const changeView = (next: View) => { setView(next); setFocusedDeadline(undefined); };
   const props = { matters, activeMatter, onVerify: verify };
   return <div className={`matter-app${statedOnly ? ' stated-only' : ''}`} data-appearance={appearance}>
@@ -68,7 +69,7 @@ export default function App() {
       <main>{view === 'Cockpit' ? <Cockpit {...props} focusedDeadline={focusedDeadline} /> : view === 'Deadline Radar' ? <Radar {...props} arrivals={arrivals} /> : <Portal {...props} />}</main>
     </div>
     <p className="synthetic-notice">Synthetic matters only. Intake text goes to the model provider. This workspace is a demonstration.</p>
-    <Ramble intake={intake} onVerify={verify} />
-    {selection && <VerifyDrawer selection={selection} onClose={() => setSelection(undefined)} onOpenMatter={matters.some(matter => matter.id === selection.matterId) ? () => { setActiveId(selection.matterId); setView('Cockpit'); setFocusedDeadline(selection.deadlineId); setSelection(undefined); intake.close(); } : undefined} />}
+    <Ramble intake={intake} onVerify={item => verify({ ...item, context: intakeFactContext(intake.draft, item.label) })} />
+    {selection && <VerifyDrawer selection={selection} matter={view === 'Client Portal' ? undefined : matters.find(matter => matter.id === selection.matterId)} onClose={() => setSelection(undefined)} onOpenMatter={matters.some(matter => matter.id === selection.matterId) ? () => { setActiveId(selection.matterId); setView('Cockpit'); setFocusedDeadline(selection.deadlineId); setSelection(undefined); intake.close(); } : undefined} />}
   </div>;
 }

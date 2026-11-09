@@ -1,6 +1,7 @@
 import type { MatterWithDeadlines } from '../data/schema';
 import { FeatureSlot } from '../components/FeatureSlot';
 import { sourceFor } from '../intake/SourceLabel';
+import { factContext } from '../verify/context';
 import { dateLabel, daysFromToday, deadlineResult, type ViewProps } from './shared';
 
 function hidden(path: string[], patterns: string[]) {
@@ -51,7 +52,7 @@ export function Portal({ matters, activeMatter, onVerify }: ViewProps) {
     if (!value) return null;
     const source = sourceFor(matter.provenance ?? {}, path);
     return source === 'inferred' || source === 'invented'
-      ? <button className="portal-field" onClick={() => onVerify({ matterId: matter.id, label: 'Client update', value })}>{value}</button>
+      ? <button className="portal-field" onClick={() => { const selection = { matterId: matter.id, label: 'Client update', value, context: factContext({ provenance: matter.provenance ?? {} }, path) }; onVerify(selection); }}>{value}</button>
       : <span className="portal-field">{value}</span>;
   };
   return <div className="portal-view"><header className="view-heading"><div><p>Client Portal</p><h2>{field('client.name', matter.client?.name)}</h2>{field('title', matter.title)}</div><span className="portal-badge">Shared with you</span></header>
