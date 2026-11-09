@@ -146,10 +146,12 @@ export const rules: DeadlineRule[] = [
   {
     ...civil('frcp-26a2d-expert-disclosure', 'Federal expert disclosures', 'frcp:26', '(a)(2)(D)(i)', 90, 'the date set for trial or for the case to be ready for trial', 'federal', 'backward'),
     description: 'At least 90 days before the date set for trial or for the case to be ready for trial, unless the court orders otherwise or the parties stipulate otherwise.',
+    orderException: 'Absent a stipulation or a court order, the disclosures must be made:',
   },
   {
     ...civil('frcp-26a3-pretrial-disclosure', 'Federal pretrial disclosures', 'frcp:26', '(a)(3)(B)', 30, 'the date set for trial', 'federal', 'backward'),
     description: 'At least 30 days before trial, unless the court orders otherwise.',
+    orderException: 'Unless the court orders otherwise, these disclosures must be made at least 30 days before trial.',
   },
   {
     ...civil('frcp-26a3-objections', 'Federal objections to pretrial disclosures', 'frcp:26', '(a)(3)(B)', 14, 'the pretrial disclosures are made', 'federal'),
@@ -158,10 +160,12 @@ export const rules: DeadlineRule[] = [
   {
     ...civil('mn-civ-26-expert-disclosure', 'Minnesota expert disclosures', 'mn-civ:26', '26.01(b)(4)(A)', 90, 'the date set for trial or for the case to be ready for trial', 'minnesota', 'backward'),
     description: 'At least 90 days before the date set for trial or for the case to be ready for trial, unless the court orders otherwise or the parties stipulate otherwise.',
+    orderException: 'Absent a stipulation or a court order, the disclosures must be made:',
   },
   {
     ...civil('mn-civ-26-pretrial-disclosure', 'Minnesota pretrial disclosures', 'mn-civ:26', '26.01(c)(2)', 30, 'the date set for trial', 'minnesota', 'backward'),
     description: 'At least 30 days before trial, unless the court orders otherwise.',
+    orderException: 'Unless the court orders otherwise, these disclosures must be made at least 30 days before trial.',
   },
   {
     ...civil('mn-civ-26-objections', 'Minnesota objections to pretrial disclosures', 'mn-civ:26', '26.01(c)(2)', 14, 'the pretrial disclosures are made', 'minnesota'),

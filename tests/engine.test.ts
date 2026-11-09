@@ -1,6 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import { computeDeadline, deadlineCatalog } from '../src/engine/index';
 import type { DeadlineInput, DeadlineResult } from '../src/engine/types';
+import { getRule } from '../data/rules';
+import { rules } from '../src/engine/rules';
 
 function compute(id: string, date: string, assumptions: DeadlineInput['assumptions'] = {}, inputs?: DeadlineInput['inputs']) {
   return computeDeadline({ deadlineRuleId: id, trigger: { event: 'Matter event', date }, assumptions, inputs });
@@ -64,6 +66,17 @@ describe('cited deadline catalog', () => {
 });
 
 describe('scheduling-order default deadlines', () => {
+  it.each([
+    ['frcp-26a2d-expert-disclosure', 'frcp:26', 'Absent a stipulation or a court order, the disclosures must be made:'],
+    ['frcp-26a3-pretrial-disclosure', 'frcp:26', 'Unless the court orders otherwise, these disclosures must be made at least 30 days before trial.'],
+    ['mn-civ-26-expert-disclosure', 'mn-civ:26', 'Absent a stipulation or a court order, the disclosures must be made:'],
+    ['mn-civ-26-pretrial-disclosure', 'mn-civ:26', 'Unless the court orders otherwise, these disclosures must be made at least 30 days before trial.'],
+  ])('%s exposes its own court-order exception verbatim from the library', (id, ruleId, sentence) => {
+    const exception = rules.find(rule => rule.id === id)?.orderException;
+    expect(exception).toBe(sentence);
+    expect(getRule(ruleId)!.text).toContain(exception);
+  });
+
   it.each([
     ['frcp-26a2d-expert-disclosure', 90, 'backward', 'frcp:26', '(a)(2)(D)(i)', '2027-06-14', '2027-03-16'],
     ['frcp-26a3-pretrial-disclosure', 30, 'backward', 'frcp:26', '(a)(3)(B)', '2027-06-14', '2027-05-14'],

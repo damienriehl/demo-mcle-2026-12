@@ -77,7 +77,8 @@ test.describe('scheduling order verification', () => {
     const reasoning = page.locator('[data-verify-section="reasoning"]');
     await expect(reasoning).toContainText('The order sets this date: Court-set expert disclosures, Feb 1, 2027 (p. 3)');
     const quote = reasoning.getByRole('blockquote');
-    await expect(quote).toContainText('Unless the court orders otherwise');
+    await expect(quote).toContainText('Absent a stipulation or a court order');
+    await expect(quote).not.toContainText('Unless the court orders otherwise, these disclosures must be made at least 30 days before trial.');
     expect(federalRules.find(rule => rule.id === 'frcp:26')!.text).toContain(await quote.innerText());
   });
 

@@ -1,8 +1,8 @@
 import { useState } from 'react';
-import { getRule } from '../../data/rules';
 import { Overlay } from '../components/Overlay';
 import type { MatterWithDeadlines } from '../data/schema';
-import { computeDeadline, deadlineCatalog, type DeadlineInput, type Step } from '../engine';
+import { computeDeadline, type DeadlineInput, type Step } from '../engine';
+import { rules } from '../engine/rules';
 import { SourceLabel, sourceFor } from '../intake/SourceLabel';
 import { dateLabel, type Selection } from '../views/shared';
 import { AssumptionToggles, assumptionLabel } from './AssumptionToggles';
@@ -23,7 +23,7 @@ function DeadlineVerification({ selection, matter }: { selection: VerifySelectio
   const upstream = matter?.deadlines.find(candidate => candidate.id === upstreamId);
   const superseding = matter?.deadlines.find(candidate => candidate.id === deadline?.supersededBy);
   const governingResult = superseding ? matter?.computedDeadlines[superseding.id] : undefined;
-  const catalog = deadlineCatalog().find(rule => rule.id === deadline?.deadlineRuleId);
+  const catalog = rules.find(rule => rule.id === deadline?.deadlineRuleId);
   const [assumptions, setAssumptions] = useState<DeadlineInput['assumptions']>(deadline?.assumptions ?? {});
   const [previousSteps, setPreviousSteps] = useState<Step[]>();
   const [chosenCitation, setChosenCitation] = useState<Step['citation']>();
@@ -32,9 +32,7 @@ function DeadlineVerification({ selection, matter }: { selection: VerifySelectio
   const result = deadline && triggerDate
     ? computeDeadline({ ...deadline, trigger: { event: deadline.trigger.event, date: triggerDate }, assumptions }) : storedResult;
   const citation = chosenCitation ?? result?.steps?.[0]?.citation;
-  const ruleText = superseding ? getRule(result?.steps?.[0]?.citation.ruleId ?? '')?.text : undefined;
-  const exceptionSentence = superseding ? (ruleText?.match(/[^.!?]*court orders otherwise[^.!?]*[.!?]?/i)
-    ?? ruleText?.match(/[^.!?]*ordered by the court[^.!?]*[.!?]?/i))?.[0].trim() : undefined;
+  const exceptionSentence = superseding ? catalog?.orderException : undefined;
   function changeAssumption(key: string, value: string | boolean) {
     setPreviousSteps(result?.steps);
     setAssumptions(current => ({ ...current, [key]: value }));

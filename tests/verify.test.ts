@@ -18,9 +18,10 @@ describe('verification content', () => {
     const html = renderToStaticMarkup(createElement(VerifyDrawer, { matter,
       selection: { matterId: matter.id, deadlineId: deadline.id, label: deadline.label }, onClose() {} }));
     const reasoning = html.split('data-verify-section="reasoning"')[1].split('</section>')[0];
-    const sentence = 'Unless the court orders otherwise, these disclosures must be made at least 30 days before trial.';
+    const sentence = 'Absent a stipulation or a court order, the disclosures must be made:';
     expect(getRule('frcp:26')!.text).toContain(sentence);
     expect(reasoning).toContain(`<blockquote>${sentence}</blockquote>`);
+    expect(reasoning).not.toContain('Unless the court orders otherwise, these disclosures must be made at least 30 days before trial.');
     expect(reasoning).toContain('The order sets this date: Court-set expert disclosures, Feb 1, 2027 (p. 3)');
   });
 
