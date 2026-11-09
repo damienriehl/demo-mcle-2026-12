@@ -113,6 +113,21 @@ export function lookup(iri: string): Concept | undefined {
   return getIndex().byIri.get(iri);
 }
 
+const branchLabels = new Map<string, readonly string[]>();
+
+/** Return the cached, distinct preferred labels for the selected branches. */
+export function labelsInBranches(branches: readonly string[]): readonly string[] {
+  const selected = new Set(branches);
+  const cacheKey = JSON.stringify([...selected].sort());
+  let labels = branchLabels.get(cacheKey);
+  if (!labels) {
+    labels = [...new Set([...getIndex().byIri.values()]
+      .filter(concept => selected.has(concept.branch)).map(concept => concept.label))].sort();
+    branchLabels.set(cacheKey, labels);
+  }
+  return labels;
+}
+
 /** Return preferred-label matches first, followed by alternative-label matches. */
 export function findByLabel(label: string): Concept[] {
   let node = getIndex().trie;

@@ -3,13 +3,24 @@ import { mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { resolve } from 'node:path';
 import { describe, expect, it } from 'vitest';
-import { findByLabel, lookup, tagText } from '../server/folio/index';
+import { findByLabel, labelsInBranches, lookup, tagText } from '../server/folio/index';
 
 const indemnification = 'https://folio.openlegalstandard.org/RLNlm7nXyJQLJmk8qYnaPQ';
 const assetPurchase = 'https://folio.openlegalstandard.org/RmCQVvWRqLFZ5V65G0txFq';
 const markdown = 'https://folio.openlegalstandard.org/R8x6LJFoln3OhMhoiVyPZtM';
 
 describe('offline FOLIO matcher', () => {
+  it('caches all preferred labels in the actor, governmental body and legal entity branches', () => {
+    const branches = ['Actor / Player', 'Governmental Body', 'Legal Entity'];
+    const { concepts } = JSON.parse(readFileSync('data/folio/folio-index.json', 'utf8')) as {
+      concepts: { label: string; branch: string }[];
+    };
+    const labels = labelsInBranches(branches);
+    expect(labels).toEqual([...new Set(concepts.filter(concept => branches.includes(concept.branch)).map(concept => concept.label))].sort());
+    expect(labels).toEqual(expect.arrayContaining(['Debtor', 'Creditor', 'Governmental Body', 'Limited Liability Company']));
+    expect(labelsInBranches([...branches].reverse())).toBe(labels);
+  });
+
   it('looks up an indexed concept', () => {
     expect(lookup(assetPurchase)?.label).toBe('Asset Purchase Agreement');
   });

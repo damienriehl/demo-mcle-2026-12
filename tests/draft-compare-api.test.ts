@@ -14,6 +14,35 @@ afterEach(() => { contexts.splice(0).forEach(c => { c.store.close(); rmSync(c.di
 const facts = () => ({ parties: meta.parties.map((p: { name: string; role: string; actorLabel: string }) => ({ name: p.name, role: p.role, actorLabel: p.actorLabel })), documentType: { label: 'Purchase Agreement', family: 'transactional' }, tags: [{ label: 'Indemnification', quote: 'direct damages', draft: 'later' }] });
 
 describe('draft compare HTTP flow', () => {
+  it('supplies a closed list of preferred actor labels in the facts request', async () => {
+    const replay = fake([facts()]);
+    const c = context(replay.stream);
+    await events(await upload(c));
+    const request = replay.requests[0];
+    expect(request.system).toContain('Debtor');
+    expect(request.system).toContain('Creditor');
+    expect(request.system).toContain('Governmental Body');
+    expect(request.system).toContain('Limited Liability Company');
+    expect(request.system).toMatch(/for every party/i);
+    expect(request.system).toMatch(/closest.*label/i);
+    expect(request.system).toMatch(/never invent/i);
+    expect(request.tool_choice).toMatchObject({ type: 'auto' });
+  });
+
+  it.each([
+    ['Creditor', 'Lending party', 'Creditor', 'https://folio.openlegalstandard.org/R7PHFZzZmVmczzNQl6iZKsa'],
+    ['Invented actor', 'Debtor', 'Debtor', 'https://folio.openlegalstandard.org/R77pHybcEdlO9OmqSuiyWi1'],
+    ['Invented actor', '  DEBTORS  ', 'Debtor', 'https://folio.openlegalstandard.org/R77pHybcEdlO9OmqSuiyWi1'],
+    ['Invented actor', 'Unclassified participant', undefined, undefined],
+  ])('resolves actor label %s with role %s to %s', async (actorLabel, role, expectedLabel, expectedIri) => {
+    const c = context(fake([{ ...facts(), parties: [{ name: buyer, role, actorLabel }] }]).stream);
+    const result = await events(await upload(c));
+    const [party] = result.find(event => event.type === 'parties').parties;
+    expect(party).toMatchObject({ name: buyer, role });
+    expect(party.actorLabel).toBe(expectedLabel);
+    expect(party.actorIri).toBe(expectedIri);
+  });
+
   it.each(['malformed', 'unknown change'])('finishes advice with done after skipping a %s element between good assessments', async kind => {
     const outputs: unknown[] = [facts()];
     const c = context(fake(outputs).stream);
@@ -133,6 +162,7 @@ describe('draft compare HTTP flow', () => {
     const value = facts();
     value.tags.push({ label: 'Imaginary FOLIO concept', quote: 'direct damages', draft: 'later' }, { label: 'Buyer', quote: 'never in this draft', draft: 'earlier' });
     value.parties[0].actorLabel = 'Imaginary actor';
+    value.parties[0].role = 'Unclassified participant';
     value.documentType.label = 'Imaginary document';
     const c = context(fake([value]).stream);
     const result = await events(await upload(c));
