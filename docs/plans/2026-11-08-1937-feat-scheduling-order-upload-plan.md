@@ -44,7 +44,7 @@ The session grew from 45 to 90 minutes, which adds roughly 30 minutes of demo ti
 
 **Upload and extraction**
 
-- R1. The Cockpit accepts a scheduling order as a PDF (drag-and-drop or file picker) or as pasted text, attached to the active matter or used to create a new one.
+- R1. The Cockpit accepts a scheduling order as a PDF (drag-and-drop or file picker) or as pasted text and attaches it to the active matter. Each bundled order has a seeded matter waiting for it.
 - R2. Extraction streams onto the screen progressively, one court-set date at a time, so the room watches it happen.
 - R3. Each court-set date carries the event name, the ISO date, an exact quote from the order, and the page number. The UI labels it "From the order, p. N".
 - R4. Code accepts a court-set date only when its quote appears on the cited page of the order's text and the quote contains the date. A failed check shows the date as "Unverified quote" and the engine does not compute from it.
@@ -106,3 +106,78 @@ The session grew from 45 to 90 minutes, which adds roughly 30 minutes of demo ti
 - Engine shape: `src/engine/rules.ts` (`civil()` helper, backward direction, `notice` and `contract` kinds that store a stated date), `src/engine/compute.ts`.
 - Intake conventions: `server/intake/routes.ts` (streamed tool fields, auto tool choice, one retry), `server/intake/prompts.ts` (today's date line).
 - Prior plan and run of show: `docs/plans/2026-11-08-1555-feat-matter-cockpit-cle-demo-plan.md`, `docs/rehearsal/runbook.md`.
+
+## Planning Contract
+
+### Key Technical Decisions
+
+- **Court-set dates are stored deadlines of a new `court-order-date` catalog kind.** Inputs carry `date`, `page`, and `quote`; the engine returns the stated date with an `{ ruleId: 'order', subdivision: 'p. N' }` citation and an `inputKey`, so the existing "from the matter" labeling applies and no due date is stored. The matter schema stays unchanged for this kind.
+- **Derived deadlines count from another deadline.** `trigger` becomes `{ event, date }` or `{ event, fromDeadline }`, where `fromDeadline` names a deadline in the same matter. The store computes deadlines in dependency order and substitutes the upstream computed due date. A missing, cyclic, or uncomputable upstream makes the dependent uncomputable with a reason that names it. This one schema change makes R9 (move the trial date) and the 26(a)(3) objection chain fall out of derive-on-read.
+- **Supersession is a stored link.** A deadline may carry `supersededBy: <deadline id>`; the default still computes, and views mark it superseded and drop it from the Radar.
+- **Code, not the model, picks the derived rules.** The model tags each court-set date with a fixed `kind` (trial, dispositive-hearing, nondispositive-hearing, expert-disclosure, pretrial-disclosure, plus other order dates that derive nothing) and the order's `court` (`minnesota` or `federal`). A deterministic table maps kind and court to the derived deadlines and to supersession.
+- **Server-side per-page PDF text with `unpdf`.** The server extracts page text, sends it to the model with page markers, and verifies each quote against the cited page after whitespace, quote-mark, and dash normalization, plus a check that the quote names the same date. Pasted text counts as page 1. `unpdf@1.9.1` (MIT; newest release at least two weeks old) is the one new dependency, logged in `THIRD-PARTY.md`.
+- **Only verified dates are written.** Unverified ones stream to the screen with their label and never reach the store.
+- **Fictional order PDFs are generated from HTML by Playwright's `page.pdf()`.** Both the HTML sources and the PDFs are committed, so the PDF step needs no new dependency.
+- **Keyless fallback is a canned extraction keyed by the bundled order's file name and text hash.** It replays through the same verify-and-write path.
+- **The feature is a registered folder** (`src/features/scheduling-order/`, `cockpit.tab`) with `server/features/scheduling-order.ts`, following the slot contract. The verify panel and deadline card get small core edits for the `order` citation, the `fromDeadline` trigger, and the superseded state.
+
+### Derivation table
+
+| Court-set kind | Minnesota (Minn. R. Civ. P. / Gen. R. Prac.) | Federal (Fed. R. Civ. P.) |
+|---|---|---|
+| trial | 26.01(b)(4)(A) experts 90 days before; 26.01(c)(2) pretrial disclosures 30 days before, then objections 14 days after | 26(a)(2)(D)(i) experts 90 days before; 26(a)(3)(B) pretrial disclosures 30 days before, then objections 14 days after |
+| dispositive-hearing | 115.03(a), (b), (c): 28, 14, and 7 days before | none (D. Minn. LR 7.1 not in the library); hearing shown alone |
+| nondispositive-hearing | 115.04(a), (b), (c): 21, 14, and 7 days before | none, same reason |
+| expert-disclosure, pretrial-disclosure | supersedes the matching trial-derived default | same |
+
+### Risks
+
+- The model mislabels a kind. The verify panel shows the quote next to the derived rule, so the error is visible; the canned fallback replays a checked extraction.
+- PDF text order differs from visual order in generated PDFs. Simple single-column HTML keeps extraction order stable; a test asserts every bundled order's canned quotes verify against the extracted text.
+
+## Implementation Units
+
+### U1. Engine rules and court-order kind
+- **Files:** `src/engine/rules.ts`, `src/engine/compute.ts`, `src/engine/types.ts`, `tests/engine.test.ts`.
+- Add the table's rules (federal and Minnesota Rule 26 trial-based, objection rules counted forward from the pretrial-disclosure date, Gen. R. Prac. 115.04 a/b/c) and the `court-order-date` kind.
+- **Tests:** AE2 date math; each new rule's period, direction, and citation; court-order result carries the `order` citation and `inputKey: 'date'`.
+
+### U2. Deadline chains and supersession in the store
+- **Files:** `src/data/schema.ts`, `src/data/engine-types.ts` (if needed), `server/store.ts`, `tests/store.test.ts`.
+- `trigger.fromDeadline` union, `supersededBy`, dependency-ordered compute, uncomputable on missing, cyclic, or uncomputable upstream, and validation that the referenced IDs exist in the matter.
+- **Tests:** AE4 (moving a trial date moves the chain but not an order-set date), cycle, missing reference, uncomputable upstream.
+
+### U3. Fictional orders, PDF text, and canned extractions
+- **Files:** `data/seed/orders/*.html|*.pdf|*.extraction.json`, `scripts/build-orders.ts`, `server/orders/pdf-text.ts`, `server/orders/verify-quote.ts`, three seeded matters in `data/seed/matters/`, `tests/orders.test.ts`.
+- Three orders per R11 with a weekend or holiday landing in each and one order-set expert date in the D. Minn. order (AE3).
+- **Tests:** per-page extraction of each bundled PDF; every canned quote verifies; AE1 pass and fail cases for the quote check.
+
+### U4. Extraction route
+- **Files:** `server/features/scheduling-order.ts`, `server/orders/extract.ts` (prompt, tool, derivation table), `tests/scheduling-order.test.ts`.
+- `POST /api/features/scheduling-order/extract` (multipart file or JSON text, plus `matterId`) streams SSE events: `pages`, `date` (with `verified`), `derived`, `done` with the updated matter, or `needs_key`/`error`. Writes the order as a matter document, verified court dates as `court-order-date` deadlines with stated provenance and the quote as evidence, timeline events, and derived deadlines using `fromDeadline`/`supersededBy`. Uploading the same order again replaces its earlier entries.
+- **Tests:** fake model stream; canned keyless path; unverified date dropped; idempotent re-upload; error text never echoes provider details.
+
+### U5. Scheduling-order tab, date edits, and calendar export
+- **Files:** `src/features/scheduling-order/**`, `tests/scheduling-order.spec.ts`.
+- Drop zone, file picker, and paste box; streamed date list with "From the order, p. N" or "Unverified quote"; schedule grouped by court date with derived deadlines and superseded defaults; inline date edit (full-matter PUT) for court dates; `.ics` export (RFC 5545 all-day events, escaped text, CRLF).
+- **Tests:** browser test with stubbed `/api/events` and a stubbed extract stream; an `.ics` unit test.
+
+### U6. Verify panel and card support
+- **Files:** `src/verify/**`, `src/components/DeadlineCard.tsx`, `src/views/Radar.tsx`, `tests/verify.spec.ts`.
+- The `order` citation renders the order quote with its page in place of library text; the trigger line resolves `fromDeadline` and labels it "From the order, p. N"; superseded deadlines show the reason and the rule's "unless the court orders otherwise" text; the Radar omits superseded ones.
+
+### U7. Run of show and rehearsal
+- **Files:** `docs/rehearsal/runbook.md`.
+- 90-minute run of show (scheduling order after Trust but Verify, two `/cook` rounds), pre-talk steps for the order PDFs, and the upload-failure fallback (keyless canned replay).
+
+### Sequencing
+U1, U2, and U3 run in parallel. U4 follows U1–U3. U5 and U6 follow U4 and run in parallel. U7 runs anytime.
+
+## Verification Contract
+
+- `npm run typecheck`, `npm test`, and `npm run e2e` pass on the merged branch.
+- A live run against the dev server uploads each bundled PDF with the real key and with no key, and a screenshot of the Scheduling order tab and one verify panel is inspected.
+
+## Definition of Done
+
+- R1–R12 hold on `main`, the verification contract passes, and the runbook's 90-minute run of show is merged.
