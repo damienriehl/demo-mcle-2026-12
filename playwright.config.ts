@@ -14,13 +14,19 @@ export default defineConfig({
   projects: [
     {
       name: 'chromium',
-      testIgnore: '**/draft-compare-e2e.spec.ts',
+      testIgnore: ['**/draft-compare.spec.ts', '**/draft-compare-e2e.spec.ts'],
+      use: { ...devices['Desktop Chrome'], viewport: { width: 1920, height: 1080 } },
+    },
+    {
+      name: 'chromium-draft-compare',
+      testMatch: '**/draft-compare.spec.ts',
+      dependencies: ['chromium'],
       use: { ...devices['Desktop Chrome'], viewport: { width: 1920, height: 1080 } },
     },
     {
       name: 'chromium-real-server',
       testMatch: '**/draft-compare-e2e.spec.ts',
-      dependencies: ['chromium'],
+      dependencies: ['chromium-draft-compare'],
       use: { ...devices['Desktop Chrome'], viewport: { width: 1920, height: 1080 } },
     },
   ],

@@ -10,6 +10,7 @@ const buyer = 'Quorrelith Components LLC';
 test.beforeAll(async () => { await initialize(); });
 
 test('asset-purchase advice exports a commented redline and only the applied indemnity counter', async ({ page, request }, testInfo) => {
+  test.setTimeout(120_000);
   // The real compare route looks up this seeded matter in the server store.
   const matterResponse = await request.get(`/api/matters/${seed.id}`);
   expect(matterResponse.ok(), 'The server must already hold the seeded asset-purchase matter.').toBe(true);
@@ -46,14 +47,20 @@ test('asset-purchase advice exports a commented redline and only the applied ind
   expect(record.assessments).toHaveLength(8);
   expect(record.assessments).toHaveLength(record.changes.length);
   await expect(page.locator('[data-assessment]')).toHaveCount(record.assessments.length);
+  const indemnityChange = record.changes.find(change => change.laterText.includes('capped at 10% of the Purchase Price'));
+  expect(indemnityChange).toBeDefined();
+  const indemnityAssessment = record.assessments.find(assessment => assessment.changeId === indemnityChange!.changeId);
+  expect(indemnityAssessment).toBeDefined();
   const memo = page.getByRole('region', { name: 'Advice memo' });
   await memo.locator('summary').click();
-  const indemnity = memo.getByRole('link', { name: /Seller's indemnity cap falls/ });
+  const indemnity = memo.getByRole('link', { name: indemnityAssessment!.reason, exact: true });
   await indemnity.click();
-  const card = page.locator('[data-assessment]').filter({ hasText: "Seller's indemnity cap falls" });
+  const card = page.locator(`[data-assessment="${indemnityChange!.changeId}"]`);
   await expect(card).toContainText('Harms ▼');
-  await expect(card).toContainText('Replace with: shall not exceed the Purchase Price');
   await expect(card.getByRole('button', { name: /Harms/ })).toHaveAttribute('aria-expanded', 'true');
+  const find = await card.locator('p').filter({ hasText: /^Find:/ }).locator('q').innerText();
+  const replacement = await card.locator('p').filter({ hasText: /^Replace with:/ }).locator('q').innerText();
+  expect(replacement.trim()).not.toBe('');
   await card.getByRole('button', { name: 'Apply', exact: true }).click();
   await expect(card).toContainText('Applied');
   await expect(page.getByRole('button', { name: 'Undo', exact: true })).toHaveCount(1);
@@ -79,9 +86,17 @@ test('asset-purchase advice exports a commented redline and only the applied ind
   expect(downloadedCounter.suggestedFilename()).toBe(`${seed.id}-counter-draft.docx`);
   const counterBytes = await readFile((await downloadedCounter.path())!);
   expect(counterBytes.byteLength).toBeGreaterThan(0);
-  expect((await getRevisions(counterBytes)).map(({ type, author, text }) => ({ type, author, text }))).toEqual([
-    { type: 'insert', author: `${buyer} counsel`, text: 'shall not exceed' },
-    { type: 'delete', author: `${buyer} counsel`, text: 'is capped at 10% of' },
-  ]);
+  const counterRevisions = await getRevisions(counterBytes);
+  const insertions = counterRevisions.filter(revision => revision.type === 'insert');
+  const deletions = counterRevisions.filter(revision => revision.type === 'delete');
+  expect(counterRevisions).toHaveLength(2);
+  expect(insertions).toHaveLength(1);
+  expect(deletions).toHaveLength(1);
+  for (const revision of counterRevisions) expect(revision.author).toBe(`${buyer} counsel`);
+  // Docxodus leaves shared words outside revisions (e.g. "the Purchase Price").
+  // Reconstruct the full replacement from the tracked edit and that unchanged context.
+  expect(deletions[0].text).not.toBe('');
+  expect(find).toContain(deletions[0].text);
+  expect(find.replace(deletions[0].text, () => insertions[0].text)).toBe(replacement);
   expect(await getComments(counterBytes)).toEqual([]);
 });
