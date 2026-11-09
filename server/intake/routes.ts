@@ -65,7 +65,7 @@ export function createIntakeRoutes(options: Options = {}): Hono {
         if (!source) {
           const matter = cannedMatter(options.cannedDirectory ?? resolve('data/seed/canned'), 'practiceArea' in body ? body.practiceArea : undefined);
           for (const leaf of leaves(matter)) {
-            const errors = await accept({ ...leaf, ...(matter.provenance[leaf.path] ?? { source: 'invented' }) });
+            const errors = await accept({ ...leaf, source: 'invented' });
             if (errors.length) throw new Error(errors.join('; '));
           }
           await save(validateMatter(draft));

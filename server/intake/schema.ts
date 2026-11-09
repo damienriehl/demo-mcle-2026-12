@@ -47,6 +47,7 @@ function schemaAt(path: string): z.ZodType {
     else if (schema instanceof z.ZodRecord) schema = schema.valueType as z.ZodType;
     else throw new Error(`${path}: invalid matter path`);
   }
+  while (schema instanceof z.ZodPipe) schema = schema.in as z.ZodType;
   return schema;
 }
 

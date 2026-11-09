@@ -51,6 +51,9 @@ export function createApp(modules: Record<string, FeatureModule> = featureFiles,
     return matter ? c.json(matter) : c.json({ error: 'not_found' }, 404);
   });
   const writeMatter = async (c: Context) => {
+    if (c.req.header('Content-Type')?.split(';')[0].trim().toLowerCase() !== 'application/json') {
+      return c.json({ error: 'invalid_matter', message: 'Matter writes require application/json.' }, 415);
+    }
     try {
       const value: unknown = await c.req.json();
       const id = c.req.param('id');

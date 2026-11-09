@@ -2,12 +2,14 @@ import { mkdtempSync, readFileSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 import type { BetaRawMessageStreamEvent as MessageStreamEvent } from '@anthropic-ai/sdk/resources/beta/messages';
+import Anthropic from '@anthropic-ai/sdk';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { matterSchema, type Matter } from '../src/data/schema';
 import { computeDeadline, deadlineCatalog } from '../src/engine';
 import { createMatterStore, type MatterStore } from '../server/store';
 import { createIntakeRoutes, type ModelStream } from '../server/intake/routes';
 import { createApp } from '../server/index';
+import { readDraft, validateMatter } from '../server/intake/schema';
 
 const fixtureDirectory = resolve('tests/fixtures/intake');
 const fixture = (name: string) => JSON.parse(readFileSync(join(fixtureDirectory, `${name}.json`), 'utf8'));
@@ -58,6 +60,29 @@ function draftFrom(events: ReturnType<typeof fixture>[]) {
 }
 
 describe('streamed intake routes', () => {
+  it('round-trips an empty internalOnly field before applying schema defaults', async () => {
+    const stream: ModelStream = async function* () {
+      yield { type: 'content_block_start', index: 0, content_block: { type: 'tool_use', id: 'empty-internal', name: 'structure_matter', input: {} } } as MessageStreamEvent;
+      yield { type: 'content_block_delta', index: 0, delta: { type: 'input_json_delta', partial_json: JSON.stringify({
+        fields: [{ path: 'internalOnly', value: [], source: 'invented' }],
+        followups: [{ id: 'forum', field: 'forum', question: 'Which forum?' }],
+      }) } };
+      yield { type: 'content_block_stop', index: 0 };
+    };
+    const events = await post(createIntakeRoutes({ store: store(), stream }), 'ramble', {
+      text: 'A fictional matter.', draft: fixture('canned-employment'),
+    });
+    const clientDraft = { ...fixture('canned-employment'), ...draftFrom(events) };
+    clientDraft.provenance = { ...fixture('canned-employment').provenance, ...draftFrom(events).provenance };
+    const roundTrip = readDraft(clientDraft);
+    expect(roundTrip.errors).toEqual([]);
+    expect(events).toContainEqual({ type: 'field', path: 'internalOnly', value: [], source: 'invented' });
+    const matter = validateMatter(roundTrip.draft);
+    expect(matter.internalOnly).toEqual(['reasoning', 'provenance.*.evidence']);
+    expect(matter.provenance['internalOnly.0']).toEqual({ source: 'inferred', evidence: 'Matter schema default.' });
+    expect(readDraft(matter).errors).toEqual([]);
+  });
+
   it('rejects browser-simple text requests before spending the model key or saving', async () => {
     const fake = replay('unknown-rule');
     const saved = store();
@@ -255,6 +280,25 @@ describe('streamed intake routes', () => {
     const events = await post(createIntakeRoutes({ store: store(), stream }), 'ramble', { text: 'A fictional firing.' });
     expect(events.at(-1)).toMatchObject({ type: 'error', partial: { client: { name: 'Mira Example' } } });
   });
+
+  it.each(['provider', 'generic'])('redacts request details and keys from %s stream errors and logs', async kind => {
+    const sentinel = 'sk-ant-TESTKEY';
+    const details = `Request headers: x-api-key: ${sentinel}`;
+    const error = kind === 'provider'
+      ? new Anthropic.APIError(401, { error: { type: 'authentication_error', message: details } }, details,
+        new Headers({ 'x-api-key': sentinel }), 'authentication_error')
+      : new Error(details);
+    const log = vi.spyOn(console, 'error').mockImplementation(() => {});
+    try {
+      const stream: ModelStream = async function* () { throw error; };
+      const events = await post(createIntakeRoutes({ store: store(), stream }), 'ramble', { text: 'A fictional matter.' });
+      expect(events.at(-1)).toMatchObject({ type: 'error', message: expect.stringContaining('Embellish') });
+      expect(JSON.stringify(events)).not.toContain(sentinel);
+      expect(JSON.stringify(events)).not.toContain('Request headers');
+      expect(JSON.stringify(log.mock.calls)).not.toContain(sentinel);
+      expect(log.mock.calls).toEqual([[kind === 'provider' ? 'intake failed: APIError 401 authentication_error' : 'intake failed: Error']]);
+    } finally { log.mockRestore(); }
+  });
 });
 
 describe('no-key intake', () => {
@@ -268,12 +312,15 @@ describe('no-key intake', () => {
 
   it('Surprise Me loads a complete canned matter filtered by practice area and saves it', async () => {
     const saved = store();
-    const app = createIntakeRoutes({ store: saved, stream: null, cannedDirectory: fixtureDirectory });
+    const app = createIntakeRoutes({ store: saved, stream: null, cannedDirectory: resolve('data/seed/canned') });
     const events = await post(app, 'surprise', { practiceArea: 'employment' });
     expect(events.at(-1).type).toBe('done');
     expect(matterSchema.safeParse(events.at(-1).matter).success).toBe(true);
     expect(events.at(-1).matter.practiceArea).toBe('employment');
     expect(saved.list()).toHaveLength(1);
+    const fields = events.filter(event => event.type === 'field');
+    expect(fields.every(field => field.source === 'invented' && field.evidence === undefined)).toBe(true);
+    expect(Object.values(events.at(-1).matter.provenance).every((label: any) => label.source === 'invented' && label.evidence === undefined)).toBe(true);
     expect(events).toContainEqual(expect.objectContaining({ type: 'field', path: 'client.name', source: 'invented' }));
     const second = await post(app, 'surprise', {});
     expect(second.at(-1).matter.id).not.toBe(events.at(-1).matter.id);

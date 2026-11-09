@@ -5,10 +5,27 @@ import { Hono } from 'hono';
 import { describe, expect, it } from 'vitest';
 import { DEFAULT_MODEL, hasKey, modelName, needsKeyResponse, readKey } from '../server/ai';
 import { createApp, mountFeatures } from '../server/index';
+import { createMatterStore } from '../server/store';
+import { computeDeadline, deadlineCatalog } from '../src/engine';
+import fixtures from './fixtures/views/matters.json';
 
 const missingKeyFile = join(mkdtempSync(join(tmpdir(), 'mc-nokey-')), 'api-key');
 
 describe('API app', () => {
+  it.each(['POST', 'PUT'])('rejects cross-origin text/plain %s writes without changing the store', async method => {
+    const store = createMatterStore({ filePath: join(mkdtempSync(join(tmpdir(), 'mc-csrf-')), 'matters.json'), engine: { computeDeadline, deadlineCatalog } });
+    try {
+      store.upsert(fixtures[0]);
+      const before = store.list();
+      const matter = { ...fixtures[0], title: 'Cross-site overwrite' };
+      const response = await createApp({}, store).request(`/api/matters${method === 'PUT' ? `/${matter.id}` : ''}`, {
+        method, headers: { 'Content-Type': 'text/plain', Origin: 'https://unrelated.example.invalid' }, body: JSON.stringify(matter),
+      });
+      expect(response.status).toBe(415);
+      expect(store.list()).toEqual(before);
+    } finally { store.close(); }
+  });
+
   it('answers the health check', async () => {
     const res = await createApp({}).request('/api/health');
     expect(res.status).toBe(200);
