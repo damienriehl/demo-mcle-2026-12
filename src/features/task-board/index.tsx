@@ -59,10 +59,10 @@ function CockpitTasks({ activeMatter }: FeatureProps) {
       ) : null}
       <div className="task-boards">
         <Columns label="Client tasks" tasks={tasks.filter(task => task.owner === 'client')} canMove={() => true}
-          onMove={(task, status) => void moveTask(matterId, task.id, 'lawyer', status)}
+          view="lawyer" onMove={(task, status, waitingOn) => void moveTask(matterId, task.id, 'lawyer', status, waitingOn)}
           extra={task => (task.uploadedDocumentId ? <p className="task-meta">Client uploaded document {task.uploadedDocumentId}</p> : task.needsUpload ? <p className="task-meta">Asks for an upload</p> : null)} />
         <Columns label="Lawyer tasks" tasks={tasks.filter(task => task.owner === 'lawyer')} canMove={() => true}
-          onMove={(task, status) => void moveTask(matterId, task.id, 'lawyer', status)}
+          view="lawyer" onMove={(task, status, waitingOn) => void moveTask(matterId, task.id, 'lawyer', status, waitingOn)}
           extra={task => (
             <>
               <label className="task-share">
@@ -109,10 +109,10 @@ function PortalTasks({ activeMatter }: FeatureProps) {
       <h3>Your tasks</h3>
       {tasks.length ? null : <p>No tasks yet. Your lawyer will add them here.</p>}
       <Columns label="Your to-do list" tasks={tasks.filter(task => task.owner === 'client')} canMove={() => true}
-        onMove={(task, status) => void moveTask(matterId, task.id, 'client', status)}
+        view="client" onMove={(task, status, waitingOn) => void moveTask(matterId, task.id, 'client', status, waitingOn)}
         extra={task => (task.uploadedDocumentId ? <p className="task-uploaded" role="status">Uploaded — thank you. Your lawyer can see it now.</p>
           : task.needsUpload && task.status !== 'done' ? <UploadControl matterId={matterId} task={task as ClientTask} /> : null)} />
-      <Columns label="What your lawyer is doing" tasks={tasks.filter(task => task.owner === 'lawyer')} canMove={() => false} onMove={() => {}} />
+      <Columns label="What your lawyer is doing" tasks={tasks.filter(task => task.owner === 'lawyer')} view="client" canMove={() => false} onMove={() => {}} />
     </div>
   );
 }

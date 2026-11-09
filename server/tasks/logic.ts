@@ -1,7 +1,7 @@
 import { randomUUID } from 'node:crypto';
 import type Anthropic from '@anthropic-ai/sdk';
 import type { MatterWithDeadlines } from '../../src/data/schema';
-import type { ClientTask, Prepared, Proposal, Task, TaskBoard, TaskOwner, TaskSource } from '../../src/features/task-board/types';
+import { TASK_STATUSES, type ClientTask, type Prepared, type Proposal, type Task, type TaskBoard, type TaskOwner, type TaskSource, type TaskStatus } from '../../src/features/task-board/types';
 import { verifyQuote } from '../prior-art/analyze';
 
 export { verifyQuote };
@@ -65,7 +65,7 @@ export function clientView(board: TaskBoard, matter?: Pick<MatterWithDeadlines, 
   const sharedDocs = new Set((matter?.documents ?? []).filter(doc => doc.shared).map(doc => doc.id));
   return {
     tasks: board.tasks.filter(task => task.owner === 'client' || task.sharedWithClient).map(task => {
-      const base: ClientTask = { id: task.id, owner: task.owner, title: task.title, status: task.status, sharedWithClient: task.owner === 'client' || task.sharedWithClient, needsUpload: task.owner === 'client' && task.needsUpload, ...(task.dueDate ? { dueDate: task.dueDate } : {}), ...(task.owner === 'client' && task.uploadedDocumentId ? { uploadedDocumentId: task.uploadedDocumentId } : {}) };
+      const base: ClientTask = { id: task.id, owner: task.owner, title: task.title, status: task.status, sharedWithClient: task.owner === 'client' || task.sharedWithClient, needsUpload: task.owner === 'client' && task.needsUpload, ...(task.dueDate ? { dueDate: task.dueDate } : {}), ...(task.status === 'waiting' && task.waitingOn ? { waitingOn: task.waitingOn } : {}), ...(task.owner === 'client' && task.uploadedDocumentId ? { uploadedDocumentId: task.uploadedDocumentId } : {}) };
       if (task.owner === 'lawyer') return base;
       const source: TaskSource | undefined = task.source.kind === 'document'
         ? (sharedDocs.has(task.source.ref) ? task.source : undefined)
@@ -73,6 +73,26 @@ export function clientView(board: TaskBoard, matter?: Pick<MatterWithDeadlines, 
       return { ...base, detail: task.detail, ...(source ? { source } : {}) };
     }),
   };
+}
+
+export type TaskPatch = { status?: unknown; waitingOn?: unknown; sharedWithClient?: unknown };
+export type PatchResult = { ok: true; task: Task } | { ok: false; code: 400 | 403; error: string; message: string };
+const otherSide = (who: TaskOwner): TaskOwner => (who === 'lawyer' ? 'client' : 'lawyer');
+
+/** Validates and applies one PATCH. The client view may change only client tasks; waitingOn exists only while waiting. */
+export function patchTask(task: Task, patch: TaskPatch, view: 'client' | 'lawyer'): PatchResult {
+  if (view === 'client' && (task.owner !== 'client' || patch.sharedWithClient !== undefined)) {
+    return { ok: false, code: 403, error: 'forbidden', message: 'Only your lawyer can change that task.' };
+  }
+  if (patch.status !== undefined && !TASK_STATUSES.includes(patch.status as TaskStatus)) return { ok: false, code: 400, error: 'invalid', message: 'Unknown status.' };
+  if (patch.waitingOn !== undefined && patch.waitingOn !== 'client' && patch.waitingOn !== 'lawyer') return { ok: false, code: 400, error: 'invalid', message: 'waitingOn must be client or lawyer.' };
+  const status = (patch.status as TaskStatus | undefined) ?? task.status;
+  if (patch.waitingOn !== undefined && status !== 'waiting') return { ok: false, code: 400, error: 'invalid', message: 'waitingOn applies only to a waiting task.' };
+  const { waitingOn: previous, ...rest } = task;
+  const next: Task = { ...rest, status };
+  if (status === 'waiting') next.waitingOn = (patch.waitingOn as TaskOwner | undefined) ?? (task.status === 'waiting' && previous ? previous : otherSide(task.owner));
+  if (typeof patch.sharedWithClient === 'boolean' && task.owner === 'lawyer') next.sharedWithClient = patch.sharedWithClient;
+  return { ok: true, task: next };
 }
 
 function parseJson(raw: string): unknown {

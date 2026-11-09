@@ -8,7 +8,7 @@
 .task-boards { display: grid; gap: var(--mc-page-space); }
 .task-board { border-top: var(--mc-header-rule) solid var(--mc-header-rule-color); padding-top: calc(var(--mc-space) / 2); }
 .task-count { font-family: var(--mc-font-ui); font-size: var(--mc-text-min); color: var(--mc-ink-muted); }
-.task-columns { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--mc-space); margin-top: calc(var(--mc-space) / 2); }
+.task-columns { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--mc-space); margin-top: calc(var(--mc-space) / 2); }
 .task-column { min-width: 0; background: var(--mc-chip); color: var(--mc-chip-ink); padding: calc(var(--mc-space) / 2); min-height: 6rem; border: var(--mc-border-width) solid var(--mc-border); }
 .task-column[data-over] { border-style: dashed; border-color: var(--mc-ink); }
 .task-column ul { list-style: none; margin: 0; padding: 0; display: grid; gap: calc(var(--mc-space) / 2); }
@@ -35,10 +35,13 @@
 .task-uploaded { font-weight: var(--mc-weight-label); font-size: var(--mc-text-min); }
 .task-error { color: var(--mc-warning); font-weight: var(--mc-weight-label); font-size: var(--mc-text-min); }
 /* Projector fit: nothing may run past a column edge. */
-.task-columns { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.task-columns { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 .task-column, .task-column ul, .task-card, .task-card > *, .task-upload, .task-upload label, .task-prepared, .task-share { min-width: 0; }
 .task-column ul { grid-template-columns: minmax(0, 1fr); }
 .task-card h5, .task-card p, .task-quote, .task-upload label, .task-prepared, .task-share { overflow-wrap: anywhere; }
 .task-upload input[type="file"] { max-width: 100%; width: 100%; font-size: var(--mc-text-min); }
 .task-actions { flex-wrap: wrap; }
 .task-actions button { max-width: 100%; white-space: normal; }
+.task-waiting { font-weight: var(--mc-weight-label); font-size: var(--mc-text-min); border-left: var(--mc-header-rule) solid var(--mc-ink); padding-left: calc(var(--mc-space) / 2); }
+.task-feature button.task-secondary { border-style: dashed; padding: calc(var(--mc-space) / 8) calc(var(--mc-space) / 3); }
+.task-column-title { overflow-wrap: anywhere; }
