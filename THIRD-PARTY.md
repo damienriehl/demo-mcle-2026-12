@@ -10,6 +10,7 @@ Direct dependencies, pinned to exact versions in `package.json`. Licenses read f
 | hono | 4.13.17 | MIT | runtime |
 | react | 19.3.1 | MIT | runtime |
 | react-dom | 19.3.1 | MIT | runtime |
+| unpdf | 1.9.1 | MIT (bundles Mozilla pdf.js, Apache-2.0) | runtime |
 | zod | 4.6.7 | MIT | runtime |
 | @playwright/test | 1.65.0 | Apache-2.0 | development |
 | @tailwindcss/vite | 4.3.5 | MIT | development |
