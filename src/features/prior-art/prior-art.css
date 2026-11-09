@@ -1,0 +1,21 @@
+.prior-art { display: grid; gap: var(--mc-space); font-size: var(--mc-text-body); line-height: 1.5; }
+.prior-art h3 { font-family: var(--mc-font-heading); font-size: var(--mc-text-lg); margin: 0 0 calc(var(--mc-space) / 2); }
+.prior-art-invention { border-left: var(--mc-header-rule) solid var(--mc-accent); padding-left: var(--mc-space); }
+.prior-art-form { display: flex; flex-wrap: wrap; gap: var(--mc-space); align-items: flex-end; }
+.prior-art-form label { display: grid; gap: calc(var(--mc-space) / 2); font-size: var(--mc-text-min); flex: 1 1 18rem; }
+.prior-art-form label:nth-child(2) { flex: 0 0 auto; }
+.prior-art-form input, .prior-art-form select { background: var(--mc-surface); color: var(--mc-ink); border: var(--mc-border-width) solid var(--mc-border); border-radius: var(--mc-radius); padding: calc(var(--mc-space) / 2); font-size: var(--mc-text-body); }
+.prior-art-form button { background: var(--mc-accent); color: var(--mc-accent-ink); border: 0; border-radius: var(--mc-radius); padding: calc(var(--mc-space) / 2) var(--mc-space); font-size: var(--mc-text-body); cursor: pointer; }
+.prior-art-caution, .prior-art-source { border: var(--mc-header-rule) dashed var(--mc-warning); padding: calc(var(--mc-space) / 2) var(--mc-space); margin: 0; }
+.prior-art-notice, .prior-art-meta, .prior-art-unverified { font-size: var(--mc-text-min); margin: 0; }
+.prior-art-error { color: var(--mc-warning); font-weight: var(--mc-weight-label); }
+.prior-art-columns { display: flex; flex-wrap: wrap; gap: var(--mc-page-space); align-items: flex-start; }
+.prior-art-columns > div { flex: 1 1 calc(var(--mc-rail-width) * 1.5); min-width: 0; }
+.prior-art-list { padding-left: calc(var(--mc-space) * 1.5); display: grid; gap: var(--mc-space); }
+.prior-art-list li p { margin: calc(var(--mc-space) / 4) 0; }
+.prior-art-ref a, .prior-art-ref b { font-family: var(--mc-font-mono); }
+.prior-art-rating { border-top: var(--mc-border-width) solid var(--mc-border); padding-top: calc(var(--mc-space) / 2); }
+.prior-art-rating blockquote { margin: calc(var(--mc-space) / 2) 0; padding-left: var(--mc-space); border-left: var(--mc-header-rule) solid var(--mc-ink-muted); font-style: italic; }
+.prior-art-tree { list-style: none; margin: 0; padding-left: calc(var(--mc-space) * 1.5); border-left: var(--mc-border-width) solid var(--mc-border); }
+.prior-art-tree li { padding: calc(var(--mc-space) / 4) 0; }
+.prior-art-chip { display: inline-block; margin-left: calc(var(--mc-space) / 2); padding: 0 calc(var(--mc-space) / 2); background: var(--mc-chip); color: var(--mc-chip-ink); font-size: var(--mc-text-min); }
