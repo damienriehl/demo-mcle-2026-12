@@ -1,0 +1,13 @@
+.ask-rules { max-width: 60rem; padding: var(--mc-section-space) 0; font-size: var(--mc-text-body); }
+.ask-rules > p { color: var(--mc-ink-muted); margin-top: calc(var(--mc-space) * .4); }
+.ask-rules form { display: flex; gap: calc(var(--mc-space) * .6); margin-top: var(--mc-space); align-items: flex-end; }
+.ask-rules label { flex: 1; display: flex; flex-direction: column; gap: calc(var(--mc-space) * .3); font-weight: var(--mc-weight-label); }
+.ask-rules input { background: var(--mc-surface); border: var(--mc-border-width) solid var(--mc-border); border-radius: var(--mc-radius); padding: .7rem; font-weight: var(--mc-weight-body); }
+.ask-rules form button { background: var(--mc-accent); color: var(--mc-accent-ink) !important; border-color: var(--mc-accent); padding: .7rem 1.4rem; font-weight: var(--mc-weight-label); }
+.ask-rules ol { list-style: none; margin-top: var(--mc-space); }
+.ask-rules li { border-top: 1px solid var(--mc-border); padding: var(--mc-space) 0; }
+.ask-rules li h3 { font-family: var(--mc-font-heading); font-weight: var(--mc-weight-heading); font-size: var(--mc-text-lg); }
+.ask-rules .ask-rules-caption { color: var(--mc-ink-muted); margin: calc(var(--mc-space) * .3) 0; }
+.ask-rules blockquote { border-left: 4px solid var(--mc-accent); padding-left: var(--mc-space); white-space: pre-line; max-height: 16rem; overflow-y: auto; font-family: var(--mc-font-body); }
+.ask-rules li a { display: inline-block; margin-top: calc(var(--mc-space) * .4); color: var(--mc-ink); text-decoration: underline; }
+.ask-rules [role="status"] { margin-top: var(--mc-space); }
