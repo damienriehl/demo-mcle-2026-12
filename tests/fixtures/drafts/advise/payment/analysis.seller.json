@@ -1,0 +1,7 @@
+{
+  "party": "Fictional Birch Seller",
+  "assessments": [{
+    "changeId": "payment", "verdict": "helps", "confidence": "high", "quote": "within 10 days",
+    "reason": "Payment \"within 10 days\" gives the seller earlier access to the purchase price."
+  }]
+}
