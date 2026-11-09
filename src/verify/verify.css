@@ -38,6 +38,7 @@
 @keyframes verify-step-change { from { background: color-mix(in srgb, var(--mc-accent) 16%, var(--mc-surface)); transform: translateX(calc(var(--mc-space) * .3)); } to { background: transparent; transform: translateX(0); } }
 .verify-reasoning ol { list-style: decimal; margin: 0; padding-left: calc(var(--mc-space) * 1.75); }
 .verify-reasoning li { padding: calc(var(--mc-space) * .12) 0; }
+.verify-rule blockquote, .verify-reasoning blockquote { margin: calc(var(--mc-space) * .35) 0; border-left: var(--mc-header-rule) solid var(--mc-ink); padding: calc(var(--mc-space) * .5) var(--mc-space); background: var(--mc-surface); white-space: pre-wrap; }
 .verify-reasoning .source-label { margin-left: calc(var(--mc-space) * .6); white-space: nowrap; font-weight: 600; }
 .verify-panel > .verify-rule { flex: 1; min-height: calc(var(--mc-space) * 9); display: flex; flex-direction: column; border-top: 1px solid var(--mc-border); padding-top: calc(var(--mc-space) * .6); }
 .verify-rule > * { flex-shrink: 0; }

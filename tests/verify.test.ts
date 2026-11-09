@@ -9,8 +9,32 @@ import { matterSchema } from '../src/data/schema';
 import fixtures from './fixtures/views/matters.json';
 import { DeadlineCard } from '../src/components/DeadlineCard';
 import { RuleText } from '../src/verify/RuleText';
+import { schedulingMatter } from './fixtures/views/scheduling-order';
 
 describe('verification content', () => {
+  it('quotes the court-order exception verbatim from the cited rule for a superseded default', () => {
+    const matter = schedulingMatter();
+    const deadline = matter.deadlines.find(deadline => deadline.id === 'expert-default')!;
+    const html = renderToStaticMarkup(createElement(VerifyDrawer, { matter,
+      selection: { matterId: matter.id, deadlineId: deadline.id, label: deadline.label }, onClose() {} }));
+    const reasoning = html.split('data-verify-section="reasoning"')[1].split('</section>')[0];
+    const sentence = 'Unless the court orders otherwise, these disclosures must be made at least 30 days before trial.';
+    expect(getRule('frcp:26')!.text).toContain(sentence);
+    expect(reasoning).toContain(`<blockquote>${sentence}</blockquote>`);
+    expect(reasoning).toContain('The order sets this date: Court-set expert disclosures, Feb 1, 2027 (p. 3)');
+  });
+
+  it('omits the supersession quotation when the cited rule has no court-order exception sentence', () => {
+    const matter = schedulingMatter();
+    const deadline = matter.deadlines.find(deadline => deadline.id === 'expert-default')!;
+    deadline.deadlineRuleId = 'frcp-12a-answer';
+    const html = renderToStaticMarkup(createElement(VerifyDrawer, { matter,
+      selection: { matterId: matter.id, deadlineId: deadline.id, label: deadline.label }, onClose() {} }));
+    const reasoning = html.split('data-verify-section="reasoning"')[1].split('</section>')[0];
+    expect(reasoning).toContain('The order sets this date:');
+    expect(reasoning).not.toContain('<blockquote>');
+  });
+
   it.each([
     ['contract-deadline', 'dueDate', 'stated', 'You said'],
     ['contract-deadline', 'dueDate', 'inferred', 'AI inferred'],

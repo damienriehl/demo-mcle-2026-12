@@ -20,6 +20,7 @@ function bandOf(result: DeadlineResult): number {
 }
 export function Radar({ matters, activeMatter, onVerify, arrivals }: ViewProps & { arrivals: Set<string> }) {
   const deadlines = matters.flatMap(matter => matter.deadlines.map((deadline, index) => ({ matter, deadline, index, result: deadlineResult(matter, deadline.id) })))
+    .filter(({ deadline }) => !deadline.supersededBy)
     .sort((a, b) => (a.result.status === 'computed' ? a.result.dueDate : '9999').localeCompare(b.result.status === 'computed' ? b.result.dueDate : '9999'));
   return <div className="radar-view"><header className="view-heading"><div><h2>Deadline Radar</h2><p>Every matter. Every next move.</p></div><p>{deadlines.length} deadlines across {matters.length} matters</p></header>
     <div className="radar-bands">{bands.map(({ label: band, note }, bandIndex) => {

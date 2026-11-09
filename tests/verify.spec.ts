@@ -2,6 +2,7 @@ import { expect, test, type Locator, type Page } from '@playwright/test';
 import fixtures from './fixtures/views/matters.json' with { type: 'json' };
 import { computeDeadline } from '../src/engine';
 import federalRules from '../data/rules/frcp.json' with { type: 'json' };
+import { schedulingMatter } from './fixtures/views/scheduling-order';
 
 function matters() {
   const [answer, unknown] = structuredClone([fixtures[0], fixtures[6]]);
@@ -16,6 +17,77 @@ function matters() {
 }
 
 const themes = ['law-review', 'mission-control', 'boutique-firm'] as const;
+
+test.describe('scheduling order verification', () => {
+  test.beforeEach(async ({ page }) => {
+    await page.route('**/api/events', route => route.fulfill({ contentType: 'text/event-stream', body: `data: ${JSON.stringify([schedulingMatter()])}\n\n` }));
+    await page.goto('/');
+  });
+
+  test('cards distinguish court dates, computations, and the governing superseding date', async ({ page }) => {
+    const trial = page.locator('[data-deadline-id="trial"]');
+    await expect(trial).toContainText('From the order, p. 2');
+    await expect(trial).not.toContainText('From the matter');
+    await expect(page.locator('[data-deadline-id="pretrial"]')).toContainText('Code computed');
+    const superseded = page.locator('[data-deadline-id="expert-default"]');
+    await expect(superseded).toContainText('Superseded — the order sets this date (p. 3)');
+    await expect(superseded.locator('.due-date')).toHaveText('Feb 1, 2027');
+    await expect(superseded.locator('.countdown')).toHaveCount(0);
+    await expect(superseded).not.toContainText(/days left|overdue|Due today/);
+  });
+
+  test('reasoning names both the court trigger and the computed upstream disclosure', async ({ page }) => {
+    await page.locator('[data-deadline-id="pretrial"]').click();
+    const panel = page.getByRole('dialog', { name: 'Trust but Verify' });
+    const reasoning = panel.locator('[data-verify-section="reasoning"]');
+    await expect(reasoning).toContainText('Counts from Trial ready date · Jun 14, 2027');
+    await expect(reasoning).toContainText('From the order, p. 2');
+    await expect(panel.locator('[data-due-date]')).toHaveText('May 14, 2027');
+    await expect(panel.getByRole('list', { name: 'Date math' })).toContainText('move earlier to Friday');
+    await page.keyboard.press('Escape');
+    await page.locator('[data-deadline-id="objections"]').click();
+    await expect(reasoning).toContainText('Counts from Pretrial disclosures · May 14, 2027');
+    await expect(reasoning).toContainText('Code computed');
+    await expect(panel.locator('[data-due-date]')).toHaveText('May 28, 2027');
+  });
+
+  for (const theme of themes) {
+    test(`source shows the uploaded quotation and checked-page caption (${theme})`, async ({ page }) => {
+      await page.getByRole('combobox', { name: 'Theme', exact: true }).selectOption(theme);
+      await page.locator('[data-deadline-id="trial"]').click();
+      const panel = page.getByRole('dialog', { name: 'Trust but Verify' });
+      await expect(panel.locator('[data-verify-section="due"]')).toContainText('From the order, p. 2');
+      const source = panel.locator('[data-verify-section="rule"]');
+      await expect(source.getByRole('heading', { name: 'Scheduling order, p. 2', exact: true })).toBeVisible();
+      await expect(source.getByRole('blockquote')).toHaveText('Trial ready date: June 14, 2027.');
+      await expect(source).toContainText('Quoted from the uploaded order; the server checked this text against page 2');
+      await expect(panel).not.toContainText('No source on file');
+      await expect(panel).not.toContainText('the notice close');
+      expect(Math.min(...await visibleFontSizes(panel))).toBeGreaterThanOrEqual(18);
+      await page.screenshot({ path: `test-results/verify-order-${theme}.png` });
+      await page.setViewportSize({ width: 390, height: 844 });
+      await expect(source.getByRole('blockquote')).toBeVisible();
+      expect(await panel.evaluate(element => element.scrollWidth <= element.clientWidth)).toBe(true);
+      await page.screenshot({ path: `test-results/verify-order-mobile-${theme}.png` });
+    });
+  }
+
+  test('superseded reasoning names the order date and quotes the library exception sentence', async ({ page }) => {
+    await page.locator('[data-deadline-id="expert-default"]').click();
+    const reasoning = page.locator('[data-verify-section="reasoning"]');
+    await expect(reasoning).toContainText('The order sets this date: Court-set expert disclosures, Feb 1, 2027 (p. 3)');
+    const quote = reasoning.getByRole('blockquote');
+    await expect(quote).toContainText('Unless the court orders otherwise');
+    expect(federalRules.find(rule => rule.id === 'frcp:26')!.text).toContain(await quote.innerText());
+  });
+
+  test('Radar omits the superseded default from all bands and the count', async ({ page }) => {
+    await page.getByRole('button', { name: 'Deadline Radar', exact: true }).click();
+    await expect(page.getByText('4 deadlines across 1 matters', { exact: true })).toBeVisible();
+    await expect(page.locator('[data-deadline-card]')).toHaveCount(4);
+    await expect(page.locator('[data-band] [data-deadline-id="expert-default"]')).toHaveCount(0);
+  });
+});
 
 function visibleFontSizes(panel: Locator) {
   return panel.locator('*').evaluateAll(elements => elements.filter(element => element.getClientRects().length).map(element => parseFloat(getComputedStyle(element).fontSize)));

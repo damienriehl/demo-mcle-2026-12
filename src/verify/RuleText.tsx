@@ -2,8 +2,13 @@ import { useState } from 'react';
 import { getRule } from '../../data/rules';
 import type { Step } from '../engine';
 
-export function RuleText({ citation }: { citation: Step['citation'] }) {
+export function RuleText({ citation, orderQuote }: { citation: Step['citation']; orderQuote?: string | number }) {
   const [full, setFull] = useState(false);
+  if (citation.ruleId === 'order') return <section data-verify-section="rule" id="verify-rule" tabIndex={-1} className="verify-rule">
+    <h3>Scheduling order, {citation.subdivision}</h3>
+    <blockquote>{orderQuote}</blockquote>
+    <p className="verify-rule-caption">Quoted from the uploaded order; the server checked this text against page {citation.subdivision?.replace(/^p\. /, '')}</p>
+  </section>;
   const rule = getRule(citation.ruleId);
   if (!rule) return <section data-verify-section="rule" id="verify-rule" tabIndex={-1} className="verify-rule"><h3>Source text</h3><p data-no-source>No source on file. Verify independently.</p><p>{citation.ruleId}{citation.subdivision}</p></section>;
   const matches = citation.subdivision?.split(',').map(label => rule.subdivisions
