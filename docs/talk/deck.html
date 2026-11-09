@@ -30,8 +30,9 @@ body {
   padding-left: max(0px, env(safe-area-inset-left, 0px));
   padding-right: max(0px, env(safe-area-inset-right, 0px));
 }
-#viewport { position: fixed; inset: 0 0 64px 0; display: grid; place-items: center; overflow: hidden; }
-#deck { width: 1920px; height: 1080px; position: relative; transform-origin: center center; flex: none; }
+#viewport { position: fixed; inset: 0 0 64px 0; overflow: hidden; }
+/* Pin the deck's center to the viewport's center so scaling never drifts sideways when the window is narrower than 1920px. */
+#deck { width: 1920px; height: 1080px; position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); transform-origin: center center; }
 .slide {
   position: absolute; inset: 0; background: var(--sheet);
   background-image:
@@ -552,7 +553,7 @@ ol.steps li::marker { color: var(--oxblood); font-weight: 700; }
 
   function fit() {
     const s = Math.min(vp.clientWidth / 1920, vp.clientHeight / 1080);
-    deck.style.transform = `scale(${s})`;
+    deck.style.transform = `translate(-50%, -50%) scale(${s})`;
   }
   addEventListener('resize', fit); fit();
 
