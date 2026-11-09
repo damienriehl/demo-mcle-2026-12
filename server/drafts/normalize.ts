@@ -110,6 +110,12 @@ export async function normalizeDraft({ filename, bytes }: { filename: string; by
         const result = index === 0 ? session.replaceText(anchor, markdown) : session.insertParagraph(anchor, 'after', markdown);
         if (!result.success) throw new Error(result.error?.message || 'Could not build the draft document.');
         anchor = (result.created.at(-1) ?? result.modified.at(-1))!.id;
+        const heading = format === 'md' && /^(#{1,6})\s/.exec(markdown);
+        if (heading) {
+          // Materialize the Word style definition so comparison retains the heading.
+          const styled = session.setParagraphStyle(anchor, `Heading${heading[1].length}`);
+          if (!styled.success) throw new Error(styled.error?.message || 'Could not style the draft heading.');
+        }
       }
       docx = session.save();
     } finally { session.close(); }

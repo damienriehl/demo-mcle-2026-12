@@ -124,6 +124,14 @@ describe('draft engine', () => {
     try { expect(session.getAnchorInfo(result.changes[0].anchorId)?.visibleText).toBe(clause); } finally { session.close(); }
   });
 
+  it('renders the deleted deposit before its replacement insertion', async () => {
+    const result = await compareDrafts(await word('deposit $240,000'), await word('deposit $360,000'));
+    const $ = load(result.html);
+    expect($('del.rev-del').text()).toBe('$240,000');
+    expect($('ins.rev-ins').text()).toBe('$360,000');
+    expect($('del.rev-del').next().is('ins.rev-ins')).toBe(true);
+  });
+
   it('groups paragraph insertions and deletions in first-appearance order', async () => {
     const earlier = await word('Agreement.\n\nThe buyer shall provide a quarterly forecast.\n\nAll invoices are payable on receipt.');
     const later = await word('Agreement.\n\nAll invoices are payable on receipt.\n\nThe supplier shall provide an annual compliance certificate.');
@@ -178,10 +186,21 @@ describe('draft engine', () => {
   });
 
   it('keeps Markdown headings as headings and uses one paragraph per block', async () => {
-    const result = await draft('# Agreement\n\nThe buyer **shall** pay\non delivery.', 'draft.markdown');
-    expect(result.text).toBe('Agreement\nThe buyer shall pay on delivery.');
+    const headings = ['Title', 'Section 1. Heading', 'Third level', 'Fourth level', 'Fifth level', 'Sixth level'];
+    const markdown = headings.map((text, index) => `${'#'.repeat(index + 1)} ${text}`).join('\n\n');
+    const result = await draft(`${markdown}\n\nThe buyer **shall** pay\non delivery.`, 'draft.markdown');
+    expect(result.text).toBe([...headings, 'The buyer shall pay on delivery.'].join('\n'));
     const session = openDocxSession(result.docx);
-    try { expect(Object.values(session.project().anchorIndex).some(anchor => anchor.kind === 'h')).toBe(true); } finally { session.close(); }
+    try {
+      const anchors = Object.entries(session.project().anchorIndex).filter(([, anchor]) => ['p', 'h', 'li'].includes(anchor.kind));
+      expect(anchors.slice(0, 6).map(([id]) => session.getBlockMetadata(id)?.styleId)).toEqual([
+        'Heading1', 'Heading2', 'Heading3', 'Heading4', 'Heading5', 'Heading6',
+      ]);
+      expect(session.getBlockMetadata(anchors[6][0])?.styleId ?? 'Normal').toBe('Normal');
+    } finally { session.close(); }
+    const later = await draft(`${markdown}\n\nThe buyer **shall** pay\nwithin thirty days.`, 'draft.md');
+    const $ = load((await compareDrafts(result, later)).html);
+    headings.forEach((text, index) => expect($(`.docx-Heading${index + 1}`).text()).toBe(text));
   });
 
   it('refuses PDFs with no text layer', async () => {
@@ -248,5 +267,13 @@ describe('draft engine', () => {
     expect($('a').map((_, el) => $(el).attr('href')).get()).toEqual(['#c1']);
     expect($('img').map((_, el) => $(el).attr('src')).get()).toEqual(['data:image/png;base64,AA==']);
     expect($('p').attr('data-change-id')).toBe('c1');
+  });
+
+  it('orders adjacent replacement markup across whitespace without changing moves or intervening text', () => {
+    const $ = load(sanitizeHtml('<p id="replacement"><ins class="rev-ins">new</ins> \n <del class="rev-del">old</del></p><p id="separate"><ins class="rev-ins">new</ins> unchanged <del class="rev-del">old</del></p><p id="move"><ins class="rev-move-to" data-move-id="m1">moved</ins> <del class="rev-move-from" data-move-id="m1">moved</del></p>'));
+    expect($('#replacement').text()).toBe('old \n new');
+    expect($('#replacement').children().map((_, el) => el.tagName).get()).toEqual(['del', 'ins']);
+    expect($('#separate').text()).toBe('new unchanged old');
+    expect($('#move').html()).toBe('<ins class="rev-move-to" data-move-id="m1">moved</ins> <del class="rev-move-from" data-move-id="m1">moved</del>');
   });
 });

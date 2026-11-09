@@ -11,5 +11,17 @@ export function sanitizeHtml(html: string): string {
       }
     }
   });
+  $('ins.rev-ins').each((_, insertion) => {
+    if ($(insertion).closest('.rev-move-from,.rev-move-to,[data-move-id]').length) return;
+    let next = insertion.next;
+    const whitespace = [];
+    while (next?.type === 'text' && !next.data.trim()) {
+      whitespace.push(next);
+      next = next.next;
+    }
+    if (next && $(next).is('del.rev-del') && !$(next).closest('.rev-move-from,.rev-move-to,[data-move-id]').length) {
+      $(insertion).before(next, ...whitespace);
+    }
+  });
   return $.html();
 }
