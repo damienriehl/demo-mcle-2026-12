@@ -27,11 +27,12 @@ The session runs 90 minutes. The scheduling-order segment takes 10 of them, and 
 | 23–29 | Ramble intake | Take two crowd matters by voice; answer one follow-up from the room; press Embellish on the second; toggle "Show what I said" |
 | 29–32 | Trust but Verify | Open the interrogatories deadline; flip service to Mail and back; point at the rule's own words and the Rule 6(d) step |
 | 32–42 | Scheduling order | See "Scheduling-order segment" below |
-| 42–43 | Primer slide | "What should we build?" |
-| 43–58 | First `/cook` | Scope (3 min), cook (about 8 min; fill with questions), reveal (2 min) |
-| 58–73 | Second `/cook` | A different practice area's idea; say "answer everything else yourself" early |
-| 73–76 | Design last | Switch themes; take one tweak from the room ("make the accent Vikings purple") as a token edit |
-| 76–90 | Q&A | Leave the take-home slide up |
+| 42–45 | Draft Compare | See "Draft Compare beat" below |
+| 45–46 | Primer slide | "What should we build?" |
+| 46–61 | First `/cook` | Scope (3 min), cook (about 8 min; fill with questions), reveal (2 min) |
+| 61–76 | Second `/cook` | A different practice area's idea; say "answer everything else yourself" early |
+| 76–79 | Design last | Switch themes; take one tweak from the room ("make the accent Vikings purple") as a token edit |
+| 79–90 | Q&A | Leave the take-home slide up |
 
 ## Scheduling-order segment (minutes 32–42)
 
@@ -48,7 +49,7 @@ The session runs 90 minutes. The scheduling-order segment takes 10 of them, and 
 
 If someone in the room offers an order, use it only if it is a public court record; open it as a new public-record matter, never on a fictional matter.
 
-## Draft Compare beat
+## Draft Compare beat (minutes 42–45)
 
 1. Open the **Asset purchase — Prairie Fen Studios LLC** matter and its **Compare drafts** tab.
    Choose **Vellunspur Workshop Asset Purchase** under **Try a sample pair**, then click **Compare**.
