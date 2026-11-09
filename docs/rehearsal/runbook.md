@@ -10,7 +10,10 @@ The session runs 90 minutes. The scheduling-order segment takes 10 of them, and 
    Keep `data/seed/orders/` open in a file window for drag-and-drop.
    For a real order, drag from `data/seed/orders/public/`; all three bundled public orders replay without a key or a local folder.
 4. Confirm the Claude key file exists (`ls ~/.config/matter-cockpit/api-key`); never print it.
-5. `npm run dev`. If the presentation browser runs on another machine, publish the app with `tailscale serve` and set `MATTER_COCKPIT_ALLOWED_HOSTS` to that host name; never bind 0.0.0.0.
+5. Start the app with the document converter, so .doc, .rtf, .odt, and HTML uploads work:
+   `MATTER_COCKPIT_SOFFICE="$PWD/scripts/soffice-container.sh" npm run dev`.
+   Build the converter once beforehand with `docker build -t matter-cockpit-soffice:1 scripts/soffice`.
+   If the presentation browser runs on another machine, publish the app with `tailscale serve` and set `MATTER_COCKPIT_ALLOWED_HOSTS` to that host name; never bind 0.0.0.0.
 6. Open the app in the presentation browser at 1920×1080, Law Review theme, Deadline Radar showing.
 7. Open the stage slides and a Claude Code session in the repo; zoom the terminal so it reads from the back row.
 8. Run one Ramble and one scheduling-order upload end to end as a smoke test, then `npm run reset` again.
@@ -51,17 +54,18 @@ If someone in the room offers an order, use it only if it is a public court reco
    Choose **Vellunspur Workshop Asset Purchase** under **Try a sample pair**, then click **Compare**.
 2. Point out the moved confidentiality clause and the FOLIO tags. Confirm
    **Quorrelith Components LLC**, the buyer, under **Who do you represent?**, then click **Run advice**.
-3. Open the **Advice memo** and click the Harms item beginning **Seller's indemnity cap falls**.
-   The card explains that the cap drops from the full Purchase Price to 10%.
-4. Read the counter-language: replace **is capped at 10% of the Purchase Price** with
-   **shall not exceed the Purchase Price**. Click **Apply** to restore the original cap.
+3. Open the **Advice memo** and click the Harms item about the indemnity cap.
+   The card explains that the cap drops from the full Purchase Price to 10%, and quotes the new text.
+4. Read the card's counter-language aloud. With a key, the model writes it live, so the wording
+   varies from run to run (for example, "shall not exceed the Purchase Price"). Click **Apply**.
 5. Click **Download redline** to show tracked changes, the linked move, and Word comments.
    Click **Download counter-draft** to show only the applied cap edit, tracked as
    **Quorrelith Components LLC counsel**.
 
-With no key, this bundled pair replays its canned parties and advice automatically; the comparison
-and both Word downloads still run on the server. Keep the bundled drafts and their canned results
-together. Custom drafts need a key for party detection and advice.
+With a key, party detection takes about 10 seconds and advice about 10 more. With no key, this
+bundled pair replays its saved parties and advice automatically, and the comparison and both Word
+downloads still run on the server. Custom drafts need a key for party detection and advice.
+If advice stalls on stage, click **Run advice** again; if it still fails, choose another sample pair.
 
 ## Sample rambles (one per practice area)
 

@@ -13,6 +13,7 @@ import { normalizeDraft } from '../server/drafts/normalize';
 import { compareDrafts } from '../server/drafts/compare';
 import { converterAvailable } from '../server/drafts/convert';
 import { sanitizeHtml } from '../server/drafts/html';
+import { changeSchema } from '../server/drafts/types';
 
 vi.mock('node:zlib', async importOriginal => {
   const actual = await importOriginal<typeof import('node:zlib')>();
@@ -114,6 +115,27 @@ describe('draft engine', () => {
     expect($('p[data-change-id="c1"]').length).toBe(1);
     expect((await getRevisions(result.redline)).length).toBeGreaterThan(0);
     expect((await getRevisions(result.redline)).every(rev => rev.author === 'Other side')).toBe(true);
+  });
+
+  it('omits anchorless document formatting from changes while preserving the text edit and redline revision', async () => {
+    const earlier = await word('The buyer shall pay within thirty days.');
+    const edited = await word('The buyer shall pay within sixty days.');
+    const session = openDocxSession(edited.docx);
+    let bytes: Uint8Array;
+    try {
+      const anchor = Object.entries(session.project().anchorIndex).find(([, info]) => info.kind === 'p')![0];
+      expect(session.setPageSetup(anchor, { marginLeftTwips: 2880 }).success).toBe(true);
+      bytes = session.save();
+    } finally { session.close(); }
+    const later = await normalizeDraft({ filename: 'later.docx', bytes });
+    const result = await compareDrafts(earlier, later);
+    const revisions = await getRevisions(result.redline);
+    expect(revisions.some(revision => revision.type === 'format'
+      && revision.affectedAnchors.every(anchor => !['p', 'h', 'li'].includes(anchor.kind)))).toBe(true);
+    expect(result.formattingCompared).toBe(true);
+    expect(result.changes).toHaveLength(1);
+    expect(result.changes[0]).toMatchObject({ kind: 'replace', earlierText: earlier.text, laterText: later.text });
+    for (const change of result.changes) expect(changeSchema.safeParse(change).success).toBe(true);
   });
 
   it('pairs a clause moved from Section 7 to Section 3 and links both HTML ends', async () => {
