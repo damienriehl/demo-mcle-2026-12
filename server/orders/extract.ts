@@ -1,6 +1,6 @@
 import { createHash } from 'node:crypto';
 import { readdir, readFile } from 'node:fs/promises';
-import { extname, resolve } from 'node:path';
+import { extname, isAbsolute, resolve } from 'node:path';
 import Anthropic from '@anthropic-ai/sdk';
 import { Hono } from 'hono';
 import { streamSSE } from 'hono/streaming';
@@ -10,7 +10,7 @@ import { modelName, NEEDS_KEY_MESSAGE } from '../ai';
 import { consumeTool, modelStream, type ModelStream } from '../intake/client';
 import { todayLine } from '../intake/prompts';
 import { getMatterStore, type MatterStore } from '../store';
-import { applySchedulingOrder } from './apply';
+import { applySchedulingOrder, createPublicRecordMatter } from './apply';
 import { orderIds } from './ids';
 import { pageTexts, textPages } from './pdf-text';
 import { extractionSchema, orderDateSchema, orderSystemPrompt, orderTool, type Extraction, type VerifiedDate } from './prompt';
@@ -24,18 +24,23 @@ function textHash(pages: string[]): string {
   return createHash('sha256').update(JSON.stringify(normalized)).digest('hex');
 }
 
-function bundledOrders(directory: string): Promise<Map<string, Extraction>> {
+function bundledOrders(directory: string, optional = false): Promise<Map<string, Extraction>> {
   let cached = bundles.get(directory);
   if (!cached) {
     cached = (async () => {
       const orders = new Map<string, Extraction>();
-      for (const name of (await readdir(directory)).filter(name => name.endsWith('.pdf')).sort()) {
+      const names = await readdir(directory);
+      for (const name of names.filter(name => name.endsWith('.pdf') && names.includes(name.replace(/\.pdf$/, '.extraction.json'))).sort()) {
         const pages = await pageTexts(new Uint8Array(await readFile(resolve(directory, name))));
-        const { dates, court, caption } = JSON.parse(await readFile(resolve(directory, name.replace(/\.pdf$/, '.extraction.json')), 'utf8'));
-        orders.set(textHash(pages), extractionSchema.parse({ dates, court, caption }));
+        const { dates, court, caption, courtName, caseNumber } = JSON.parse(await readFile(resolve(directory, name.replace(/\.pdf$/, '.extraction.json')), 'utf8'));
+        orders.set(textHash(pages), extractionSchema.parse({ dates, court, caption, courtName, caseNumber }));
       }
       return orders;
     })().catch(error => {
+      if (optional) {
+        console.warn(`Skipping unavailable orders directory: ${directory}`);
+        return new Map<string, Extraction>();
+      }
       bundles.delete(directory);
       throw error;
     });
@@ -91,7 +96,8 @@ export function createSchedulingOrderRoutes(options: Options = {}): Hono {
         pages = await pageTexts(new Uint8Array(await file.arrayBuffer()));
       }
       const store = options.store ?? getMatterStore();
-      if (!store.get(matterId)) {
+      const creating = matterId === 'new';
+      if (!creating && !store.get(matterId)) {
         await send({ type: 'error', message: 'Unknown matter.' });
         return;
       }
@@ -116,7 +122,13 @@ export function createSchedulingOrderRoutes(options: Options = {}): Hono {
         }, abort.signal), accept, orderTool.name, 'dates'));
       } else {
         const orders = await bundledOrders(resolve(options.ordersDirectory ?? 'data/seed/orders'));
-        const canned = orders.get(textHash(pages));
+        const hash = textHash(pages);
+        let canned = orders.get(hash);
+        const extraDirectories = (process.env.MATTER_COCKPIT_EXTRA_ORDERS_DIR ?? '').split(',').map(path => path.trim()).filter(isAbsolute);
+        for (const directory of extraDirectories) {
+          const extra = await bundledOrders(directory, true);
+          canned ??= extra.get(hash);
+        }
         if (!canned) {
           await send({ type: 'needs_key', message: NEEDS_KEY_MESSAGE });
           return;
@@ -130,20 +142,21 @@ export function createSchedulingOrderRoutes(options: Options = {}): Hono {
       }
       if (abort.signal.aborted) return;
       const current = store.get(matterId);
-      if (!current) {
+      if (!creating && !current) {
         await send({ type: 'error', message: 'Unknown matter.' });
         return;
       }
       const courtDates = accepted.filter(date => date.verified).length;
       if (!courtDates) {
-        await send({ type: 'done', matter: toStoredMatter(current), added: { courtDates: 0, derived: 0 },
+        await send({ type: 'done', ...(current ? { matter: toStoredMatter(current) } : {}), added: { courtDates: 0, derived: 0 },
           unverified: accepted, message: 'No dates could be verified; the matter was not changed.' });
         return;
       }
-      const matter = applySchedulingOrder(toStoredMatter(current), { ...extraction, dates: accepted }, orderSlug);
+      const base = creating ? createPublicRecordMatter(extraction) : toStoredMatter(current!);
+      const matter = applySchedulingOrder(base, { ...extraction, dates: accepted }, orderSlug);
       store.upsert(matter);
       const derived = matter.deadlines.filter(deadline => deadline.id.startsWith(orderIds(orderSlug).prefix)).length - courtDates;
-      await send({ type: 'done', matter, added: { courtDates, derived }, unverified: accepted.filter(date => !date.verified) });
+      await send({ type: 'done', ...(creating ? { created: true } : {}), matter, added: { courtDates, derived }, unverified: accepted.filter(date => !date.verified) });
     } catch (error) {
       if (error instanceof Anthropic.APIError) console.error(`scheduling order failed: ${error.constructor.name} ${error.status ?? 'no-status'} ${error.type ?? 'unknown_type'}`);
       else if (!(error instanceof z.ZodError)) console.error(`scheduling order failed: ${error instanceof Error ? error.constructor.name : typeof error}`);

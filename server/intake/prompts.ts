@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { matterSchema } from '../../src/data/schema';
+import { syntheticMatterSchema } from '../../src/data/schema';
 import { intakeTool } from './schema';
 import { deadlineCatalog } from '../../src/engine';
 import { localToday } from '../seed-dates';
@@ -30,5 +30,5 @@ Catalog assumption keys, labels, allowed values, and defaults:
 ${deadlineCatalog().filter((rule) => rule.assumptions.length).map((rule) => `${rule.id}: ${JSON.stringify(rule.assumptions)}`).join('\n')}
 
 Full matter storage schema (the server builds provenance from field labels; do not emit it as a field):
-${JSON.stringify(z.toJSONSchema(matterSchema, { io: 'input' }))}`;
+${JSON.stringify(z.toJSONSchema(syntheticMatterSchema, { io: 'input' }))}`;
 }

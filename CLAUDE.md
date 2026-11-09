@@ -52,7 +52,8 @@ atomically. Claude Code can also write a temporary file and rename it over the r
 | --- | --- |
 | `id`, `title`, `forum` | Nonempty strings; matter IDs are unique across the list. |
 | `practiceArea` | `litigation`, `transactional`, `patent`, `bankruptcy`, `family`, `employment`, or `regulatory`. |
-| `synthetic` | Required literal `true`. Use only fictional names, contacts, stories, and documents. |
+| `synthetic` | Required `true` for fictional matters or `false` for public-record matters, which exist only at runtime, are created only by uploading a public court order, are removed by `npm run reset`, and are never committed. |
+| `publicRecord` | Required strict `{ court, caseNumber, sourceUrl? }` only when `synthetic` is `false`; these public-record matters exist only at runtime, are created only by uploading a public court order, are removed by `npm run reset`, and are never committed. |
 | `client` | `{ name, contact }`, both fictional strings. Use an `example.invalid` contact. |
 | `parties` | Array of `{ name, role }`. |
 | `timeline` | Array of `{ id, event, date }`, with ISO `YYYY-MM-DD` dates. |
