@@ -17,7 +17,7 @@ export function createTaskStore(directory: string) {
   function read(matterId: string): TaskBoard {
     try {
       const parsed = JSON.parse(readFileSync(file(matterId), 'utf8')) as Partial<TaskBoard>;
-      return { tasks: parsed.tasks ?? [], proposals: parsed.proposals ?? [] };
+      return { tasks: parsed.tasks ?? [], proposals: parsed.proposals ?? [], ...(parsed.outbox ? { outbox: parsed.outbox } : {}), ...(parsed.prefs ? { prefs: parsed.prefs } : {}) };
     } catch { return { tasks: [], proposals: [] }; }
   }
   function write(matterId: string, board: TaskBoard) {
@@ -29,8 +29,10 @@ export function createTaskStore(directory: string) {
     listeners.get(matterId)?.forEach(listener => listener(board));
     return board;
   }
+  /** Merges the change over the current board, so outbox and preferences survive task-only updates. */
   function update(matterId: string, change: (board: TaskBoard) => TaskBoard) {
-    return write(matterId, change(read(matterId)));
+    const current = read(matterId);
+    return write(matterId, { ...current, ...change(current) });
   }
   function subscribe(matterId: string, listener: Listener) {
     const set = listeners.get(matterId) ?? new Set<Listener>();

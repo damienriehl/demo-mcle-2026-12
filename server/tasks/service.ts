@@ -57,3 +57,32 @@ export function approveProposal({ matterId, proposalId, matters, tasks, makeTask
     proposals: current.proposals.filter(item => item.id !== proposalId),
   }));
 }
+
+/** PATCH a task, then notify the client when it enters Waiting on client (R1). Notification never fails the move (R8). */
+export async function patchAndNotify({ matter, taskId, patch, view, tasks, adapters }: {
+  matter: Pick<Matter, 'id' | 'client'>; taskId: string; patch: import('./logic').TaskPatch; view: 'client' | 'lawyer'; tasks: TaskStore; adapters?: import('../notify/adapters').Adapters;
+}) {
+  const { patchTask } = await import('./logic');
+  const task = tasks.read(matter.id).tasks.find(item => item.id === taskId);
+  if (!task) return { ok: false as const, code: 404 as const, error: 'not_found', message: 'That task is no longer on the board.' };
+  const result = patchTask(task, patch, view);
+  if (!result.ok) return result;
+  let board = tasks.update(matter.id, current => ({ ...current, tasks: current.tasks.map(item => (item.id === task.id ? result.task : item)) }));
+  const entered = result.task.status === 'waiting' && result.task.waitingOn === 'client' && !(task.status === 'waiting' && task.waitingOn === 'client');
+  if (entered) {
+    try {
+      const { notifyWaiting } = await import('../notify');
+      if ((await notifyWaiting({ matter, task: result.task, store: tasks, adapters })).length) board = tasks.read(matter.id);
+    } catch { /* the move already stands */ }
+  }
+  return { ok: true as const, board };
+}
+
+/** Validates the client's own notification preferences (R3). */
+export function parsePrefs(input: unknown): import('../../src/features/task-board/types').NotifyPrefs | undefined {
+  const value = (input ?? {}) as Record<string, unknown>;
+  if (typeof value.email !== 'boolean' || typeof value.text !== 'boolean' || typeof value.textConsent !== 'boolean') return undefined;
+  const phone = typeof value.phone === 'string' ? value.phone.trim() : '';
+  if (phone && !/^\+?[0-9][0-9 ().-]{3,19}$/.test(phone)) return undefined;
+  return { email: value.email, text: value.text, textConsent: value.textConsent, ...(phone ? { phone } : {}) };
+}

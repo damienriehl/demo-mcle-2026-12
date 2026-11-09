@@ -1,7 +1,7 @@
 import { randomUUID } from 'node:crypto';
 import type Anthropic from '@anthropic-ai/sdk';
 import type { MatterWithDeadlines } from '../../src/data/schema';
-import { TASK_STATUSES, type ClientTask, type Prepared, type Proposal, type Task, type TaskBoard, type TaskOwner, type TaskSource, type TaskStatus } from '../../src/features/task-board/types';
+import { DEFAULT_PREFS, TASK_STATUSES, type ClientTask, type NotifyPrefs, type Prepared, type Proposal, type Task, type TaskBoard, type TaskOwner, type TaskSource, type TaskStatus } from '../../src/features/task-board/types';
 import { verifyQuote } from '../prior-art/analyze';
 
 export { verifyQuote };
@@ -61,9 +61,11 @@ export function mergeTasks(existing: Task[], incoming: Task[]): { tasks: Task[];
 }
 
 /** The Portal view: client tasks plus shared lawyer tasks, with no prepared or internal fields (R9, R16). */
-export function clientView(board: TaskBoard, matter?: Pick<MatterWithDeadlines, 'documents'>): { tasks: ClientTask[] } {
+/** The Portal's projection. It carries the client's own preferences and never the outbox. */
+export function clientView(board: TaskBoard, matter?: Pick<MatterWithDeadlines, 'documents'>): { tasks: ClientTask[]; prefs: NotifyPrefs } {
   const sharedDocs = new Set((matter?.documents ?? []).filter(doc => doc.shared).map(doc => doc.id));
   return {
+    prefs: { ...DEFAULT_PREFS, ...board.prefs },
     tasks: board.tasks.filter(task => task.owner === 'client' || task.sharedWithClient).map(task => {
       const base: ClientTask = { id: task.id, owner: task.owner, title: task.title, status: task.status, sharedWithClient: task.owner === 'client' || task.sharedWithClient, needsUpload: task.owner === 'client' && task.needsUpload, ...(task.dueDate ? { dueDate: task.dueDate } : {}), ...(task.status === 'waiting' && task.waitingOn ? { waitingOn: task.waitingOn } : {}), ...(task.owner === 'client' && task.uploadedDocumentId ? { uploadedDocumentId: task.uploadedDocumentId } : {}) };
       if (task.owner === 'lawyer') return base;
