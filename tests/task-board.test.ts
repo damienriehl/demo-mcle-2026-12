@@ -104,7 +104,7 @@ describe('uploads', () => {
     const result = await ingestUpload({ matterId: 'm1', taskId: task.id, filename: 'statement.docx', bytes: new Uint8Array([1]), matters, tasks, convert: async () => 'Corrected statement text.' });
     const added = matters.current().documents.at(-1)!;
     expect(added).toMatchObject({ id: result.documentId, kind: 'client-upload', shared: true, body: 'Corrected statement text.' });
-    expect(tasks.read('m1').tasks[0]).toMatchObject({ status: 'done', needsUpload: false });
+    expect(tasks.read('m1').tasks[0]).toMatchObject({ status: 'done', uploadedDocumentId: result.documentId });
   });
 
   it('converts a real .txt upload without the converter', async () => {

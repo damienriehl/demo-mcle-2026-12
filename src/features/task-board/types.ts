@@ -22,6 +22,8 @@ export type Task = {
   source: TaskSource;
   needsUpload: boolean;
   prepared?: Prepared;
+  /** Set when the client's upload completed this task. */
+  uploadedDocumentId?: string;
   createdAt: string;
 };
 export type Proposal = {
@@ -35,6 +37,6 @@ export type Proposal = {
   createdAt: string;
 };
 export type TaskBoard = { tasks: Task[]; proposals: Proposal[] };
-export type ClientTask = Pick<Task, 'id' | 'owner' | 'title' | 'status' | 'sharedWithClient' | 'dueDate' | 'needsUpload'> & { detail?: string; source?: TaskSource };
+export type ClientTask = Pick<Task, 'id' | 'owner' | 'title' | 'status' | 'sharedWithClient' | 'dueDate' | 'needsUpload' | 'uploadedDocumentId'> & { detail?: string; source?: TaskSource };
 
 export const STATUS_LABEL: Record<TaskStatus, string> = { todo: 'To do', doing: 'Doing', done: 'Done' };

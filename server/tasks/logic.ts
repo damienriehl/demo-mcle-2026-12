@@ -65,7 +65,7 @@ export function clientView(board: TaskBoard, matter?: Pick<MatterWithDeadlines, 
   const sharedDocs = new Set((matter?.documents ?? []).filter(doc => doc.shared).map(doc => doc.id));
   return {
     tasks: board.tasks.filter(task => task.owner === 'client' || task.sharedWithClient).map(task => {
-      const base: ClientTask = { id: task.id, owner: task.owner, title: task.title, status: task.status, sharedWithClient: task.owner === 'client' || task.sharedWithClient, needsUpload: task.owner === 'client' && task.needsUpload, ...(task.dueDate ? { dueDate: task.dueDate } : {}) };
+      const base: ClientTask = { id: task.id, owner: task.owner, title: task.title, status: task.status, sharedWithClient: task.owner === 'client' || task.sharedWithClient, needsUpload: task.owner === 'client' && task.needsUpload, ...(task.dueDate ? { dueDate: task.dueDate } : {}), ...(task.owner === 'client' && task.uploadedDocumentId ? { uploadedDocumentId: task.uploadedDocumentId } : {}) };
       if (task.owner === 'lawyer') return base;
       const source: TaskSource | undefined = task.source.kind === 'document'
         ? (sharedDocs.has(task.source.ref) ? task.source : undefined)

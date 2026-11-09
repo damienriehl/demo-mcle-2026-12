@@ -33,7 +33,7 @@ export async function ingestUpload({ matterId, taskId, filename, bytes, matters,
   const updated = matters.upsert({ ...stored, documents: [...stored.documents, {
     id: documentId, title: `${filename} (uploaded for: ${task.title})`.slice(0, 200), kind: 'client-upload', body: text.slice(0, 40000), shared: true,
   }] } as Matter);
-  const board = tasks.update(matterId, current => ({ ...current, tasks: current.tasks.map(item => (item.id === taskId ? { ...item, status: 'done', needsUpload: false, detail: `${item.detail} Uploaded: ${filename}.`.trim() } : item)) }));
+  const board = tasks.update(matterId, current => ({ ...current, tasks: current.tasks.map(item => (item.id === taskId ? { ...item, status: 'done', uploadedDocumentId: documentId, detail: `${item.detail} Uploaded: ${filename}.`.trim() } : item)) }));
   return { matter: updated as MatterWithDeadlines, documentId, text, board };
 }
 
