@@ -35,6 +35,28 @@ A demo legal-matter app built live on stage. Synthetic matters only.
   print, or log it, never read `.env*` files, and never use `ANTHROPIC_API_KEY` for the app.
 - Environment variable names are listed in `.env.example`.
 
+## Draft Compare
+
+The **Compare drafts** tab lives in `src/features/draft-compare/`. The server entry point is
+`server/features/draft-compare.ts`; `server/drafts/` handles routes, normalization, comparison,
+advice, downloads, and storage, and `server/folio/` tags legal concepts. Bundled draft pairs
+live in `data/seed/drafts/`. With no key, those pairs replay canned parties and advice.
+
+Comparison records and Word files live in `data/comparisons/<matterId>/<comparisonId>/`.
+This folder is gitignored, survives server restarts, and is removed by `npm run reset`.
+
+For .doc, .rtf, .odt, and HTML, install LibreOffice or set `MATTER_COCKPIT_SOFFICE` to a
+converter executable. To use the optional container, build it with
+`docker build -t matter-cockpit-soffice:1 scripts/soffice`, then set
+`MATTER_COCKPIT_SOFFICE` to the absolute path of `scripts/soffice-container.sh`.
+
+Rebuild the sample Word files and settlement PDF from Markdown with
+`node --import tsx scripts/build-drafts.ts`. Then regenerate canned parties, tags, and
+advice with `node --import tsx scripts/generate-canned.ts`; this step calls the model and
+requires a configured app key. Pass a pair folder name, such as
+`transactional-asset-purchase`, to regenerate only that pair. Rebuild canned results after
+editing sample text so their content hashes and verified counter-language match the drafts.
+
 ## Shared matter store
 
 Real public court orders are bundled under `data/seed/orders/public/` as source documents, while public-record matters are created only at runtime and never seeded.
