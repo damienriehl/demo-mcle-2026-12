@@ -1,4 +1,4 @@
-import { mkdirSync, readdirSync, readFileSync, renameSync, writeFileSync } from 'node:fs';
+import { mkdirSync, readdirSync, readFileSync, renameSync, rmSync, writeFileSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { mattersSchema } from '../src/data/schema';
@@ -20,6 +20,7 @@ export function resetDemo({
   mkdirSync(dirname(filePath), { recursive: true });
   writeFileSync(`${filePath}.tmp`, `${JSON.stringify(matters, null, 2)}\n`);
   renameSync(`${filePath}.tmp`, filePath);
+  rmSync(join(dirname(filePath), 'comparisons'), { recursive: true, force: true });
   return matters;
 }
 
