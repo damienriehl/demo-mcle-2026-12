@@ -29,6 +29,8 @@ after the deadline engine is injected. Reset never computes or stores due dates.
 
 ## Fictional scheduling orders
 
+Real public court orders are bundled under `data/seed/orders/public/` as source documents, while public-record matters are created only at runtime and never seeded.
+
 `orders/` contains three fictional, two-page court orders. Each has an HTML source,
 a committed PDF, and a matching `.extraction.json` with the court-set dates, exact
 quotes, and 1-based page numbers. Every PDF page is marked

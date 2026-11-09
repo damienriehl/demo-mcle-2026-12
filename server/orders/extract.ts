@@ -122,8 +122,9 @@ export function createSchedulingOrderRoutes(options: Options = {}): Hono {
         }, abort.signal), accept, orderTool.name, 'dates'));
       } else {
         const orders = await bundledOrders(resolve(options.ordersDirectory ?? 'data/seed/orders'));
+        const publicOrders = await bundledOrders(resolve('data/seed/orders/public'));
         const hash = textHash(pages);
-        let canned = orders.get(hash);
+        let canned = orders.get(hash) ?? publicOrders.get(hash);
         const extraDirectories = (process.env.MATTER_COCKPIT_EXTRA_ORDERS_DIR ?? '').split(',').map(path => path.trim()).filter(isAbsolute);
         for (const directory of extraDirectories) {
           const extra = await bundledOrders(directory, true);

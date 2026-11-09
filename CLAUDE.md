@@ -37,6 +37,8 @@ A demo legal-matter app built live on stage. Synthetic matters only.
 
 ## Shared matter store
 
+Real public court orders are bundled under `data/seed/orders/public/` as source documents, while public-record matters are created only at runtime and never seeded.
+
 add a matter by editing data/matters.json; write trigger dates, never due dates
 
 The runtime file is a JSON array of synthetic matters. It is gitignored; `npm run reset`

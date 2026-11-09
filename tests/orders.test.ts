@@ -1,7 +1,8 @@
-import { readFileSync } from 'node:fs';
+import { readFileSync, readdirSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import { pageTexts, textPages } from '../server/orders/pdf-text';
 import { verifyQuote } from '../server/orders/verify-quote';
+import { extractionSchema } from '../server/orders/prompt';
 
 const expected = {
   'hennepin-lanternfish': {
@@ -57,6 +58,20 @@ describe('bundled scheduling orders', () => {
     expect(matter.timeline.at(-1).event).toBe('Scheduling order entered');
     expect(matter.deadlines.every((entry: { deadlineRuleId: string }) => entry.deadlineRuleId !== 'court-order-date')).toBe(true);
   });
+
+  it.each(readdirSync('data/seed/orders/public').filter(name => name.endsWith('.extraction.json')))(
+    'public/%s has court metadata and every canned quote verifies against its PDF', async name => {
+      const { order, ...value } = JSON.parse(readFileSync(`data/seed/orders/public/${name}`, 'utf8'));
+      const extraction = extractionSchema.parse(value);
+      expect(extraction.court).toBe('federal');
+      expect(extraction.courtName).toEqual(expect.stringMatching(/district.*minnesota/i));
+      expect(extraction.caseNumber).toEqual(expect.any(String));
+      expect(extraction.shortCaption).toEqual(expect.any(String));
+      expect(order).toBe(name.replace('.extraction.json', ''));
+      const pages = await pageTexts(new Uint8Array(readFileSync(`data/seed/orders/public/${order}.pdf`)));
+      for (const entry of extraction.dates) expect(verifyQuote(entry, pages), entry.quote).toEqual({ ok: true });
+    },
+  );
 });
 
 describe('quote verification', () => {
