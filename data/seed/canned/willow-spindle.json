@@ -40,7 +40,7 @@
     },
     {
       "id": "event-4",
-      "event": "Client workplan signed; draft delivery agreed for ten days after reset",
+      "event": "Client workplan signed; draft delivery agreed for thirteen days after signing",
       "date": "-3"
     },
     {
@@ -54,7 +54,7 @@
       "id": "doc-1",
       "title": "Family motion hearing notice",
       "kind": "notice",
-      "body": "SYNTHETIC DEMO DOCUMENT. Ordinary temporary-custody motion hearing thirty-four days after reset. No emergency, post-trial motion, or special scheduling order. Client is moving for a stable exchange schedule.",
+      "body": "SYNTHETIC DEMO DOCUMENT. The ordinary temporary-custody motion hearing is set for forty days after it was scheduled. No emergency, post-trial motion, or special scheduling order. Client is moving for a stable exchange schedule.",
       "shared": true
     },
     {
@@ -68,7 +68,7 @@
       "id": "doc-3",
       "title": "Agreed workplan",
       "kind": "agreement",
-      "body": "SYNTHETIC DEMO DOCUMENT. Workplan § 6: Counsel will deliver the motion draft and proposed exchange schedule. Delivery is due ten calendar days after the demo reset date. This is an agreed draft-delivery milestone, separate from any filing deadline.",
+      "body": "SYNTHETIC DEMO DOCUMENT. Workplan § 6: Counsel will deliver the motion draft and proposed exchange schedule. Delivery is due thirteen calendar days after the client workplan was signed. This is an agreed draft-delivery milestone, separate from any filing deadline.",
       "shared": true
     }
   ],
@@ -118,255 +118,255 @@
   "provenance": {
     "id": {
       "source": "stated",
-      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+      "evidence": "Expressly stated in the matter record."
     },
     "title": {
       "source": "stated",
-      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+      "evidence": "Expressly stated in the matter record."
     },
     "practiceArea": {
       "source": "stated",
-      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+      "evidence": "Expressly stated in the matter record."
     },
     "forum": {
       "source": "stated",
-      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+      "evidence": "Expressly stated in the matter record."
     },
     "synthetic": {
       "source": "stated",
-      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+      "evidence": "Expressly stated in the matter record."
     },
     "client.name": {
       "source": "stated",
-      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+      "evidence": "Expressly stated in the matter record."
     },
     "client.contact": {
       "source": "stated",
-      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+      "evidence": "Expressly stated in the matter record."
     },
     "parties.0.name": {
       "source": "stated",
-      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+      "evidence": "Expressly stated in the matter record."
     },
     "parties.0.role": {
       "source": "stated",
-      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+      "evidence": "Expressly stated in the matter record."
     },
     "parties.1.name": {
       "source": "stated",
-      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+      "evidence": "Expressly stated in the matter record."
     },
     "parties.1.role": {
       "source": "stated",
-      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+      "evidence": "Expressly stated in the matter record."
     },
     "parties.2.name": {
       "source": "stated",
-      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+      "evidence": "Expressly stated in the matter record."
     },
     "parties.2.role": {
       "source": "stated",
-      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+      "evidence": "Expressly stated in the matter record."
     },
     "timeline.0.id": {
       "source": "stated",
-      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+      "evidence": "Expressly stated in the matter record."
     },
     "timeline.0.event": {
       "source": "stated",
-      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+      "evidence": "Expressly stated in the matter record."
     },
     "timeline.0.date": {
       "source": "stated",
-      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+      "evidence": "Expressly stated in the matter record."
     },
     "timeline.1.id": {
       "source": "stated",
-      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+      "evidence": "Expressly stated in the matter record."
     },
     "timeline.1.event": {
       "source": "stated",
-      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+      "evidence": "Expressly stated in the matter record."
     },
     "timeline.1.date": {
       "source": "stated",
-      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+      "evidence": "Expressly stated in the matter record."
     },
     "timeline.2.id": {
       "source": "stated",
-      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+      "evidence": "Expressly stated in the matter record."
     },
     "timeline.2.event": {
       "source": "stated",
-      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+      "evidence": "Expressly stated in the matter record."
     },
     "timeline.2.date": {
       "source": "stated",
-      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+      "evidence": "Expressly stated in the matter record."
     },
     "timeline.3.id": {
       "source": "stated",
-      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+      "evidence": "Expressly stated in the matter record."
     },
     "timeline.3.event": {
       "source": "stated",
-      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+      "evidence": "Expressly stated in the matter record."
     },
     "timeline.3.date": {
       "source": "stated",
-      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+      "evidence": "Expressly stated in the matter record."
     },
     "timeline.4.id": {
       "source": "stated",
-      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+      "evidence": "Expressly stated in the matter record."
     },
     "timeline.4.event": {
       "source": "stated",
-      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+      "evidence": "Expressly stated in the matter record."
     },
     "timeline.4.date": {
       "source": "stated",
-      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+      "evidence": "Expressly stated in the matter record."
     },
     "documents.0.id": {
       "source": "stated",
-      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+      "evidence": "Expressly stated in the matter record."
     },
     "documents.0.title": {
       "source": "stated",
-      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+      "evidence": "Expressly stated in the matter record."
     },
     "documents.0.kind": {
       "source": "stated",
-      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+      "evidence": "Expressly stated in the matter record."
     },
     "documents.0.body": {
       "source": "stated",
-      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+      "evidence": "Expressly stated in the matter record."
     },
     "documents.0.shared": {
       "source": "stated",
-      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+      "evidence": "Expressly stated in the matter record."
     },
     "documents.1.id": {
       "source": "stated",
-      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+      "evidence": "Expressly stated in the matter record."
     },
     "documents.1.title": {
       "source": "stated",
-      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+      "evidence": "Expressly stated in the matter record."
     },
     "documents.1.kind": {
       "source": "stated",
-      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+      "evidence": "Expressly stated in the matter record."
     },
     "documents.1.body": {
       "source": "stated",
-      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+      "evidence": "Expressly stated in the matter record."
     },
     "documents.1.shared": {
       "source": "stated",
-      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+      "evidence": "Expressly stated in the matter record."
     },
     "documents.2.id": {
       "source": "stated",
-      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+      "evidence": "Expressly stated in the matter record."
     },
     "documents.2.title": {
       "source": "stated",
-      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+      "evidence": "Expressly stated in the matter record."
     },
     "documents.2.kind": {
       "source": "stated",
-      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+      "evidence": "Expressly stated in the matter record."
     },
     "documents.2.body": {
       "source": "stated",
-      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+      "evidence": "Expressly stated in the matter record."
     },
     "documents.2.shared": {
       "source": "stated",
-      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+      "evidence": "Expressly stated in the matter record."
     },
     "deadlines.0.id": {
       "source": "stated",
-      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+      "evidence": "Expressly stated in the matter record."
     },
     "deadlines.0.label": {
       "source": "stated",
-      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+      "evidence": "Expressly stated in the matter record."
     },
     "deadlines.0.deadlineRuleId": {
       "source": "stated",
-      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+      "evidence": "Expressly stated in the matter record."
     },
     "deadlines.0.trigger.event": {
       "source": "stated",
-      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+      "evidence": "Expressly stated in the matter record."
     },
     "deadlines.0.trigger.date": {
       "source": "stated",
-      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+      "evidence": "Expressly stated in the matter record."
     },
     "deadlines.1.id": {
       "source": "stated",
-      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+      "evidence": "Expressly stated in the matter record."
     },
     "deadlines.1.label": {
       "source": "stated",
-      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+      "evidence": "Expressly stated in the matter record."
     },
     "deadlines.1.deadlineRuleId": {
       "source": "stated",
-      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+      "evidence": "Expressly stated in the matter record."
     },
     "deadlines.1.trigger.event": {
       "source": "stated",
-      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+      "evidence": "Expressly stated in the matter record."
     },
     "deadlines.1.trigger.date": {
       "source": "stated",
-      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+      "evidence": "Expressly stated in the matter record."
     },
     "deadlines.2.id": {
       "source": "stated",
-      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+      "evidence": "Expressly stated in the matter record."
     },
     "deadlines.2.label": {
       "source": "stated",
-      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+      "evidence": "Expressly stated in the matter record."
     },
     "deadlines.2.deadlineRuleId": {
       "source": "stated",
-      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+      "evidence": "Expressly stated in the matter record."
     },
     "deadlines.2.trigger.event": {
       "source": "stated",
-      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+      "evidence": "Expressly stated in the matter record."
     },
     "deadlines.2.trigger.date": {
       "source": "stated",
-      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+      "evidence": "Expressly stated in the matter record."
     },
     "deadlines.2.inputs.dueDate": {
       "source": "stated",
-      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+      "evidence": "Expressly stated in the matter record."
     },
     "deadlines.2.inputs.section": {
       "source": "stated",
-      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+      "evidence": "Expressly stated in the matter record."
     },
     "clientFacing.status": {
       "source": "stated",
-      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+      "evidence": "Expressly stated in the matter record."
     },
     "clientFacing.nextSteps.0": {
       "source": "stated",
-      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+      "evidence": "Expressly stated in the matter record."
     },
     "clientFacing.nextSteps.1": {
       "source": "stated",
-      "evidence": "Explicitly stated in this authored synthetic demo fixture."
+      "evidence": "Expressly stated in the matter record."
     }
   }
 }

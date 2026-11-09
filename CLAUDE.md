@@ -13,6 +13,7 @@ A demo legal-matter app built live on stage. Synthetic matters only.
 - `npm run dev` starts everything on http://127.0.0.1:8982. Client edits hot-reload in the browser;
   server edits (anything under `server/`) apply on the next request. Never restart the server for a change.
 - `npm run typecheck`, `npm test`, `npm run e2e` before calling a change done.
+- `E2E_PORT=8996 npm run e2e` selects the browser-test server port (default 8982).
 - `npm run smoke:ai` checks the configured key and model; `npm run reset` rebuilds the demo store.
 
 ## Where things go
