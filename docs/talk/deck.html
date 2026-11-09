@@ -1,0 +1,616 @@
+<title>Matter Cockpit Talk</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,700;1,6..72,400;1,6..72,500&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: one 1920x1080 law-review "page" scaled to fit; running head, body, footnote rule. Single deliberate paper look (Matter Cockpit's Law Review theme). */
+:root {
+  color-scheme: light;
+  --paper: #f7f3ea;
+  --sheet: #fdfbf6;
+  --ink: #1b1a17;
+  --ink-muted: #4a453d;
+  --rule: #c9bfa9;
+  --oxblood: #7a1f1f;
+  --ins: #173e83;
+  --del: #8d2020;
+  --move: #225638;
+  --amber: #704b00;
+  --chip: #e9e0ce;
+  --stage-ground: #2a2622;
+  --display: 'Newsreader', Georgia, 'Times New Roman', serif;
+  --body: 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif;
+  --mono: 'IBM Plex Mono', 'Courier New', monospace;
+}
+html, body { height: 100%; }
+body {
+  margin: 0; background: var(--stage-ground); color: var(--ink);
+  font-family: var(--body); font-size: 18px; overflow: hidden;
+  padding-left: max(0px, env(safe-area-inset-left, 0px));
+  padding-right: max(0px, env(safe-area-inset-right, 0px));
+}
+#viewport { position: fixed; inset: 0 0 64px 0; display: grid; place-items: center; overflow: hidden; }
+#deck { width: 1920px; height: 1080px; position: relative; transform-origin: center center; flex: none; }
+.slide {
+  position: absolute; inset: 0; background: var(--sheet);
+  background-image:
+    radial-gradient(circle at 12% 18%, rgba(122,31,31,.035), transparent 40%),
+    radial-gradient(circle at 88% 82%, rgba(23,62,131,.03), transparent 45%),
+    repeating-linear-gradient(0deg, rgba(27,26,23,.012) 0 1px, transparent 1px 3px);
+  padding: 72px 120px 64px; box-sizing: border-box;
+  display: grid; grid-template-rows: auto 1fr auto; gap: 40px;
+  opacity: 0; visibility: hidden; transition: opacity .35s ease;
+}
+.slide.on { opacity: 1; visibility: visible; }
+@media (prefers-reduced-motion: reduce) { .slide { transition: none; } .slide.on .rise { animation: none !important; } }
+.slide.on .rise { animation: rise .55s cubic-bezier(.2,.7,.2,1) both; }
+.slide.on .rise:nth-child(2) { animation-delay: .06s; } .slide.on .rise:nth-child(3) { animation-delay: .12s; }
+.slide.on .rise:nth-child(4) { animation-delay: .18s; } .slide.on .rise:nth-child(5) { animation-delay: .24s; }
+.slide.on .rise:nth-child(6) { animation-delay: .30s; } .slide.on .rise:nth-child(7) { animation-delay: .36s; }
+@keyframes rise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+
+.head { display: flex; justify-content: space-between; align-items: baseline; border-bottom: 2px solid var(--ink); padding-bottom: 14px;
+  font-family: var(--body); font-weight: 600; font-size: 24px; letter-spacing: .12em; text-transform: uppercase; color: var(--ink-muted); }
+.head b { color: var(--oxblood); font-weight: 600; }
+.foot { border-top: 1px solid var(--rule); padding-top: 14px; font-size: 24px; color: var(--ink-muted); display: flex; justify-content: space-between; gap: 40px; }
+.foot sup, .fn { color: var(--oxblood); font-weight: 600; }
+
+h1, h2, h3 { font-family: var(--display); font-weight: 500; margin: 0; text-wrap: balance; color: var(--ink); }
+h1 { font-size: 132px; line-height: .98; letter-spacing: -.02em; }
+h2 { font-size: 84px; line-height: 1.02; letter-spacing: -.015em; }
+h3 { font-size: 44px; line-height: 1.1; }
+p, li { font-size: 34px; line-height: 1.38; margin: 0; }
+.lede { font-family: var(--display); font-size: 46px; line-height: 1.25; color: var(--ink-muted); max-width: 30ch; }
+.label { font-size: 24px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--oxblood); }
+.muted { color: var(--ink-muted); }
+.mono { font-family: var(--mono); }
+del { color: var(--del); text-decoration-thickness: 6px; text-decoration-color: var(--del); }
+ins { color: var(--ins); text-decoration: underline; text-decoration-thickness: 5px; text-underline-offset: 10px; }
+ins::before { content: ""; }
+.mid { display: flex; flex-direction: column; justify-content: center; gap: 36px; min-height: 0; }
+.cols { display: grid; grid-template-columns: 1.05fr 1fr; gap: 80px; align-items: center; min-height: 0; }
+.cols.top { align-items: start; }
+ul.plain { list-style: none; padding: 0; margin: 0; display: grid; gap: 22px; }
+ul.plain li { padding-left: 44px; position: relative; }
+ul.plain li::before { content: "§"; position: absolute; left: 0; color: var(--oxblood); font-family: var(--display); font-weight: 700; }
+ul.check li::before { content: "✓"; font-family: var(--body); }
+
+.card { background: var(--paper); border: 1px solid var(--rule); padding: 36px 40px; display: grid; gap: 18px; }
+.card .label { color: var(--ink-muted); }
+.step { display: grid; grid-template-columns: 220px 1fr; gap: 24px; align-items: baseline; padding: 14px 0; border-bottom: 1px solid var(--rule); font-size: 30px; }
+.step:last-child { border-bottom: 0; }
+.step .d { font-family: var(--display); font-size: 34px; font-variant-numeric: tabular-nums; }
+.step .why { color: var(--ink-muted); font-size: 26px; display: block; margin-top: 4px; }
+.quote { font-family: var(--display); font-style: italic; font-size: 34px; line-height: 1.35; border-left: 4px solid var(--oxblood); padding-left: 28px; color: var(--ink); }
+.chip { display: inline-block; background: var(--chip); padding: 4px 14px; font-size: 24px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; }
+.harms { background: var(--del); color: var(--sheet); } .helps { background: var(--move); color: var(--sheet); } .neutral { background: var(--ink-muted); color: var(--sheet); }
+
+/* title */
+.title-slide { grid-template-rows: auto 1fr auto; }
+.title-slide h1 { font-size: 168px; }
+.title-slide .kicker { font-family: var(--display); font-style: italic; font-size: 52px; color: var(--ink-muted); }
+
+/* divider slides */
+.divider { background: var(--oxblood); background-image: repeating-linear-gradient(135deg, rgba(253,251,246,.04) 0 2px, transparent 2px 22px); color: var(--sheet); }
+.divider .head { color: #f3e6d8; border-color: #f3e6d8; } .divider .head b { color: var(--sheet); }
+.divider h2, .divider h1 { color: var(--sheet); }
+.divider .lede, .divider p, .divider li { color: #f6ece2; }
+.divider .foot { color: #f3e6d8; border-color: rgba(243,230,216,.5); }
+.divider .label { color: #f3e6d8; }
+.divider ul.plain li::before { color: #f3e6d8; }
+.beats { display: grid; grid-template-columns: repeat(5, 1fr); gap: 0; border-top: 2px solid #f3e6d8; }
+.beats div { padding: 24px 28px 0 0; display: grid; gap: 10px; align-content: start; }
+.beats .t { font-family: var(--mono); font-size: 26px; color: #f3e6d8; }
+.beats .n { font-family: var(--display); font-size: 40px; line-height: 1.1; color: var(--sheet); }
+
+/* numbers */
+.figs { display: grid; grid-template-columns: repeat(4, 1fr); border-top: 2px solid var(--ink); border-bottom: 1px solid var(--rule); }
+.figs div { padding: 28px 28px 28px 0; display: grid; gap: 6px; }
+.figs div + div { padding-left: 28px; border-left: 1px solid var(--rule); }
+.figs .v { font-family: var(--display); font-size: 104px; line-height: 1; font-variant-numeric: tabular-nums; color: var(--oxblood); }
+.figs .k { font-size: 28px; color: var(--ink-muted); }
+
+/* loop */
+.loop { display: grid; grid-template-columns: repeat(5, 1fr); gap: 0; counter-reset: s; }
+.loop div { border-top: 6px solid var(--ink); padding: 26px 26px 0 0; display: grid; gap: 12px; align-content: start; }
+.loop div:nth-child(odd) { border-color: var(--oxblood); }
+.loop .n { font-family: var(--display); font-size: 54px; }
+.loop p { font-size: 28px; color: var(--ink-muted); }
+
+/* ideas grid */
+.ideas { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; }
+.ideas .card { padding: 28px 32px; gap: 10px; }
+.ideas h3 { font-size: 38px; }
+.ideas p { font-size: 27px; color: var(--ink-muted); line-height: 1.32; }
+
+/* redline specimen */
+.redline { font-family: var(--display); font-size: 36px; line-height: 1.5; background: var(--paper); border: 1px solid var(--rule); padding: 36px 40px; }
+.redline del { text-decoration-thickness: 3px; }
+.redline ins { text-decoration-thickness: 3px; text-underline-offset: 6px; }
+
+.eco { display: grid; grid-template-columns: 300px 1fr 640px; border-top: 2px solid var(--ink); }
+.eco > div { font-size: 30px; line-height: 1.3; padding: 20px 24px 20px 0; border-bottom: 1px solid var(--rule); }
+.eco .mono { font-size: 26px; color: var(--ink-muted); overflow-wrap: anywhere; }
+.eco .eh { font-size: 24px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--oxblood); }
+ol.steps { margin: 0; padding-left: 56px; display: grid; gap: 12px; font-family: var(--display); }
+ol.steps li { font-size: 46px; line-height: 1.2; padding-left: 8px; }
+ol.steps li::marker { color: var(--oxblood); font-weight: 700; }
+.qrbox { display: grid; gap: 20px; justify-items: center; background: var(--paper); border: 1px solid var(--rule); padding: 40px; }
+#qr { width: 440px; height: 440px; background: #fff; padding: 20px; box-sizing: content-box; }
+#qr img, #qr canvas { width: 440px !important; height: 440px !important; }
+
+/* chrome */
+#bar { position: fixed; left: 0; right: 0; bottom: 0; height: 64px; display: flex; align-items: center; gap: 10px;
+  padding: 0 max(16px, env(safe-area-inset-right, 0px)) env(safe-area-inset-bottom, 0px) max(16px, env(safe-area-inset-left, 0px));
+  background: var(--stage-ground); color: #efe7da; font-size: 18px; box-sizing: border-box; transition: opacity .3s; }
+#bar.dim { opacity: 0; } #bar:hover, #bar:focus-within { opacity: 1; }
+#bar a, #bar button { font: 600 18px var(--body); color: #f7f1e6; background: #3d3731; border: 1px solid #5c544b; padding: 8px 14px; text-decoration: none; cursor: pointer; white-space: nowrap; }
+#bar a:hover, #bar button:hover { background: #4d463f; }
+#bar :focus-visible, #setup :focus-visible { outline: 3px solid #ffd27a; outline-offset: 2px; }
+#bar kbd { font-family: var(--mono); font-size: 18px; color: #ffd9a8; margin-right: 6px; }
+#count { font-family: var(--mono); min-width: 7ch; text-align: center; }
+#bar .grow { flex: 1; }
+#progress { position: fixed; left: 0; bottom: 64px; height: 4px; background: var(--oxblood); transition: width .3s; }
+@media (max-width: 720px) { #bar .wide { display: none; } }
+
+#setup { position: fixed; inset: 0; background: rgba(20,18,16,.72); display: grid; place-items: center; padding: 16px; z-index: 20; }
+#setup[hidden] { display: none; }
+#setup .panel { background: var(--sheet); color: var(--ink); max-width: 860px; width: 100%; max-height: 90vh; overflow: auto; padding: 32px 36px; box-sizing: border-box; display: grid; gap: 18px; border-top: 6px solid var(--oxblood); }
+#setup h2 { font-size: 40px; }
+#setup p, #setup li, #setup label { font-size: 20px; line-height: 1.45; }
+#setup ol { margin: 0; padding-left: 26px; display: grid; gap: 8px; }
+#setup input { font: 18px var(--mono); padding: 10px 12px; border: 1px solid var(--ink-muted); background: #fff; color: var(--ink); width: 100%; box-sizing: border-box; }
+#setup .row { display: grid; gap: 6px; }
+#setup .btns { display: flex; gap: 12px; flex-wrap: wrap; }
+#setup button { font: 600 20px var(--body); padding: 10px 18px; background: var(--oxblood); color: var(--sheet); border: 0; cursor: pointer; }
+#setup button.secondary { background: var(--chip); color: var(--ink); }
+#setup code { font-family: var(--mono); font-size: 18px; background: var(--chip); padding: 1px 6px; overflow-wrap: anywhere; }
+#setup table { border-collapse: collapse; font-size: 19px; }
+#setup td { padding: 4px 16px 4px 0; vertical-align: top; }
+</style>
+
+<div id="viewport"><div id="deck">
+
+<!-- 1 -->
+<section class="slide title-slide" data-name="title">
+  <div class="head"><span><b>Matter Cockpit</b> · CLE, November 9, 2026</span><span>Damien Riehl</span></div>
+  <div class="mid">
+    <div class="label rise">A live build session</div>
+    <h1 class="rise">Lawyers <del>buy</del> <ins>build</ins> their&nbsp;software.</h1>
+    <p class="kicker rise">One lawyer, one voice, and Claude Code. Then you take the microphone.</p>
+  </div>
+  <div class="foot"><span>Synthetic matters, real public court orders, and a live model.</span><span>→ to begin</span></div>
+</section>
+
+<!-- 2 -->
+<section class="slide" data-name="yesterday">
+  <div class="head"><span><b>§ 1</b> · Premise</span><span>Matter Cockpit</span></div>
+  <div class="mid">
+    <h2 class="rise">On November 8, at 2:52 p.m., this app did not exist.</h2>
+    <p class="lede rise">I described it, mostly out loud. A day later it tracks deadlines, reads scheduling orders, and redlines contracts.</p>
+    <div class="figs rise">
+      <div><span class="v">99</span><span class="k">commits</span></div>
+      <div><span class="v">6</span><span class="k">merged pull requests</span></div>
+      <div><span class="v">481</span><span class="k">passing tests</span></div>
+      <div><span class="v">24</span><span class="k">hours, start to finish</span></div>
+    </div>
+  </div>
+  <div class="foot"><span><span class="fn">1</span> Counts from the repository's git history: 408 unit tests and 73 browser tests.</span><span>2</span></div>
+</section>
+
+<!-- 3 -->
+<section class="slide" data-name="how">
+  <div class="head"><span><b>§ 1</b> · Method</span><span>How it got built</span></div>
+  <div class="mid">
+    <h2 class="rise">I talk. Agents plan, write, test, and check each other.</h2>
+    <div class="loop rise">
+      <div><span class="n">Brainstorm</span><p>I describe the problem by voice, usually from my phone.</p></div>
+      <div><span class="n">Plan</span><p>Claude writes the product contract and splits the work.</p></div>
+      <div><span class="n">Work</span><p>Coding agents build in parallel, each in its own copy of the code.</p></div>
+      <div><span class="n">Review</span><p>A second model hunts for bugs before anything merges.</p></div>
+      <div><span class="n">Compound</span><p>Each lesson becomes a test or a rule, so the next feature starts smarter.</p></div>
+    </div>
+    <p class="muted rise">My job: taste, judgment, and saying no. The same job I do with associates.</p>
+  </div>
+  <div class="foot"><span>Claude Code orchestrates. Codex workers write code. Compound Engineering supplies the loop.</span><span>3</span></div>
+</section>
+
+<!-- 4 -->
+<section class="slide divider" data-name="tour">
+  <div class="head"><span><b>§ 2</b> · Tour</span><span>What we built</span></div>
+  <div class="mid">
+    <h1 class="rise">Seven features, one practice.</h1>
+    <p class="lede rise" style="max-width:34ch">Every one started as a sentence spoken into a microphone.</p>
+  </div>
+  <div class="foot"><span>Radar · Cockpit · Portal · Ramble · Trust but Verify · Scheduling orders · Draft Compare</span><span>4</span></div>
+</section>
+
+<!-- 5 -->
+<section class="slide" data-name="radar">
+  <div class="head"><span><b>§ 2.1</b> · Radar, Cockpit, Portal</span><span>Three views, one store</span></div>
+  <div class="cols">
+    <div class="mid">
+      <h2 class="rise">Every deadline, every matter, one glance.</h2>
+      <ul class="plain rise">
+        <li><b>Deadline Radar</b> shows every deadline across ten matters, with a "This week" band on top.</li>
+        <li><b>Cockpit</b> opens one matter in depth: parties, timeline, documents, and tabs.</li>
+        <li><b>Client Portal</b> shows the client the same matter, minus our internal reasoning.</li>
+      </ul>
+    </div>
+    <div class="card rise">
+      <span class="label">One edit, three screens</span>
+      <p>Change a trigger date and the Radar, the Cockpit, and the Portal update live.</p>
+      <p class="muted" style="font-size:28px">We store trigger dates, never due dates. Code computes every due date on read.</p>
+    </div>
+  </div>
+  <div class="foot"><span>Seven practice areas: litigation, transactional, patent, bankruptcy, family, employment, and regulatory.</span><span>5</span></div>
+</section>
+
+<!-- 6 -->
+<section class="slide" data-name="ramble">
+  <div class="head"><span><b>§ 2.2</b> · Ramble intake</span><span>Speak a matter</span></div>
+  <div class="cols">
+    <div class="mid">
+      <h2 class="rise">Ramble for a minute. Get a structured matter.</h2>
+      <ul class="plain rise">
+        <li>Talk the way you would to a paralegal. The model returns a matter that passes the schema.</li>
+        <li><b>Embellish</b> fills realistic gaps and marks each one invented.</li>
+        <li><b>Show what I said</b> puts your words next to each field.</li>
+      </ul>
+    </div>
+    <div class="card rise">
+      <span class="label">Every field carries provenance</span>
+      <div class="step"><span class="d">Stated</span><span>You said it.</span></div>
+      <div class="step"><span class="d">Inferred</span><span>The model reasoned to it from your words.</span></div>
+      <div class="step"><span class="d">Invented</span><span>Embellish made it up, and the field says so.</span></div>
+    </div>
+  </div>
+  <div class="foot"><span>Ramble to matter: about 10 seconds against the live model.</span><span>6</span></div>
+</section>
+
+<!-- 7 -->
+<section class="slide" data-name="verify">
+  <div class="head"><span><b>§ 2.3</b> · Trust but Verify</span><span>Show your math</span></div>
+  <div class="cols">
+    <div class="mid">
+      <h2 class="rise">Code counts the days. The rule speaks for itself.</h2>
+      <ul class="plain rise">
+        <li>Open any deadline and see each step of the math, with the rule's own words.</li>
+        <li>Flip service from electronic to mail and watch Rule 6(d) add three days.</li>
+        <li>Federal and Minnesota rules: FRCP 6(a), 6(d), and Gen. R. Prac. 115.03.</li>
+      </ul>
+    </div>
+    <div class="card rise">
+      <span class="label">Interrogatory answers, served by mail</span>
+      <div class="step"><span class="d">Day 0</span><span>Served<span class="why">Trigger event</span></span></div>
+      <div class="step"><span class="d">+30 days</span><span>Rule 33(b)(2)<span class="why">"within 30 days after being served"</span></span></div>
+      <div class="step"><span class="d">+3 days</span><span>Rule 6(d)<span class="why">Service by mail adds three days</span></span></div>
+      <div class="step"><span class="d">Roll forward</span><span>Rule 6(a)(1)(C)<span class="why">A weekend or holiday pushes to the next business day</span></span></div>
+    </div>
+  </div>
+  <div class="foot"><span>The model never computes a deadline. A tested rules engine does.</span><span>7</span></div>
+</section>
+
+<!-- 8 -->
+<section class="slide" data-name="scheduling">
+  <div class="head"><span><b>§ 2.4</b> · Scheduling orders</span><span>Drop a PDF</span></div>
+  <div class="cols">
+    <div class="mid">
+      <h2 class="rise">Drop the order. Every date lands, with its quote.</h2>
+      <ul class="plain rise">
+        <li>The model copies each court-set date and the sentence that sets it.</li>
+        <li>The server checks every quote against the page before it saves anything.</li>
+        <li>Code derives the rule deadlines, then exports a calendar file for Outlook or Google.</li>
+      </ul>
+    </div>
+    <div class="card rise">
+      <span class="label">From the Quillfeather order</span>
+      <div class="step"><span class="d">Sat → Fri</span><span>Pretrial disclosures roll back to Friday, May 14<span class="why">Rule 26(a)(3)(B), counted backward under Rule 6(a)(5)</span></span></div>
+      <div class="step"><span class="d">+14 days</span><span>Objections follow<span class="why">Rule 26(a)(3)(B)</span></span></div>
+      <div class="step"><span class="d"><del style="text-decoration-thickness:3px">90 days</del></span><span>Expert default struck: the order sets February 1<span class="why">Rule 26(a)(2)(D): "absent a stipulation or a court order"</span></span></div>
+    </div>
+  </div>
+  <div class="foot"><span>Upload to five court dates and six derived deadlines: about 3 seconds.</span><span>8</span></div>
+</section>
+
+<!-- 9 -->
+<section class="slide" data-name="public">
+  <div class="head"><span><b>§ 2.5</b> · Public-record matters</span><span>Real orders</span></div>
+  <div class="cols">
+    <div class="mid">
+      <h2 class="rise">It works on real orders, too.</h2>
+      <p class="lede rise">Three real District of Minnesota scheduling orders ship with the app, from CourtListener's free RECAP archive.</p>
+    </div>
+    <div class="card rise">
+      <span class="label">Guardrails for real parties</span>
+      <ul class="plain check">
+        <li>Opens as a new matter marked "Public record."</li>
+        <li>Never seeded. Exists only while the app runs.</li>
+        <li>The Client Portal never shows it.</li>
+        <li>One reset command removes it.</li>
+      </ul>
+    </div>
+  </div>
+  <div class="foot"><span><i>Pulling Guad Productions v. Lambert</i>, No. 26-cv-2305 (D. Minn. Oct. 28, 2026), among others.</span><span>9</span></div>
+</section>
+
+<!-- 10 -->
+<section class="slide" data-name="compare">
+  <div class="head"><span><b>§ 2.6</b> · Draft Compare</span><span>Two drafts in, advice out</span></div>
+  <div class="cols top">
+    <div class="mid">
+      <h2 class="rise">A redline that knows whose side you're on.</h2>
+      <ul class="plain rise">
+        <li>Compare Word, PDF, text, Markdown, .doc, .rtf, .odt, or HTML.</li>
+        <li>Get Word-faithful tracked changes, with moved clauses linked.</li>
+        <li>Name your client. Each change gets advice: Harms, Neutral, or Helps.</li>
+        <li>Download a redline with margin comments, plus a counter-draft in your own tracked changes.</li>
+      </ul>
+    </div>
+    <div class="mid">
+      <div class="redline rise">Seller's aggregate liability shall not exceed <del>the Purchase Price</del> <ins>ten percent (10%) of the Purchase Price</ins>.</div>
+      <div class="card rise">
+        <span><span class="chip harms">Harms</span> <span class="muted" style="font-size:26px">&nbsp;for the buyer</span></span>
+        <p style="font-size:30px">The cap drops from the full Purchase Price to 10%. Counter: "shall not exceed the Purchase Price."</p>
+      </div>
+    </div>
+  </div>
+  <div class="foot"><span>Concepts tagged from the open FOLIO legal ontology. Every quote verified against the draft.</span><span>10</span></div>
+</section>
+
+<!-- 11 -->
+<section class="slide" data-name="guardrails">
+  <div class="head"><span><b>§ 3</b> · Guardrails</span><span>Trust, then verify in code</span></div>
+  <div class="mid">
+    <h2 class="rise">Never trust the model's word. Check it on the server.</h2>
+    <div class="cols top rise" style="gap:60px">
+      <ul class="plain check">
+        <li>Synthetic clients only. Real orders stay public records.</li>
+        <li>Every quote gets matched against its source page.</li>
+        <li>Code, never the model, computes deadlines.</li>
+      </ul>
+      <ul class="plain check">
+        <li>The model labels concepts only by index into a fixed ontology.</li>
+        <li>The app listens only on this laptop, never the open network.</li>
+        <li>The API key never appears on screen or in a log.</li>
+      </ul>
+    </div>
+  </div>
+  <div class="foot"><span>Same duties as always: competence, confidentiality, and supervision. New tools.</span><span>11</span></div>
+</section>
+
+<!-- 12 -->
+<section class="slide divider" data-name="demo">
+  <div class="head"><span><b>§ 4</b> · Live demo</span><span>Minutes 20 to 42</span></div>
+  <div class="mid">
+    <h1 class="rise">Enough slides. Let's open it.</h1>
+    <div class="beats rise">
+      <div><span class="t">20–23</span><span class="n">Seed tour</span></div>
+      <div><span class="t">23–29</span><span class="n">Ramble: your matters</span></div>
+      <div><span class="t">29–32</span><span class="n">Trust but Verify</span></div>
+      <div><span class="t">32–42</span><span class="n">Scheduling orders</span></div>
+      <div><span class="t">if time</span><span class="n">Draft Compare</span></div>
+    </div>
+  </div>
+  <div class="foot"><span>Press A for the app.</span><span>12</span></div>
+</section>
+
+<!-- 13 -->
+<section class="slide" data-name="build">
+  <div class="head"><span><b>§ 5</b> · Your turn</span><span>Primer</span></div>
+  <div class="mid" style="gap:30px">
+    <h2 class="rise">What should we build?</h2>
+    <div class="ideas rise">
+      <div class="card"><span class="label">Billing</span><h3>Budget burn-down</h3><p>Fees billed against the client's budget, with a warning before you blow it.</p></div>
+      <div class="card"><span class="label">Ethics</span><h3>Conflict check</h3><p>Flag any name that appears in more than one matter.</p></div>
+      <div class="card"><span class="label">Triage</span><h3>Risk heat map</h3><p>Sort the Radar so the hottest matters rise to the top.</p></div>
+      <div class="card"><span class="label">Client service</span><h3>Status email</h3><p>Draft a plain-English update from the matter's latest events.</p></div>
+      <div class="card"><span class="label">Portal</span><h3>What happens next</h3><p>Tell the client the next step in words a non-lawyer reads.</p></div>
+      <div class="card"><span class="label">Research</span><h3>Ask the Rules</h3><p>Search the rules and answer with the rule's own text.</p></div>
+    </div>
+    <p class="muted rise">Or call out anything else. Family, patent, bankruptcy, employment, regulatory: what annoys you every week?</p>
+  </div>
+  <div class="foot"><span>Shout it out. I'll say it into Claude Code, and we'll build it live in about ten minutes.</span><span>13</span></div>
+</section>
+
+<!-- 14 -->
+<section class="slide" data-name="cook">
+  <div class="head"><span><b>§ 5</b> · Your turn</span><span>/cook</span></div>
+  <div class="cols">
+    <div class="mid">
+      <h2 class="rise">Fifteen minutes, idea to working feature.</h2>
+      <p class="lede rise">I type <span class="mono" style="font-size:40px;color:var(--oxblood)">/cook</span> and your idea. Claude asks a few scoping questions, builds the feature, and runs every test.</p>
+    </div>
+    <div class="card rise">
+      <div class="step"><span class="d">3 min</span><span>Scope<span class="why">You answer Claude's questions; I relay them</span></span></div>
+      <div class="step"><span class="d">~8 min</span><span>Cook<span class="why">Claude writes code and tests while we take questions</span></span></div>
+      <div class="step"><span class="d">2 min</span><span>Reveal<span class="why">It ships only after typecheck, unit tests, and browser tests pass</span></span></div>
+    </div>
+  </div>
+  <div class="foot"><span>Two rounds, two practice areas. Press C for Claude Code.</span><span>14</span></div>
+</section>
+
+<!-- 15 -->
+<section class="slide divider" data-name="design">
+  <div class="head"><span><b>§ 6</b> · Design last</span><span>Minutes 73 to 76</span></div>
+  <div class="mid">
+    <h1 class="rise">Make the accent Vikings purple.</h1>
+    <p class="lede rise">Three themes ship today: Law Review, Mission Control, and Boutique Firm. One sentence changes the whole look.</p>
+  </div>
+  <div class="foot"><span>Design lives in one file of tokens, so a request like this touches nothing else.</span><span>15</span></div>
+</section>
+
+<!-- 16 -->
+<section class="slide" data-name="ecosystem">
+  <div class="head"><span><b>§ 7</b> · Free and open source</span><span>Keep building</span></div>
+  <div class="mid">
+    <h2 class="rise">Point Claude Code at any of these.</h2>
+    <div class="eco rise">
+      <div class="eh">Project</div><div class="eh">What it does</div><div class="eh">Where</div>
+      <div><b>Matter Cockpit</b></div><div>Today's demo: matters, deadlines, scheduling orders, and Draft Compare</div><div class="mono">github.com/damienriehl/demo-mcle-2026-12</div>
+      <div><b>Mike</b></div><div>Document review, drafting, and research workspace</div><div class="mono">github.com/open-legal-products/mike</div>
+      <div><b>BigLaw</b></div><div>Self-hosted memos with quote-verified citations</div><div class="mono">github.com/discover-legal/BigLaw</div>
+      <div><b>LQ.AI</b></div><div>Matter-scoped AI workspace with skills and playbooks</div><div class="mono">github.com/LegalQuants/lq-ai</div>
+      <div><b>FOLIO</b></div><div>Open legal ontology that tags concepts in Draft Compare (CC BY 4.0)</div><div class="mono">openlegalstandard.org</div>
+    </div>
+  </div>
+  <div class="foot"><span>Read each project's license before you build on it.</span><span>16</span></div>
+</section>
+
+<!-- 17 -->
+<section class="slide" data-name="takehome">
+  <div class="head"><span><b>§ 8</b> · Take-home</span><span>Questions</span></div>
+  <div class="cols" style="grid-template-columns:1fr 520px">
+    <div class="mid">
+      <h2 class="rise">Build your own tonight.</h2>
+      <ol class="steps rise">
+        <li>Clone the repo.</li>
+        <li>Open it in Claude Code.</li>
+        <li>Type <span class="mono" style="color:var(--oxblood)">/cook</span> and describe your idea.</li>
+      </ol>
+      <p class="mono rise" style="font-size:32px">github.com/damienriehl/demo-mcle-2026-12</p>
+      <ul class="plain rise" style="gap:14px">
+        <li style="font-size:30px"><b>Start small.</b> Pick the spreadsheet you curse at every week.</li>
+        <li style="font-size:30px"><b>Verify in code.</b> Make the software check the model, every time.</li>
+        <li style="font-size:30px"><b>Keep clients out.</b> Use synthetic matters until you trust the setup.</li>
+      </ul>
+    </div>
+    <div class="qrbox rise"><div id="qr" role="img" aria-label="QR code linking to github.com/damienriehl/demo-mcle-2026-12"></div><span class="label">Scan for the repo</span></div>
+  </div>
+  <div class="foot"><span>Questions?</span><span>17</span></div>
+</section>
+
+</div></div>
+
+<div id="progress"></div>
+<nav id="bar" aria-label="Presenter controls">
+  <button id="prev" type="button" aria-label="Previous slide">←</button>
+  <span id="count" aria-live="polite">1 / 17</span>
+  <button id="next" type="button" aria-label="Next slide">→</button>
+  <span class="grow"></span>
+  <a id="appLink" href="http://127.0.0.1:8982/" target="cockpit-app" rel="noopener"><kbd>A</kbd>App</a>
+  <a id="ccLink" href="https://claude.ai/code" target="claude-code" rel="noopener"><kbd>C</kbd>Claude Code</a>
+  <button id="fsBtn" type="button" class="wide"><kbd>F</kbd>Full screen</button>
+  <button id="setupBtn" type="button"><kbd>S</kbd>Setup</button>
+</nav>
+
+<div id="setup" hidden role="dialog" aria-modal="true" aria-labelledby="setupTitle">
+  <div class="panel">
+    <h2 id="setupTitle">Presenter setup</h2>
+    <div class="row"><label for="appUrl">App address</label><input id="appUrl" type="url" spellcheck="false"></div>
+    <div class="row"><label for="ccUrl">Claude Code address (your claude.ai/code session link)</label><input id="ccUrl" type="url" spellcheck="false"></div>
+    <div class="btns"><button id="saveUrls" type="button">Save addresses</button><button id="closeSetup" class="secondary" type="button">Close (Esc)</button></div>
+    <p id="saved" class="muted" aria-live="polite"></p>
+    <p><b>Most reliable toggle:</b> one browser window, three tabs, in this order.</p>
+    <ol>
+      <li>This deck. Switch with <code>Ctrl+1</code> (<code>⌘1</code> on a Mac).</li>
+      <li>Claude Code: the terminal or the claude.ai/code session. <code>Ctrl+2</code>.</li>
+      <li>The app at the address above. <code>Ctrl+3</code>.</li>
+    </ol>
+    <p>Start the app from the repository: <code>MATTER_COCKPIT_SOFFICE="$PWD/scripts/soffice-container.sh" npm run dev</code></p>
+    <table>
+      <tr><td><code>→</code> <code>Space</code> <code>PgDn</code></td><td>Next slide</td></tr>
+      <tr><td><code>←</code> <code>PgUp</code></td><td>Previous slide</td></tr>
+      <tr><td><code>Home</code> <code>End</code></td><td>First or last slide</td></tr>
+      <tr><td><code>A</code> <code>C</code></td><td>Open or reuse the app tab, or the Claude Code tab</td></tr>
+      <tr><td><code>F</code></td><td>Full screen</td></tr>
+      <tr><td><code>S</code> <code>Esc</code></td><td>Open or close this panel</td></tr>
+    </table>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script>
+(() => {
+  try { new QRCode(document.getElementById('qr'), { text: 'https://github.com/damienriehl/demo-mcle-2026-12', width: 440, height: 440, colorDark: '#1b1a17', colorLight: '#ffffff', correctLevel: QRCode.CorrectLevel.M }); }
+  catch { document.getElementById('qr').textContent = 'github.com/damienriehl/demo-mcle-2026-12'; }
+  const slides = [...document.querySelectorAll('.slide')];
+  const deck = document.getElementById('deck');
+  const vp = document.getElementById('viewport');
+  const count = document.getElementById('count');
+  const progress = document.getElementById('progress');
+  const bar = document.getElementById('bar');
+  const setup = document.getElementById('setup');
+  const appLink = document.getElementById('appLink');
+  const ccLink = document.getElementById('ccLink');
+  const appUrl = document.getElementById('appUrl');
+  const ccUrl = document.getElementById('ccUrl');
+  const DEFAULTS = { app: 'http://127.0.0.1:8982/', cc: 'https://claude.ai/code' };
+  let i = 0;
+
+  const store = {
+    get(k) { try { return localStorage.getItem(k); } catch { return null; } },
+    set(k, v) { try { localStorage.setItem(k, v); return true; } catch { return false; } }
+  };
+  function applyUrls() {
+    appLink.href = store.get('mc-deck-app') || DEFAULTS.app;
+    ccLink.href = store.get('mc-deck-cc') || DEFAULTS.cc;
+    appUrl.value = appLink.href; ccUrl.value = ccLink.href;
+  }
+  applyUrls();
+
+  function fit() {
+    const s = Math.min(vp.clientWidth / 1920, vp.clientHeight / 1080);
+    deck.style.transform = `scale(${s})`;
+  }
+  addEventListener('resize', fit); fit();
+
+  function show(n, fromHash) {
+    i = Math.max(0, Math.min(slides.length - 1, n));
+    slides.forEach((s, k) => { s.classList.toggle('on', k === i); s.setAttribute('aria-hidden', k === i ? 'false' : 'true'); });
+    count.textContent = `${i + 1} / ${slides.length}`;
+    progress.style.width = `${((i + 1) / slides.length) * 100}%`;
+    const name = slides[i].dataset.name;
+    if (!fromHash && location.hash !== '#' + name) { try { history.replaceState(null, '', '#' + name); } catch { location.hash = name; } }
+  }
+  function fromHash() {
+    const h = location.hash.slice(1);
+    const k = slides.findIndex(s => s.dataset.name === h);
+    show(k >= 0 ? k : 0, true);
+  }
+  addEventListener('hashchange', fromHash); fromHash();
+
+  document.getElementById('prev').onclick = () => show(i - 1);
+  document.getElementById('next').onclick = () => show(i + 1);
+  deck.addEventListener('click', e => { if (!e.target.closest('a,button')) show(i + (e.clientX < innerWidth * 0.25 ? -1 : 1)); });
+
+  function fullscreen() {
+    const el = document.documentElement;
+    try {
+      if (document.fullscreenElement) document.exitFullscreen();
+      else if (el.requestFullscreen) el.requestFullscreen().catch(() => {});
+    } catch {}
+  }
+  document.getElementById('fsBtn').onclick = fullscreen;
+
+  function openSetup(open) { setup.hidden = !open; if (open) appUrl.focus(); }
+  document.getElementById('setupBtn').onclick = () => openSetup(true);
+  document.getElementById('closeSetup').onclick = () => openSetup(false);
+  setup.addEventListener('click', e => { if (e.target === setup) openSetup(false); });
+  document.getElementById('saveUrls').onclick = () => {
+    const a = appUrl.value.trim() || DEFAULTS.app, c = ccUrl.value.trim() || DEFAULTS.cc;
+    const ok = store.set('mc-deck-app', a) & store.set('mc-deck-cc', c);
+    appLink.href = a; ccLink.href = c;
+    document.getElementById('saved').textContent = ok ? 'Saved in this browser.' : 'Updated for this visit. This browser blocks saving, so re-enter after a reload.';
+  };
+
+  addEventListener('keydown', e => {
+    if (e.metaKey || e.ctrlKey || e.altKey) return;
+    if (!setup.hidden) { if (e.key === 'Escape') openSetup(false); return; }
+    const k = e.key;
+    if (['ArrowRight', 'PageDown', ' ', 'Enter'].includes(k)) { e.preventDefault(); show(i + 1); }
+    else if (['ArrowLeft', 'PageUp', 'Backspace'].includes(k)) { e.preventDefault(); show(i - 1); }
+    else if (k === 'Home') show(0);
+    else if (k === 'End') show(slides.length - 1);
+    else if (k === 'f' || k === 'F') fullscreen();
+    else if (k === 'a' || k === 'A') appLink.click();
+    else if (k === 'c' || k === 'C') ccLink.click();
+    else if (k === 's' || k === 'S') openSetup(true);
+  });
+
+  let idle;
+  function wake() { bar.classList.remove('dim'); clearTimeout(idle); idle = setTimeout(() => bar.classList.add('dim'), 3000); }
+  addEventListener('mousemove', wake); wake();
+})();
+</script>
