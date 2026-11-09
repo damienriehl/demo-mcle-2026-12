@@ -1,0 +1,66 @@
+{
+  "order": "dminn-old-national-bank-v-adams",
+  "court": "federal",
+  "caption": "Old National Bank v. Sarah Adams, Kasey Bernu, Yvette Campbell, Kimberly Ellingson, Rachal Johnson, Michael McConkey, Sharon Vold, Daniel Yantes, and Bell Bank",
+  "courtName": "United States District Court, District of Minnesota",
+  "caseNumber": "Civil No. 25-4636 (PJS/LIB)",
+  "dates": [
+    {
+      "kind": "other",
+      "event": "Pre-discovery disclosures under Rule 26(a)(1) completed",
+      "date": "2026-04-21",
+      "page": 1,
+      "quote": "shall be completed on or before April 21, 2026"
+    },
+    {
+      "kind": "other",
+      "event": "Discovery terminates",
+      "date": "2027-09-30",
+      "page": 2,
+      "quote": "shall terminate on September 30, 2027."
+    },
+    {
+      "kind": "nondispositive-hearing",
+      "event": "Motions to amend pleadings or add parties filed and heard",
+      "date": "2026-10-31",
+      "page": 2,
+      "quote": "on or before October 31, 2026."
+    },
+    {
+      "kind": "nondispositive-hearing",
+      "event": "Other nondispositive motions filed and heard",
+      "date": "2027-10-31",
+      "page": 2,
+      "quote": "prior to October 31, 2027"
+    },
+    {
+      "kind": "expert-disclosure",
+      "event": "Plaintiff's expert disclosures",
+      "date": "2027-06-20",
+      "page": 4,
+      "quote": "The Plaintiff\u2019s disclosures shall be made on or before June 20, 2027."
+    },
+    {
+      "kind": "expert-disclosure",
+      "event": "Defendant Bell Bank's and Employee Defendants' expert disclosures",
+      "date": "2027-08-10",
+      "page": 4,
+      "quote": "shall be made on or before August 10, 2027."
+    },
+    {
+      "kind": "dispositive-hearing",
+      "event": "Dispositive motions served, filed and heard",
+      "date": "2027-11-30",
+      "page": 5,
+      "quote": "shall be served, filed and heard on or before November 30, 2027."
+    },
+    {
+      "kind": "trial",
+      "event": "Ready for Trial",
+      "date": "2028-03-31",
+      "page": 6,
+      "quote": "ready for Trial on March 31, 2028"
+    }
+  ],
+  "shortCaption": "Old National Bank v. Adams et al."
+}

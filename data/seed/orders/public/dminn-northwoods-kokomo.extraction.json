@@ -1,0 +1,115 @@
+{
+  "order": "dminn-northwoods-kokomo",
+  "court": "federal",
+  "caption": "Northwoods League, Inc. v. Kokomo Baseball, LLC et al.",
+  "courtName": "UNITED STATES DISTRICT COURT DISTRICT OF MINNESOTA",
+  "caseNumber": "25-cv-03345 (LMP/ECW)",
+  "shortCaption": "Northwoods League, Inc. v. Kokomo Baseball, LLC et al.",
+  "dates": [
+    {
+      "kind": "other",
+      "event": "Initial disclosures: written disclosures",
+      "date": "2025-11-07",
+      "page": 2,
+      "quote": "The parties must make their initial disclosures under Fed. R. Civ. P. 26(a)(1) on or before November 7, 2025 (written disclosures) and November 21, 2025 (documents)."
+    },
+    {
+      "kind": "other",
+      "event": "Initial disclosures: documents",
+      "date": "2025-11-21",
+      "page": 2,
+      "quote": "The parties must make their initial disclosures under Fed. R. Civ. P. 26(a)(1) on or before November 7, 2025 (written disclosures) and November 21, 2025 (documents)."
+    },
+    {
+      "kind": "other",
+      "event": "Complete fact discovery",
+      "date": "2026-06-15",
+      "page": 2,
+      "quote": "The parties must commence fact discovery procedures in time to be completed on or before June 15, 2026."
+    },
+    {
+      "kind": "other",
+      "event": "Expert identities: party with burden of proof",
+      "date": "2026-07-14",
+      "page": 3,
+      "quote": "Identities by the party with the burden of proof on the issue(s) addressed by the expert on or before July 14, 2026."
+    },
+    {
+      "kind": "expert-disclosure",
+      "event": "Expert disclosures: party with burden of proof",
+      "date": "2026-07-14",
+      "page": 4,
+      "quote": "Disclosures by the party with the burden of proof on the issue(s) addressed by the expert on or before July 14, 2026."
+    },
+    {
+      "kind": "other",
+      "event": "Expert identities: responding party",
+      "date": "2026-09-01",
+      "page": 4,
+      "quote": "Identities by the responding party on or before September 1, 2026."
+    },
+    {
+      "kind": "other",
+      "event": "Expert disclosures: responding party",
+      "date": "2026-09-01",
+      "page": 4,
+      "quote": "Disclosures by the responding party on or before September 1, 2026."
+    },
+    {
+      "kind": "other",
+      "event": "Complete expert discovery, including depositions",
+      "date": "2026-09-29",
+      "page": 4,
+      "quote": "Expert discovery, including depositions, shall be completed by September 29, 2026."
+    },
+    {
+      "kind": "other",
+      "event": "Amend pleadings or add parties: filed and served",
+      "date": "2025-12-26",
+      "page": 4,
+      "quote": "Except as otherwise specifically set forth in this section, all motions that seek to amend the pleadings or to add parties must be filed and served on or before December 26, 2025."
+    },
+    {
+      "kind": "other",
+      "event": "Non-dispositive motions, including fact discovery: filed and served",
+      "date": "2026-06-29",
+      "page": 4,
+      "quote": "Except as otherwise specifically set forth in this section, all non- dispositive motions and supporting documents, including those that relate to fact discovery, shall be filed and served on or before June 29, 2026."
+    },
+    {
+      "kind": "other",
+      "event": "Expert discovery non-dispositive motions: filed and served",
+      "date": "2026-10-13",
+      "page": 4,
+      "quote": "All non-dispositive motions and supporting documents that relate to expert discovery shall be filed and served on or before October 13, 2026."
+    },
+    {
+      "kind": "other",
+      "event": "Dispositive motions: filed and served",
+      "date": "2026-11-30",
+      "page": 8,
+      "quote": "All dispositive motions must be filed and served by the moving party on or before November 30, 2026."
+    },
+    {
+      "kind": "other",
+      "event": "Joint proposed protective order",
+      "date": "2025-11-19",
+      "page": 8,
+      "quote": "The parties shall jointly file a proposed Protective Order, prominently identifying (yellow highlighting is suggested) any terms on which the parties disagree, on or before November 19, 2025."
+    },
+    {
+      "kind": "other",
+      "event": "Private mediation",
+      "date": "2026-02-28",
+      "page": 11,
+      "quote": "The parties must engage in private mediation on or before February 28, 2026."
+    },
+    {
+      "kind": "trial",
+      "event": "Jury trial ready on or about this date",
+      "date": "2027-03-30",
+      "page": 12,
+      "quote": "This case will be ready for a jury trial on or about March 30, 2027."
+    }
+  ]
+}

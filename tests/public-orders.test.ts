@@ -1,4 +1,4 @@
-import { mkdtempSync, writeFileSync, rmSync } from 'node:fs';
+import { mkdtempSync, readFileSync, readdirSync, writeFileSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import type { BetaRawMessageStreamEvent } from '@anthropic-ai/sdk/resources/beta/messages';
@@ -73,6 +73,32 @@ afterEach(() => {
 });
 
 describe('public court order matters', () => {
+  it.each(readdirSync('data/seed/orders/public').filter(name => name.endsWith('.pdf')))(
+    'keylessly opens bundled public/%s as a new public-record matter with every date verified', async name => {
+      vi.stubEnv('MATTER_COCKPIT_EXTRA_ORDERS_DIR', '');
+      const { order: _order, ...value } = JSON.parse(readFileSync(`data/seed/orders/public/${name.replace('.pdf', '.extraction.json')}`, 'utf8'));
+      const { app, store } = setup(null);
+      expect(store.list()).toEqual([]);
+      const form = new FormData();
+      form.set('matterId', 'new');
+      form.set('file', new File([readFileSync(`data/seed/orders/public/${name}`)], 'renamed.pdf', { type: 'application/pdf' }));
+      const result = await events(await app.request('/extract', { method: 'POST', headers: { 'X-Matter-Cockpit-Upload': '1' }, body: form }));
+      expect(result.filter(event => event.type === 'date')).toEqual(value.dates.map((date: Extraction['dates'][number]) => ({ type: 'date', ...date, verified: true })));
+      const done = result.at(-1);
+      expect(done).toMatchObject({ type: 'done', created: true, unverified: [], added: { courtDates: value.dates.length }, matter: {
+        synthetic: false, title: value.shortCaption, publicRecord: { court: value.courtName, caseNumber: value.caseNumber },
+      } });
+      expect(value.shortCaption).toEqual(expect.any(String));
+      expect(store.list()).toHaveLength(1);
+      const matter = store.get(done.matter.id)!;
+      expect(matter.title).toBe(value.shortCaption);
+      expect(schema.isPublicRecord(matter)).toBe(true);
+      const courtDates = matter.deadlines.filter(deadline => deadline.deadlineRuleId === 'court-order-date');
+      expect(courtDates.map(deadline => deadline.inputs)).toEqual(value.dates.map((date: Extraction['dates'][number]) => ({ date: date.date, page: date.page, quote: date.quote })));
+      for (const deadline of courtDates) expect(matter.computedDeadlines[deadline.id]).toMatchObject({ status: 'computed', dueDate: deadline.inputs!.date });
+    },
+  );
+
   it.each([
     { shortCaption, title: shortCaption },
     { shortCaption: undefined, title: extraction.caption },

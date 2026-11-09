@@ -1,0 +1,66 @@
+{
+  "order": "dminn-pulling-guard-v-lambert",
+  "court": "federal",
+  "caption": "Pulling Guad Productions, LLC d/b/a The Arena League v. Jacob Lambert; J&B Manufactured Home Services LLC; Steve Walters; Minnesota Monsters Entertainment LLC; Kramer Service Group, LLC; Brent LaBrie; Arena Football 1, LLC",
+  "courtName": "UNITED STATES DISTRICT COURT DISTRICT OF MINNESOTA",
+  "caseNumber": "26-cv-2305 (PJS/LIB)",
+  "dates": [
+    {
+      "kind": "other",
+      "event": "Pre-discovery disclosures under Rule 26(a)(1) completed",
+      "date": "2026-11-15",
+      "page": 1,
+      "quote": "shall be completed on or before November 15, 2026"
+    },
+    {
+      "kind": "other",
+      "event": "Discovery terminates",
+      "date": "2027-09-15",
+      "page": 2,
+      "quote": "shall terminate on September 15, 2027."
+    },
+    {
+      "kind": "nondispositive-hearing",
+      "event": "Motions to amend pleadings or add parties filed and heard",
+      "date": "2027-02-28",
+      "page": 2,
+      "quote": "on or before February 28, 2027."
+    },
+    {
+      "kind": "nondispositive-hearing",
+      "event": "Other nondispositive motions filed and heard",
+      "date": "2027-10-15",
+      "page": 2,
+      "quote": "prior to October 15, 2027"
+    },
+    {
+      "kind": "expert-disclosure",
+      "event": "Plaintiff's expert disclosures",
+      "date": "2027-06-25",
+      "page": 4,
+      "quote": "The Plaintiff\u2019s disclosures shall be made on or before June 25, 2027."
+    },
+    {
+      "kind": "expert-disclosure",
+      "event": "Defendants' expert disclosures",
+      "date": "2027-07-23",
+      "page": 4,
+      "quote": "The Defendants\u2019\ndisclosures shall be made on or before July 23, 2027."
+    },
+    {
+      "kind": "dispositive-hearing",
+      "event": "Dispositive motions served, filed and heard",
+      "date": "2027-11-15",
+      "page": 5,
+      "quote": "shall be served, filed and heard on or before November 15, 2027."
+    },
+    {
+      "kind": "trial",
+      "event": "Case ready for Trial",
+      "date": "2028-03-15",
+      "page": 6,
+      "quote": "ready for Trial on March 15, 2028"
+    }
+  ],
+  "shortCaption": "Pulling Guad Productions, LLC v. Lambert et al."
+}
