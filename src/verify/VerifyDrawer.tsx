@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Overlay } from '../components/Overlay';
 import type { MatterWithDeadlines } from '../data/schema';
 import { computeDeadline, deadlineCatalog, type DeadlineInput, type Step } from '../engine';
-import { SourceLabel } from '../intake/SourceLabel';
+import { SourceLabel, sourceFor } from '../intake/SourceLabel';
 import { dateLabel, type Selection } from '../views/shared';
 import { AssumptionToggles, assumptionLabel } from './AssumptionToggles';
 import { factContext, type FactContext } from './context';
@@ -30,13 +30,19 @@ function DeadlineVerification({ selection, matter }: { selection: VerifySelectio
   }
   const ruleContext = matter ? factContext(matter, `deadlines.${index}.deadlineRuleId`) : undefined;
   const triggerContext = matter ? factContext(matter, `deadlines.${index}.trigger.date`) : undefined;
+  const inputKey = result?.status === 'computed' ? result.inputKey : undefined;
+  const inputSource = matter && inputKey ? sourceFor(matter.provenance, `deadlines.${index}.inputs.${inputKey}`) : undefined;
+  const steps = inputKey && inputSource !== 'stated' ? result!.steps.map((step, index) => index === 1
+    ? { ...step, label: `Use the date entered for ${deadline?.inputs?.section ?? 'the notice close'}; no inferred calendar roll.` }
+    : step) : result?.steps ?? [];
   return <>
     <section data-verify-section="due" className="verify-due" aria-live="polite" aria-atomic="true"><p>{selection.label}</p>
-      {result?.status === 'computed' ? <><strong data-due-date>{dateLabel(result.dueDate)}</strong><span>Code computed</span></>
+      {result?.status === 'computed' ? <><strong data-due-date>{dateLabel(result.dueDate)}</strong>{inputKey
+        ? <><span>From the matter</span><SourceLabel source={inputSource} /></> : <span>Code computed</span>}</>
         : <><strong data-no-source>No source on file. Verify independently.</strong><p>{result?.reason}</p></>}
     </section>
     <AssumptionToggles controls={catalog?.assumptions ?? []} values={assumptions} onChange={changeAssumption} />
-    <MathSteps steps={result?.steps ?? []} previousSteps={previousSteps} onCitation={next => {
+    <MathSteps steps={steps} previousSteps={previousSteps} onCitation={next => {
       setChosenCitation(next);
       requestAnimationFrame(() => document.getElementById('verify-rule')?.focus({ preventScroll: true }));
     }} />

@@ -203,12 +203,14 @@ describe('bankruptcy, patents, employment, notice and agreement dates', () => {
   // 5 USC 553(b)(1), (c): notice controls, rather than a made-up universal comment period.
   it('uses the stated notice close date exactly, even on a Saturday', () => {
     const result = computed(compute('apa-comment-close', '2026-09-01', {}, { noticeCloseDate: '2026-10-03' }));
+    expect(result).toHaveProperty('inputKey', 'noticeCloseDate');
     expect(result.dueDate).toBe('2026-10-03');
     expect(result.steps.every(step => step.citation.ruleId === 'usc:5-553')).toBe(true);
   });
 
   it('uses the agreement date and section exactly without adding court counting rules', () => {
     const result = computed(compute('contract-deadline', '2026-09-01', {}, { dueDate: '2026-10-03', section: 'Section 4.2' }));
+    expect(result).toHaveProperty('inputKey', 'dueDate');
     expect(result.dueDate).toBe('2026-10-03');
     expect(result.steps.every(step => step.citation.ruleId === 'contract' && step.citation.subdivision === 'Section 4.2')).toBe(true);
   });

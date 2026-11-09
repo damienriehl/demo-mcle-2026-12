@@ -8,7 +8,7 @@ export type DeadlineInput = {
 export type Step = { label: string; date?: string; citation: { ruleId: string; subdivision?: string } };
 
 export type DeadlineResult =
-  | { status: 'computed'; dueDate: string; steps: Step[] }
+  | { status: 'computed'; dueDate: string; steps: Step[]; inputKey?: string }
   | { status: 'uncomputable'; reason: string; steps: Step[] };
 
 export type DeadlineRuleSummary = {

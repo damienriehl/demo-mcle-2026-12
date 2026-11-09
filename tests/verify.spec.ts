@@ -156,6 +156,64 @@ test('Radar opens the selected deadline with its assumptions and reasoning', asy
   await expect(panel).toContainText('A federal complaint calls for an answer under Rule 12; service determines the response period.');
 });
 
+test('opening a matter focuses its deadline once and leaves later controls focused', async ({ page }) => {
+  await open(page);
+  await page.getByRole('button', { name: 'Deadline Radar', exact: true }).click();
+  await page.locator('[data-deadline-id="answer"]').click();
+  await page.getByRole('button', { name: 'Open matter', exact: true }).click();
+  await expect(page.locator('[data-deadline-id="answer"]')).toBeFocused();
+  const theme = page.getByRole('combobox', { name: 'Theme', exact: true });
+  await theme.focus();
+  await theme.selectOption('mission-control');
+  await expect(theme).toBeFocused();
+
+  let release!: () => void;
+  await page.route('**/api/intake/ramble', async route => {
+    await new Promise<void>(resolve => { release = resolve; });
+    await route.fulfill({ contentType: 'text/event-stream', body: [
+      { type: 'field', path: 'client.name', value: 'Streamed fictional client', source: 'stated' },
+      { type: 'followups', questions: [{ id: 'forum', field: 'forum', question: 'Which forum?' }] },
+    ].map(event => `data: ${JSON.stringify(event)}\n\n`).join('') });
+  });
+  await page.getByRole('button', { name: 'Ramble', exact: true }).click();
+  const intake = page.getByRole('dialog', { name: 'Ramble intake' });
+  await intake.getByRole('textbox', { name: 'Tell us about the matter' }).fill('A fictional client needs help.');
+  const build = intake.getByRole('button', { name: 'Build matter', exact: true });
+  await build.click();
+  await expect(intake.getByRole('status')).toContainText('Building your matter');
+  const story = intake.getByRole('textbox', { name: 'Tell us about the matter' });
+  await story.focus();
+  await expect.poll(() => typeof release).toBe('function');
+  release();
+  await expect(intake.getByText('Streamed fictional client', { exact: true })).toBeVisible();
+  await expect(story).toBeFocused();
+  await page.keyboard.press('Escape');
+  await expect(intake).toHaveCount(0);
+});
+
+test('mail-service math keeps duplicate calendar steps without React key warnings', async ({ page }) => {
+  const errors: string[] = [];
+  page.on('console', message => { if (message.type() === 'error') errors.push(message.text()); });
+  const data = matters();
+  data[0].deadlines[0] = { ...data[0].deadlines[0], deadlineRuleId: 'frcp-33-interrogatories',
+    trigger: { event: 'Interrogatories served', date: '2026-10-03' }, assumptions: { serviceMethod: 'mail' } };
+  data[0].computedDeadlines.answer = computeDeadline(data[0].deadlines[0]);
+  const repeated = 'The landing day is neither a weekend nor a legal holiday; no calendar roll is required.';
+  expect(data[0].computedDeadlines.answer.steps.filter(step => step.label === repeated)).toHaveLength(2);
+  await page.route('**/api/events', route => route.fulfill({ contentType: 'text/event-stream', body: `data: ${JSON.stringify(data)}\n\n` }));
+  await page.goto('/');
+  await page.locator('[data-deadline-id="answer"]').click();
+  const panel = page.getByRole('dialog', { name: 'Trust but Verify' });
+  const math = panel.getByRole('list', { name: 'Date math' });
+  await expect(math.getByText(repeated, { exact: true })).toHaveCount(2);
+  const service = panel.getByRole('group', { name: 'Service method', exact: true });
+  await service.getByRole('button', { name: 'Personal service', exact: true }).click();
+  await expect(math.getByText(repeated, { exact: true })).toHaveCount(1);
+  await service.getByRole('button', { name: 'Mail', exact: true }).click();
+  await expect(math.getByText(repeated, { exact: true })).toHaveCount(2);
+  expect(errors.filter(error => error.includes('same key'))).toEqual([]);
+});
+
 test('Portal fact verification keeps the source label and omits internal evidence and reasoning', async ({ page }) => {
   await open(page);
   await page.getByRole('button', { name: 'Client Portal', exact: true }).click();

@@ -8,9 +8,9 @@ function uncomputable(reason: string, steps: Step[]): DeadlineResult {
   return { status: 'uncomputable', reason, steps };
 }
 
-function finish(dueDate: string, steps: Step[], citation: Step['citation']): DeadlineResult {
+function finish(dueDate: string, steps: Step[], citation: Step['citation'], inputKey?: string): DeadlineResult {
   steps.push({ label: 'Final due date', date: dueDate, citation });
-  return { status: 'computed', dueDate, steps };
+  return { status: 'computed', dueDate, steps, ...(inputKey ? { inputKey } : {}) };
 }
 
 function roll(date: string, rule: DeadlineRule, steps: Step[]): string | undefined {
@@ -71,7 +71,7 @@ export function computeDeadline(input: DeadlineInput): DeadlineResult {
     const date = input.inputs?.[rule.period.amount];
     if (!isCalendarDate(date)) return uncomputable(`Supply ${rule.period.amount} as the actual stated ISO date.`, steps);
     steps.push({ label: rule.kind === 'notice' ? 'Use the notice’s stated close date; no inferred period or calendar roll.' : `Use the deadline stated in the agreement, ${section}; no inferred calendar roll.`, date, citation });
-    return finish(date, steps, citation);
+    return finish(date, steps, citation, String(rule.period.amount));
   }
 
   const outsideCalendar = () => uncomputable('The required calendar date is outside the encoded 2024–2030 holiday calendars. Verify independently.', steps);
