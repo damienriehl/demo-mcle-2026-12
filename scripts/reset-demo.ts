@@ -4,6 +4,7 @@ import { pathToFileURL } from 'node:url';
 import { mattersSchema } from '../src/data/schema';
 import { localToday, materialize } from '../server/seed-dates';
 import { DEFAULT_COMPARISONS_DIRECTORY } from '../server/drafts/store';
+import { DEFAULT_TASKS_DIRECTORY } from '../server/tasks/store';
 
 export function resetDemo({
   seedDirectory = resolve('data/seed/matters'),
@@ -22,6 +23,7 @@ export function resetDemo({
   writeFileSync(`${filePath}.tmp`, `${JSON.stringify(matters, null, 2)}\n`);
   renameSync(`${filePath}.tmp`, filePath);
   rmSync(join(dirname(filePath), basename(DEFAULT_COMPARISONS_DIRECTORY)), { recursive: true, force: true });
+  rmSync(join(dirname(filePath), basename(DEFAULT_TASKS_DIRECTORY)), { recursive: true, force: true });
   return matters;
 }
 
