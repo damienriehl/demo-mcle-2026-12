@@ -7,6 +7,7 @@ Direct dependencies, pinned to exact versions in `package.json`. Licenses read f
 | @anthropic-ai/sdk | 1.6.0 | Apache-2.0 | runtime |
 | @hono/node-server | 2.1.6 | MIT | runtime |
 | cheerio | 1.2.0 | MIT | runtime |
+| docxodus | 15.1.0 | MIT (bundles a .NET WebAssembly runtime, MIT) | runtime |
 | hono | 4.13.17 | MIT | runtime |
 | react | 19.3.1 | MIT | runtime |
 | react-dom | 19.3.1 | MIT | runtime |
